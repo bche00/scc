@@ -1,0 +1,40 @@
+@import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css')
+;
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Galmuri9', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+  background-color: black;
+
+  cursor: url('./asset/util/cursor.png'), auto;
+
+}
+
+:root{
+  /* font-size */
+  --font-size-28: 1.75rem;
+  --font-size-24: 1.5rem;
+  --font-size-20: 1.25rem;
+  --font-size-18: 1.125rem;
+  --font-size-16: 1rem;
+  --font-size-14: 0.875rem;
+
+  /* border-radius */
+  --border-radius-32: 2rem;
+  --border-radius-16: 1rem;
+  --border-radius-8: 0.5rem;
+}
+
+::selection {
+  background: #C7C9CE; 
+  color: #ac141e;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+}

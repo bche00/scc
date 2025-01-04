@@ -1,0 +1,133 @@
+.container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 1rem;
+  
+  .c01{
+    width: 100%;
+    overflow: hidden;
+
+    .top{
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      align-self: stretch;
+
+      .alarm{
+        div{
+          p.utilNumber{
+            font-family: DungGeunMo;
+            color: #FFF;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 400;
+            line-height: 1;
+            // margin-bottom: unset;
+          }
+        }
+      }
+    
+      .explore {
+        width: 15.8125rem;
+        height: 8.125rem;
+        border: 2px solid #fff;
+        border-radius: var(--border-radius-8);
+        background-image: url('../../asset/img/tamsa.png');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+      
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0);
+          transition: background 0.3s ease;
+          z-index: 1;
+        }
+      
+        &:hover::before {
+          background: rgba(0, 0, 0, 0.3);
+        }
+      
+        p {
+          margin: 0.5rem;
+          padding: 0.125rem 0.325rem;
+          border: 1px solid #fff;
+          background-color: #000;
+          border-radius: 4px;
+          display: inline-block;
+          position: relative;
+          z-index: 2;
+        }
+      }
+      
+    }
+    
+
+    .banner {
+      width: 100%;
+    
+      .planText {
+        text-align: center;
+        font-size: var(--font-size-16);
+        line-height: normal;
+        margin-bottom: unset;
+    
+        display: inline-block;
+        white-space: nowrap;
+        position: relative;
+        animation: slideLeft 12s linear infinite;
+      }
+    
+      @keyframes slideLeft {
+        0% {
+          transform: translateX(150%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(-150%);
+        }
+      }
+    }
+  }
+
+  .c02{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .utilIcon{
+      display: flex;
+      height: 6.25rem;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      p{
+        font-size: var(--font-size-16);
+        line-height: normal;
+        letter-spacing: 0.3rem;
+        text-indent: 0.3rem;
+        margin-bottom: unset;
+      }
+      .icon{
+        width: 4.375rem;
+        height: 4.375rem;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+
+  
+}
