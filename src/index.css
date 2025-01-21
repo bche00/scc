@@ -1,6 +1,8 @@
 @import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css')
 ;
 body {
+  width: 100vw;
+  height: calc(var(--vh, 1vh) * 100);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
