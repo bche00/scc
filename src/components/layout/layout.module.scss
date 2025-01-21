@@ -1,78 +1,73 @@
-.container{
+.container {
   width: 100vw;
   height: calc(var(--vh, 1vh) * 100); /* 100vh 대신 동적 변수를 사용 */
-
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-  .phone{
+.phone {
+  display: flex;
+  min-width: 20rem;
+  width: 24.5625rem;
+  max-height: 50rem;
+  height: calc(var(--vh, 1vh) * 100); /* 높이를 정확하게 맞추기 */
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 1rem;
+  border: 2px solid #fff;
+  background: #000;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  overflow: hidden;
+
+  @media (max-width: 576px) {
+    width: 100vw;
+    height: calc(var(--vh, 1vh) * 100); /* 모바일에서 높이 정확히 맞추기 */
+    max-width: unset;
+    max-height: unset;
+    min-height: unset;
+    border-radius: unset;
+    border: unset;
+  }
+
+  .bar {
     display: flex;
-    min-width: 20rem;
-    width: 24.5625rem;
-    max-height: 50rem;
-    height: 100%;
-    flex-direction: column;
-    align-items: flex-start;
+    height: 2.5rem;
+    padding-left: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-bottom: 2px solid #FFF;
+    background: #FFF;
+    color: #000;
+    font-size: var(--font-size-16);
 
-    border-radius: 1rem;
-    border: 2px solid #fff;
-    background: #000;
-
-    gap: 1rem;
-    padding-bottom: 1rem;
-    overflow: hidden;
-
-    @media (max-width:576px){
-      width: 100vw;
-      height: calc(var(--vh, 1vh) * 100); /* 모바일 환경에서 높이를 정확히 설정 */
-      max-width: unset;
-      max-height: unset;
-      min-height: unset;
-      border-radius: unset;
-      border: unset;
-    }
-
-    .bar{
+    .close {
       display: flex;
+      width: 2.3rem;
       height: 2.5rem;
-      padding-left: 1rem;
-      justify-content: space-between;
-      align-items: center;
-      align-self: stretch;
-
-      border-bottom: 2px solid #FFF;
-      background: #FFF;
-      color: #000;
-      font-size: var(--font-size-16);
-
-      .close{
-        display: flex;
-        width: 2.3rem;
-        height: 2.5rem;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        border-bottom: 2px solid #FFF;
-        background: #000;
-        color: #FFF;
-        font-size: var(--font-size-28);
-        padding: 0 0 0 0.125rem;
-
-        cursor: pointer;
-      }
-    }
-
-    .content{
-      height: 100%;
-      display: flex;
-      padding: 0rem 1rem;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 2.5rem;
-      align-self: stretch;
-      justify-content: space-between;
+      border-bottom: 2px solid #FFF;
+      background: #000;
+      color: #FFF;
+      font-size: var(--font-size-28);
+      padding: 0 0 0 0.125rem;
+      cursor: pointer;
     }
+  }
+
+  .content {
+    height: 100%;
+    display: flex;
+    padding: 0rem 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    align-self: stretch;
+    justify-content: space-between;
+    overflow: hidden; /* .content 영역에 스크롤이 생기지 않도록 처리 */
   }
 }
