@@ -136,7 +136,7 @@ export default function SignUpForm() {
             </tr>
             <tr>
               <td colSpan="2" style={{ textAlign: "center" }}>
-                <button type="submit">입부신청</button>
+                <button type="submit" className={style.btn}>입부신청</button>
               </td>
             </tr>
           </tbody>
