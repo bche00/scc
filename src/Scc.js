@@ -6,6 +6,7 @@ import './js/common.js'
 import Layout from './components/layout/Layout.js';
 import Home from './section/home/Home.js';
 import Login from './section/login/Login.js';
+import Join from './section/login/Join.js';
 import Explore from './section/explore/Explore.js';
 import Shop from './section/shop/Shop.js';
 import Bag from './section/bag/Bag.js';
@@ -43,6 +44,7 @@ function App() {
           <Route
             path="/"
             element={isLoggedIn ? <Home /> : <Navigate to="/login" />}/>
+          <Route path='/join-us' element={<Join />}></Route>
           <Route path='/explore' element={<Explore />}></Route>
           <Route path='/shop' element={<Shop />}></Route>
           <Route path='/bag' element={<Bag />}></Route>
