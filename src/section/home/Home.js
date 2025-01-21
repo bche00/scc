@@ -10,6 +10,7 @@ import Record from '../../asset/icon/record.png';
 export default function Home() {
   return (
     <div className={style.container}>
+      <div className={style.user}>환영합니다! ○○○ 부원님😊</div>
       <div className={style.c01}>
         <div className={style.top}>
         <div className={style.alarm}>

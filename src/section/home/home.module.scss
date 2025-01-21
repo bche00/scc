@@ -5,6 +5,13 @@
   align-items: center;
   gap: 2.5rem;
   padding: 1rem;
+
+  .user{
+    border: 2px solid #FFF;
+    border-radius: var(--border-radius-8);
+    padding: 1rem;
+    width: 100%;
+  }
   
   .c01{
     width: 100%;
@@ -15,6 +22,8 @@
       justify-content: space-between;
       align-items: flex-start;
       align-self: stretch;
+
+
 
       .alarm{
         div{

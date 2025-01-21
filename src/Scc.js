@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// import { MusicProvider } from "./js/MusicProvider.js";
 
 import './js/common.js'
 import Layout from './components/layout/Layout.js';
@@ -34,18 +35,20 @@ function App() {
     <div>
     <Router>
       <Layout>
-        <Routes>
-        <Route
-          path="/login"
-          element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
-        <Route
-          path="/"
-          element={isLoggedIn ? <Home /> : <Navigate to="/login" />}/>
-        <Route path='/explore' element={<Explore />}></Route>
-        <Route path='/shop' element={<Shop />}></Route>
-        <Route path='/bag' element={<Bag />}></Route>
-        <Route path='/record' element={<Record />}></Route>
-        </Routes>
+        {/* <MusicProvider> */}
+          <Routes>
+          <Route
+            path="/login"
+            element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
+          <Route
+            path="/"
+            element={isLoggedIn ? <Home /> : <Navigate to="/login" />}/>
+          <Route path='/explore' element={<Explore />}></Route>
+          <Route path='/shop' element={<Shop />}></Route>
+          <Route path='/bag' element={<Bag />}></Route>
+          <Route path='/record' element={<Record />}></Route>
+          </Routes>
+        {/* </MusicProvider> */}
       </Layout>
     </Router>
     </div>
