@@ -57,20 +57,26 @@
       }
     }
 
-    .btn{
+    .btn {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      outline: none;
       background-color: #000;
       color: #FFF;
       padding: 0.5rem 1rem;
       border: 2px solid #fff;
       border-radius: var(--border-radius-8);
-      transition: background-color 0.5s, color 0.5s;
-
-      &:hover{
+      text-align: center;
+      transition: background-color 1s ease-in-out, color 1s ease-in-out;
+    
+      &:hover {
         background-color: #FFF;
         color: #000;
-        font-weight: 300;
       }
     }
+    
+    
   }
 }
 
