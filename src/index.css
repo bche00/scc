@@ -1,5 +1,12 @@
-@import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css')
-;
+@import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+
+@font-face {
+  font-family: 'DungGeunMo';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   height: 100%;
   margin: 0;
