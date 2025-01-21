@@ -17,7 +17,27 @@
       width: 100%;
       td {
         width: 100% !important;
-        // padding: 0 0 1rem;
+        padding: 0 0 1rem;
+      }
+
+      input{
+        display: flex;
+        min-height: 2.5rem;
+        padding: 0.5rem 1rem;
+        align-items: center;
+        max-width: 15rem;
+        
+        border-radius: 0.5rem;
+        border: 2px solid #FFF;
+        background: #000;
+      }
+
+      .radio{
+        input{
+          display: inline-block;
+          min-height: unset;
+          margin-right: 0.5rem;
+        }
       }
 
       .formRow{
@@ -27,9 +47,10 @@
           align-items: flex-start;
           gap: 0.5rem;
           margin-bottom: 1rem;
-  
+          
           input {
-            margin-top: 0.2rem;
+            margin-top: 0.3rem;
+            min-height: unset;
           }
         }
       }
