@@ -7,20 +7,6 @@
   font-style: normal;
 }
 
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Galmuri9', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #fff;
-  background-color: black;
-
-  cursor: url('./asset/util/cursor.png'), auto;
-
-}
 
 :root{
   /* font-size */
@@ -36,6 +22,39 @@ body {
   --border-radius-16: 1rem;
   --border-radius-8: 0.5rem;
 }
+
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Galmuri9', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+  background-color: black;
+
+  cursor: url('./asset/util/cursor.png'), auto;
+
+}
+
+
+
+::-webkit-scrollbar {
+width: 8px;
+}
+::-webkit-scrollbar-track {
+background: #000;
+}
+::-webkit-scrollbar-thumb {
+background: #fff;
+border-radius: var(--radius-10, 0.625rem);
+}
+::-webkit-scrollbar-thumb:hover {
+background: var(--CL-blue, #9c9c9c);
+}
+
 
 ::selection {
   background: #C7C9CE; 

@@ -19,7 +19,7 @@
         width: 100% !important;
         padding: 0 0 1rem;
       }
-
+      
       input{
         display: flex;
         min-height: 2.5rem;
@@ -31,16 +31,20 @@
         border-radius: 0.5rem;
         border: 2px solid #FFF;
         background: #000;
+        
+        &::placeholder{
+          color: #636363;
+        }
       }
-
+      
       .radio{
         input{
           display: inline-block;
           min-height: unset;
-          margin-right: 0.5rem;
+          margin-right: 0.325rem;
         }
       }
-
+      
       .formRow{
         padding-top: 1rem;
         .checkboxContainer {
@@ -48,6 +52,7 @@
           align-items: flex-start;
           gap: 0.5rem;
           margin-bottom: 1rem;
+          word-break: keep-all;
           
           input {
             margin-top: 0.3rem;

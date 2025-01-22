@@ -9,7 +9,8 @@ export default function Layout({ children }) {
         <div className={style.bar}>
           心靈捕捉部 <span className={style.close}>×</span>
         </div>
-        <div className={style.content}>{children}
+        <div className={style.content}>{children}</div>
+        <div className={style.util}>
           <Util />
         </div>
       </div>

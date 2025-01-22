@@ -8,7 +8,7 @@ export default function Util() {
   const navigate = useNavigate();
 
   return (
-    <div className='d-flex justify-content-between align-items-end w-100 mb-2'>
+    <div className='d-flex justify-content-between align-items-end w-100'>
       <img src={soundOn} alt="Sound On" />
 
       <Link to="/">

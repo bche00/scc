@@ -83,7 +83,7 @@ export default function SignUpForm() {
               </td>
             </tr>
             <tr className={style.radio}>
-              <td>성별</td>
+              <td>성별 :</td>
               <td>
                 <label>
                   <input
