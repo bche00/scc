@@ -37,16 +37,29 @@
         }
       }
       
-      .radio{
-        input{
+      .radio {
+        label {
           display: inline-block;
-          min-height: unset;
-          margin-right: 0.325rem;
+          align-items: center;
+          cursor: pointer;
+          margin-right: 1rem;
+      
+          img {
+            display: inline-block;
+            margin-right: 0.325rem;
+          }
+      
+          span {
+            font-size: 1rem;
+            color: #fff;
+          }
         }
       }
       
+      
       .formRow{
         padding-top: 1rem;
+        
         .checkboxContainer {
           display: flex;
           align-items: flex-start;

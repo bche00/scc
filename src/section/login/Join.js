@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import style from './join.module.scss';
 
+import CustomRadio from "../../components/commonUI/CustomRadio";
+import CustomCheckbox from "../../components/commonUI/CustomCheckbox";
+
 export default function SignUpForm() {
   const [form, setForm] = useState({
     name: "",
@@ -16,6 +19,20 @@ export default function SignUpForm() {
     setForm({
       ...form,
       [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleCustomCheckboxChange = (name, value) => {
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
+  const handleCustomRadioChange = (value) => {
+    setForm({
+      ...form,
+      gender: value,
     });
   };
 
@@ -52,8 +69,7 @@ export default function SignUpForm() {
                   maxLength="8"
                   onChange={handleChange}
                   placeholder="이름을 입력해주세요."
-                  required
-                />
+                  required/>
               </td>
             </tr>
             <tr>
@@ -78,58 +94,41 @@ export default function SignUpForm() {
                   value={form.confirmPassword}
                   onChange={handleChange}
                   placeholder="비밀번호를 확인해주세요."
-                  required
-                />
+                  required/>
               </td>
             </tr>
             <tr className={style.radio}>
               <td>성별 :</td>
               <td>
-                <label>
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="女"
-                    checked={form.gender === "女"}
-                    onChange={handleChange}
-                  />
-                  女
-                </label>
-                <label style={{ marginLeft: "10px" }}>
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="男"
-                    checked={form.gender === "男"}
-                    onChange={handleChange}
-                  />
-                  男
-                </label>
+                <CustomRadio
+                  name="gender"
+                  value="女"
+                  selectedValue={form.gender}
+                  onChange={handleCustomRadioChange}
+                  label="女"
+                />
+                <CustomRadio
+                  name="gender"
+                  value="男"
+                  selectedValue={form.gender}
+                  onChange={handleCustomRadioChange}
+                  label="男"
+                />
               </td>
             </tr>
             <tr>
               <td colSpan="2" className={style.formRow}>
                 <div className={style.checkboxContainer}>
-                  <input
-                    type="checkbox"
-                    id="checkbox1"
-                    name="checkbox1"
+                  <CustomCheckbox
                     checked={form.checkbox1}
-                    onChange={handleChange}/>
-                  <label htmlFor="checkbox1">
-                    저는 정신과 신체 모두 정상입니다.
-                  </label>
+                    onChange={(value) => handleCustomCheckboxChange("checkbox1", value)}
+                    label="저는 정신과 신체 모두 정상입니다."/>
                 </div>
                 <div className={style.checkboxContainer}>
-                  <input
-                    type="checkbox"
-                    id="checkbox2"
-                    name="checkbox2"
+                  <CustomCheckbox
                     checked={form.checkbox2}
-                    onChange={handleChange}/>
-                  <label htmlFor="checkbox2">
-                    심령포착동아리 활동 중 발생하는 모든 일에 동의하며 책임을 묻지 않습니다.
-                  </label>
+                    onChange={(value) => handleCustomCheckboxChange("checkbox2", value)}
+                    label="심령포착동아리 활동 중 발생하는 모든 일에 동의하며 책임을 묻지 않습니다."/>
                 </div>
               </td>
             </tr>
@@ -142,6 +141,5 @@ export default function SignUpForm() {
         </table>
       </form>
     </div>
-    
   );
 }
