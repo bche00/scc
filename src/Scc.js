@@ -13,7 +13,11 @@ import Bag from './section/bag/Bag.js';
 import Record from './section/record/Record.js';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const storedStatus = localStorage.getItem('isLoggedIn');
+    return storedStatus === 'true' ? true : false;
+  });
+  
 
   const handleLogin = () => {
     localStorage.setItem('isLoggedIn', 'true');
@@ -38,17 +42,17 @@ function App() {
       <Layout>
         {/* <MusicProvider> */}
           <Routes>
-          <Route
-            path="/login"
-            element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
-          <Route
-            path="/"
-            element={isLoggedIn ? <Home /> : <Navigate to="/login" />}/>
-          <Route path='/join-us' element={<Join />}></Route>
-          <Route path='/explore' element={<Explore />}></Route>
-          <Route path='/shop' element={<Shop />}></Route>
-          <Route path='/bag' element={<Bag />}></Route>
-          <Route path='/record' element={<Record />}></Route>
+            <Route
+              path="/login"
+              element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
+            <Route
+              path="/"
+              element={isLoggedIn ? <Home /> : <Navigate to="/login" />}/>
+            <Route path='/join-us' element={<Join />}></Route>
+            <Route path='/explore' element={<Explore />}></Route>
+            <Route path='/shop' element={<Shop />}></Route>
+            <Route path='/bag' element={<Bag />}></Route>
+            <Route path='/record' element={<Record />}></Route>
           </Routes>
         {/* </MusicProvider> */}
       </Layout>
