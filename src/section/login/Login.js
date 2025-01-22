@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Login({ onLogin }) {
   const handleLoginClick = () => {
-    onLogin(); // 부모에서 전달된 handleLogin 호출
+    onLogin();
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import style from './join.module.scss';
+import { supabase } from "../../db/supabase";
 
 import CustomRadio from "../../components/commonUI/CustomRadio";
 import CustomCheckbox from "../../components/commonUI/CustomCheckbox";
@@ -36,8 +37,15 @@ export default function SignUpForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+
+  // 팝업 출력
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!form.name.trim()) {
+      alert("이름을 입력해주세요.");
+      return;
+    }
     if (form.password !== form.confirmPassword) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
@@ -50,9 +58,49 @@ export default function SignUpForm() {
       alert("필수 체크박스를 모두 선택해주세요.");
       return;
     }
-    alert("입부신청이 완료되었습니다!");
+  
+    try {
+      const { data, error, status } = await supabase
+        .from('users')
+        .insert(
+          [
+            {
+              name: form.name.trim(),
+              password: form.password,
+              gender: form.gender,
+              status: 'pending',
+            },
+          ],
+          { returning: 'representation' }
+        );
+  
+      console.log("Response Details:", { data, error, status });
+  
+      if (error) {
+        console.error("Supabase Error Details:", { error, status });
+        alert(`회원가입 중 오류가 발생했습니다: ${error.message}`);
+      } else if (status === 201) {
+        alert("입부 신청이 완료되었습니다! 관리자의 승인을 기다려주세요.");
+        setForm({
+          name: "",
+          password: "",
+          confirmPassword: "",
+          gender: "",
+          checkbox1: false,
+          checkbox2: false,
+        });
+      } else {
+        alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+      }
+    } catch (err) {
+      console.error("Unexpected Error:", err);
+      alert("예기치 않은 오류가 발생했습니다.");
+    }
   };
+  
+  
 
+// html
   return (
     <div className={style.container}>
       <h2>회원가입</h2>
@@ -69,7 +117,8 @@ export default function SignUpForm() {
                   maxLength="8"
                   onChange={handleChange}
                   placeholder="이름을 입력해주세요."
-                  required/>
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -94,7 +143,8 @@ export default function SignUpForm() {
                   value={form.confirmPassword}
                   onChange={handleChange}
                   placeholder="비밀번호를 확인해주세요."
-                  required/>
+                  required
+                />
               </td>
             </tr>
             <tr className={style.radio}>
@@ -122,13 +172,15 @@ export default function SignUpForm() {
                   <CustomCheckbox
                     checked={form.checkbox1}
                     onChange={(value) => handleCustomCheckboxChange("checkbox1", value)}
-                    label="저는 정신과 신체 모두 정상입니다."/>
+                    label="저는 정신과 신체 모두 정상입니다."
+                  />
                 </div>
                 <div className={style.checkboxContainer}>
                   <CustomCheckbox
                     checked={form.checkbox2}
                     onChange={(value) => handleCustomCheckboxChange("checkbox2", value)}
-                    label="심령포착동아리 활동 중 발생하는 모든 일에 동의하며 책임을 묻지 않습니다."/>
+                    label="심령포착동아리 활동 중 발생하는 모든 일에 동의하며 책임을 묻지 않습니다."
+                  />
                 </div>
               </td>
             </tr>
