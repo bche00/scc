@@ -38,13 +38,9 @@ function App() {
       <Layout>
         {/* <MusicProvider> */}
           <Routes>
-          {/* <Route
+          <Route
             path="/login"
-            element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/> */}
-            <Route
-              path="/login"
-              element={!isLoggedIn || window.location.search.includes('forceLogin=true') ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
-              {/* 디렉토링 시, 경로에 /login?forceLogin=true 추가해서 확인하기. */}
+            element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
           <Route
             path="/"
             element={isLoggedIn ? <Home /> : <Navigate to="/login" />}/>
