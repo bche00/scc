@@ -128,8 +128,7 @@ export default function SignUpForm() {
                     checked={form.checkbox2}
                     onChange={handleChange}/>
                   <label htmlFor="checkbox2">
-                    심령포착부 활동 중 발생하는 모든 일에 동의하며,
-                    심령포착부 측에 책임을 묻지 않습니다.
+                    심령포착동아리 활동 중 발생하는 모든 일에 동의하며 책임을 묻지 않습니다.
                   </label>
                 </div>
               </td>

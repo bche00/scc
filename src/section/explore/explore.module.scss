@@ -25,7 +25,9 @@
     border-radius: var(--border-radius-8);
 
     background-image: url('/asset/img/science_room.png');
-    object-fit: contain;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .textBox{
