@@ -35,10 +35,16 @@ body {
   color: #fff;
   background-color: black;
 
-  cursor: url('./asset/util/cursor.png'), auto;
-
+  cursor: url('./asset/util/cursor.png'), default;
 }
 
+/* cursor스타일 */
+a, button, .cursorPointer {
+  cursor: url('./asset/util/cursor_pointer.png'), pointer !important;
+}
+span:hover, p:hover {
+  cursor: url('./asset/util/cursor_text.png'), pointer;
+}
 
 
 ::-webkit-scrollbar {

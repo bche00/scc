@@ -41,7 +41,6 @@
         label {
           display: inline-block;
           align-items: center;
-          cursor: pointer;
           margin-right: 1rem;
       
           img {
@@ -85,11 +84,11 @@
       background-color: #000;
       border: 2px solid #fff;
       border-radius: var(--border-radius-8);
-      transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
       padding: 0.5rem 1rem;
     
       &:hover {
-        background-color: #FFF;
+        background-color: #636363;
         color: #000;
       }
     }

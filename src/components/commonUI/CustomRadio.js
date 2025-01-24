@@ -6,6 +6,7 @@ export default function CustomRadio({ name, value, selectedValue, onChange, labe
   return (
     <label>
       <img
+        className="cursorPointer"
         src={value === selectedValue ? selectedIcon : unselectedIcon}
         alt={value === selectedValue ? "Selected" : "Unselected"}
         onClick={() => onChange(value)}

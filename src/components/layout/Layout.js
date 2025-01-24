@@ -21,9 +21,8 @@ export default function Layout({ children, setIsLoggedIn }) {
         <div className={style.bar}>
           心靈捕捉部{" "}
           <span
-            className={style.close}
-            onClick={handleLogout} // 로그아웃 핸들러 연결
-          >
+            className={`${style.close} cursorPointer`}
+            onClick={handleLogout}>
             ×
           </span>
         </div>
