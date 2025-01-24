@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import ProtectedRoute from "./components/other/ProtectedRoute";
 // import { MusicProvider } from "./js/MusicProvider.js";
 
 import './js/common.js'
@@ -13,51 +14,49 @@ import Bag from './section/bag/Bag.js';
 import Record from './section/record/Record.js';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    const storedStatus = localStorage.getItem('isLoggedIn');
-    return storedStatus === 'true' ? true : false;
-  });
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(null); // 초기값 null
+
+  useEffect(() => {
+    const storedStatus = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(storedStatus === "true");
+  }, []);
 
   const handleLogin = () => {
-    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem("isLoggedIn", "true");
     setIsLoggedIn(true);
   };
-  
+
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
   };
 
-  useEffect(() => {
-    const storedStatus = localStorage.getItem('isLoggedIn');
-    if (storedStatus === 'true') {
-      setIsLoggedIn(true);
-    }
-  }, []);
+  // 로딩 상태 처리
+  if (isLoggedIn === null) {
+    return <div>Loading...</div>; // 로딩 중일 때 빈 화면 또는 로딩 스피너
+  }
 
   return (
-    <div>
     <Router>
-      <Layout>
-        {/* <MusicProvider> */}
-          <Routes>
-            <Route
-              path="/login"
-              element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
-            <Route
-              path="/"
-              element={isLoggedIn ? <Home /> : <Navigate to="/login" />}/>
-            <Route path='/join-us' element={<Join />}></Route>
-            <Route path='/explore' element={<Explore />}></Route>
-            <Route path='/shop' element={<Shop />}></Route>
-            <Route path='/bag' element={<Bag />}></Route>
-            <Route path='/record' element={<Record />}></Route>
-          </Routes>
-        {/* </MusicProvider> */}
+      <Layout setIsLoggedIn={setIsLoggedIn}>
+        <Routes>
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/join-us" element={<Join />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/bag" element={<Bag />} />
+          <Route path="/record" element={<Record />} />
+        </Routes>
       </Layout>
     </Router>
-    </div>
   );
 }
 
