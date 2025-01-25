@@ -22,8 +22,10 @@ export default function Login({ onLogin }) {
     });
   };
 
+
   const handleLoginClick = async () => {
     try {
+      console.log(`로그인 시도: ${form.name} ${form.password}`);
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -31,24 +33,29 @@ export default function Login({ onLogin }) {
         .eq("password", form.password)
         .eq("status", "approved")
         .single();
-
+  
       if (error || !data) {
-        setErrorMessage(
-          "이름 또는 비밀번호가 올바르지 않거나,\n승인되지 않은 회원입니다."
-        );
+        setErrorMessage("이름 또는 비밀번호가 올바르지 않거나, 승인되지 않은 회원입니다.");
         console.error("Login Error:", error);
         return;
       }
-
+  
+      console.log("로그인 성공:", data);
+  
+      // 유저 정보를 localStorage에 저장
+      localStorage.setItem("loggedInUser", JSON.stringify(data));
+      localStorage.setItem("isLoggedIn", "true"); // 로그인 상태 저장
+  
       setErrorMessage("");
-
-      onLogin();
+      onLogin(); // App.js에서 로그인 상태 업데이트
       navigate("/"); // 홈 화면으로 이동
     } catch (err) {
       console.error("Unexpected Error:", err);
-      setErrorMessage("예기치 않은 오류가 발생했습니다.\n다시 시도해주세요.");
+      setErrorMessage("예기치 않은 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
+  
+  
 
   return (
     <div className={style.container}>
@@ -83,7 +90,7 @@ export default function Login({ onLogin }) {
         {errorMessage && (
           <p style={{
               color: "red",
-              whiteSpace: "pre-line", // \n을 줄바꿈으로 처리
+              whiteSpace: "pre-line",
             }}>
             {errorMessage}
           </p>

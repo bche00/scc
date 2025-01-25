@@ -14,33 +14,35 @@ import Bag from './section/bag/Bag.js';
 import Record from './section/record/Record.js';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(null); // 초기값 null
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const storedStatus = localStorage.getItem("isLoggedIn");
-    setIsLoggedIn(storedStatus === "true");
+    // localStorage에서 로그인 상태 확인
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    setIsLoggedIn(!!loggedInUser); // loggedInUser가 존재하면 true
   }, []);
 
   const handleLogin = () => {
-    localStorage.setItem("isLoggedIn", "true");
-    setIsLoggedIn(true);
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser) {
+      setIsLoggedIn(true);
+    }
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
     localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
   };
-
-  // 로딩 상태 처리
-  if (isLoggedIn === null) {
-    return <div>Loading...</div>; // 로딩 중일 때 빈 화면 또는 로딩 스피너
-  }
 
   return (
     <Router>
       <Layout setIsLoggedIn={setIsLoggedIn}>
         <Routes>
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route
+              path="/login"
+              element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}
+            />
           <Route
             path="/"
             element={
