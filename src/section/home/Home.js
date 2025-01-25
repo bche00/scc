@@ -31,7 +31,7 @@ export default function Home() {
   
       try {
         const { data: userInfo, error: infoError } = await supabase
-          .from("users_info") // 정확한 테이블 이름
+          .from("users_info")
           .select("coin, mail, bag_item, explore_limit, lucky_draw_limit")
           .eq("user_id", userId)
           .single();
@@ -62,7 +62,7 @@ export default function Home() {
 
   return (
     <div className={style.container}>
-      <div className={style.user}>환영합니다! {userName} 부원님 😊</div>
+      <div className={style.user}>환영합니다! &lceil; {userName} &rfloor; 부원님 😊</div>
       <div className={style.c01}>
         <div className={style.top}>
           <div className={style.alarm}>
@@ -83,7 +83,7 @@ export default function Home() {
         </div>
 
         <div className={style.banner}>
-          <p className={style.planText}>오늘의 일정은 ---- 입니다~! ▶ 바로가기 ◀</p>
+          <p className={style.planText}>오늘의 일정은 ---- 입니다~!	&rArr; 공지 바로가기 &lArr;</p>
         </div>
       </div>
 

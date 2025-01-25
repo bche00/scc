@@ -54,11 +54,11 @@ width: 8px;
 background: #000;
 }
 ::-webkit-scrollbar-thumb {
-background: #fff;
+background: #636363;
 border-radius: var(--radius-10, 0.625rem);
 }
 ::-webkit-scrollbar-thumb:hover {
-background: var(--CL-blue, #9c9c9c);
+background: var(--CL-blue, #fff);
 }
 
 
