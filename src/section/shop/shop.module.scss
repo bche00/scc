@@ -45,7 +45,7 @@
     .productList {
       // border: 2px solid lawngreen;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개씩 */
       gap: 1rem;
       max-height: 15rem;
       overflow-y: auto;
