@@ -1,10 +1,13 @@
+import { use } from "react";
+
 const products = [
   {
     id: 1,
     image: "/asset/product/product_00.png",
-    name: "물건1",
-    price: 1,
+    name: "페인트",
+    price: 20,
     description: "동아리 커버를 변경할 수 있다. 사용하고싶다면 부장에게 연락하자. ...이정도까지만!",
+    used: "false",
   },
   {
     id: 2,
@@ -12,6 +15,7 @@ const products = [
     name: "물건2",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
   {
     id: 3,
@@ -19,6 +23,7 @@ const products = [
     name: "물건3",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
   {
     id: 4,
@@ -26,6 +31,7 @@ const products = [
     name: "물건4",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
   {
     id: 5,
@@ -33,6 +39,7 @@ const products = [
     name: "물건5",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
   {
     id: 6,
@@ -40,6 +47,7 @@ const products = [
     name: "물건6",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
   {
     id: 7,
@@ -47,6 +55,7 @@ const products = [
     name: "물건7",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
   {
     id: 8,
@@ -54,6 +63,7 @@ const products = [
     name: "물건8",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
   {
     id: 9,
@@ -61,6 +71,7 @@ const products = [
     name: "물건9",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
   {
     id: 10,
@@ -68,6 +79,7 @@ const products = [
     name: "물건10",
     price: 1,
     description: "더미데이터.",
+    used: "false",
   },
 ];
 

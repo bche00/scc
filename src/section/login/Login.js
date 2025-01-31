@@ -96,8 +96,8 @@ export default function Login({ onLogin }) {
           </p>
         )}
         <div className={style.btn}>
-          <button onClick={handleLoginClick}>로그인</button>
           <span className="cursorPointer" onClick={handleJoinUsClick}>회원가입</span>
+          <button onClick={handleLoginClick}>로그인</button>
         </div>
       </form>
     </div>

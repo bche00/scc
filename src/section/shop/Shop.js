@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { supabase } from "../../db/supabase"; // Supabase 연결
 import style from "./shop.module.scss";
 
 import TextDone from "../../asset/util/text_done.gif";
 import products from "../../db/product.js";
+import Coin from "../../asset/util/coin.gif";
 
 export default function Shop() {
   const dialogues = [
@@ -17,6 +19,8 @@ export default function Shop() {
 
   const [currentDialogue, setCurrentDialogue] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null); // 선택된 상품
+  const [loading, setLoading] = useState(false);
+  const [userCoin, setUserCoin] = useState(0); // **유저 코인 상태 추가**
 
   useEffect(() => {
     const randomDialogue =
@@ -24,15 +28,117 @@ export default function Shop() {
     setCurrentDialogue(randomDialogue);
   }, []);
 
+  // **유저 소지금 가져오기**
+  useEffect(() => {
+    const fetchUserCoin = async () => {
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (!loggedInUser) return;
+
+      const { data, error } = await supabase
+        .from("users_info")
+        .select("coin")
+        .eq("user_id", loggedInUser.id)
+        .single();
+
+      if (error) {
+        console.error("유저 코인 정보를 가져오는 중 오류 발생:", error);
+        return;
+      }
+
+      setUserCoin(data.coin);
+    };
+
+    fetchUserCoin();
+  }, []);
+
   const handleProductClick = (product) => {
-    setSelectedProduct(product); // 선택된 상품 업데이트
+    setSelectedProduct(product);
+  };
+
+  const handlePurchase = async () => {
+    if (!selectedProduct) return;
+
+    const confirmPurchase = window.confirm(
+      `${selectedProduct.name}을(를) 구매하시겠습니까?(${selectedProduct.price}c)`
+    );
+    if (!confirmPurchase) return;
+
+    setLoading(true);
+
+    try {
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (!loggedInUser) {
+        alert("로그인이 필요합니다.");
+        setLoading(false);
+        return;
+      }
+
+      const userId = loggedInUser.id;
+
+      // 유저 정보 가져오기
+      const { data: userInfo, error: userError } = await supabase
+        .from("users_info")
+        .select("coin, bag_item")
+        .eq("user_id", userId)
+        .single();
+
+      if (userError || !userInfo) {
+        console.error("유저 정보를 가져오는 중 오류 발생:", userError);
+        alert("유저 정보를 가져오는 데 실패했습니다.");
+        setLoading(false);
+        return;
+      }
+
+      if (userInfo.coin < selectedProduct.price) {
+        alert("이런! 코인이 부족합니다😥");
+        setLoading(false);
+        return;
+      }
+
+      // **코인 차감 및 소지품 업데이트**
+      const updatedCoins = userInfo.coin - selectedProduct.price;
+      const updatedBagitem = [...userInfo.bag_item];
+      const existingItem = updatedBagitem.find(
+        (item) => item.itemId === selectedProduct.id
+      );
+
+      if (existingItem) {
+        existingItem.count += 1;
+      } else {
+        updatedBagitem.push({ itemId: selectedProduct.id, count: 1 });
+      }
+
+      // Supabase 업데이트
+      const { error: updateError } = await supabase
+        .from("users_info")
+        .update({
+          coin: updatedCoins,
+          bag_item: updatedBagitem,
+        })
+        .eq("user_id", userId);
+
+      if (updateError) {
+        console.error("데이터 업데이트 중 오류 발생:", updateError);
+        alert("구매 처리 중 문제가 발생했습니다.");
+      } else {
+        alert("구매가 완료되었습니다!");
+        setUserCoin(updatedCoins); // **소지금 UI 업데이트**
+      }
+    } catch (err) {
+      console.error("예기치 않은 오류 발생:", err);
+      alert("구매 처리 중 문제가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className={style.container}>
-      {/* 상단 대화 박스 */}
+      {/* 상단 텍스트 박스 */}
       <div className={style.c01}>
-        <div className={style.imgBox} />
+        <div className={style.imgBox}>
+          <div className={style.coin}><img src={Coin} alt="Coin" />{userCoin}c</div> {/* 💰 유저 코인 표시 */}
+        </div>
         <div className={style.textBox}>
           {currentDialogue}
           <img src={TextDone} alt="Text done" />
@@ -46,7 +152,7 @@ export default function Shop() {
             <div
               key={product.id}
               className={style.product}
-              onClick={() => handleProductClick(product)} // 클릭 시 상세 정보 업데이트
+              onClick={() => handleProductClick(product)}
             >
               <img src={product.image} alt={product.name} />
               <span>{product.price}c</span>
@@ -59,13 +165,17 @@ export default function Shop() {
           <div className={style.productInfo}>
             <img src={selectedProduct.image} alt={selectedProduct.name} />
             <div className={style.infoMore}>
-              <span className={style.productN}>{selectedProduct.name}</span>
+              <span className={style.productN}>
+                {selectedProduct.name} - {selectedProduct.price}c
+              </span>
               <span className={style.productD}>
                 {selectedProduct.description}
               </span>
               <div className={style.btn}>
                 <button>선물</button>
-                <button>구매</button>
+                <button onClick={handlePurchase} disabled={loading}>
+                  {loading ? "구매 중..." : "구매"}
+                </button>
               </div>
             </div>
           </div>

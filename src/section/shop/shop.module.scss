@@ -13,15 +13,40 @@
 
     .imgBox{
       background-image: url(../../asset/img/shop.png);
-
+      
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 20.625rem;
       height: 6.25rem;
-      padding: 0rem 1rem;
       gap: 0.625rem;
+
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      .coin{
+        position: absolute;
+        background-color: #000;
+        border: 2px solid #FFF;
+        padding: 0.5rem;
+        border-radius: var(--border-radius-8);
+        right: 0;
+        top: 0;
+
+        display: flex;;
+        justify-content: center;
+        align-items: center;
+        gap: 0.2rem;
+
+        font-family: 'DungGeunMo';
+        color: #FFF;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 1;
+      }
     }
 
     .textBox{
@@ -43,7 +68,6 @@
     height: 100%;
     
     .productList {
-      // border: 2px solid lawngreen;
       display: grid;
       grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개씩 */
       gap: 1rem;
@@ -56,7 +80,7 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.5rem;
         gap: 0.5rem;
         transition: opacity 0.3s ease;
 
@@ -72,7 +96,7 @@
       border: 2px solid #fff;
       border-radius: var(--border-radius-8);
       display: flex;
-      gap: 0.5rem;
+      gap: 1rem;
       padding: 1rem;
 
       img{
@@ -104,8 +128,13 @@
             justify-content: center;
             border-radius: 0.25rem;
             border: 2px solid #FFF;
-            background: #000;
             color: #FFF;
+            background: #000;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+            &:hover{
+              background-color: #636363;
+            }
           }
         }
       }

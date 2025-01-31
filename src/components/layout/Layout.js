@@ -28,8 +28,10 @@ export default function Layout({ children, setIsLoggedIn }) {
   const handleLogout = () => {
     const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
     if (confirmLogout) {
-      localStorage.removeItem("isLoggedIn"); // 로컬스토리지 초기화
-      setIsLoggedIn(false); // 상태 업데이트
+      // 로컬 스토리지 초기화
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("loggedInUser"); // 유저 정보 삭제
+      setIsLoggedIn(false); // 상태 초기화
       navigate("/login"); // 로그인 페이지로 이동
     }
   };

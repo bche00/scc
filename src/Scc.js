@@ -12,6 +12,7 @@ import Explore from './section/explore/Explore.js';
 import Shop from './section/shop/Shop.js';
 import Bag from './section/bag/Bag.js';
 import Record from './section/record/Record.js';
+import NotFound from './section/notFound.js';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,23 +40,14 @@ function App() {
     <Router>
       <Layout setIsLoggedIn={setIsLoggedIn}>
         <Routes>
-          <Route
-              path="/login"
-              element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}
-            />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/login" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
+          <Route path="/" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Home /></ProtectedRoute>}/>
           <Route path="/join-us" element={<Join />} />
           <Route path="/explore" element={<Explore />} />
-          <Route path="/shop" element={<Shop />} />
+          <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>}/>
           <Route path="/bag" element={<Bag />} />
           <Route path="/record" element={<Record />} />
+          <Route path="*" element={<NotFound />} /> {/* 404 */}
         </Routes>
       </Layout>
     </Router>
