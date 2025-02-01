@@ -36,7 +36,7 @@ export default function Shop() {
 
       const { data, error } = await supabase
         .from("users_info")
-        .select("coin")
+        .select("coin, bag_item")
         .eq("user_id", loggedInUser.id)
         .single();
 
@@ -57,14 +57,14 @@ export default function Shop() {
 
   const handlePurchase = async () => {
     if (!selectedProduct) return;
-
+  
     const confirmPurchase = window.confirm(
       `${selectedProduct.name}을(를) 구매하시겠습니까?(${selectedProduct.price}c)`
     );
     if (!confirmPurchase) return;
-
+  
     setLoading(true);
-
+  
     try {
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (!loggedInUser) {
@@ -72,43 +72,49 @@ export default function Shop() {
         setLoading(false);
         return;
       }
-
+  
       const userId = loggedInUser.id;
-
-      // 유저 정보 가져오기
+  
+      // **유저 정보 가져오기**
       const { data: userInfo, error: userError } = await supabase
         .from("users_info")
         .select("coin, bag_item")
         .eq("user_id", userId)
         .single();
-
+  
       if (userError || !userInfo) {
         console.error("유저 정보를 가져오는 중 오류 발생:", userError);
         alert("유저 정보를 가져오는 데 실패했습니다.");
         setLoading(false);
         return;
       }
-
+  
       if (userInfo.coin < selectedProduct.price) {
         alert("이런! 코인이 부족합니다😥");
         setLoading(false);
         return;
       }
-
+  
       // **코인 차감 및 소지품 업데이트**
       const updatedCoins = userInfo.coin - selectedProduct.price;
       const updatedBagitem = [...userInfo.bag_item];
+  
+      // **기존 아이템 중 used: false 상태인 것 찾기**
       const existingItem = updatedBagitem.find(
-        (item) => item.itemId === selectedProduct.id
+        (item) => item.itemId === selectedProduct.id && !item.used
       );
-
+  
       if (existingItem) {
         existingItem.count += 1;
       } else {
-        updatedBagitem.push({ itemId: selectedProduct.id, count: 1 });
+        updatedBagitem.push({ itemId: selectedProduct.id, count: 1, used: false });
       }
-
-      // Supabase 업데이트
+  
+      // **📌 한국 시간(KST) 변환**
+      const koreaTime = new Date();
+      koreaTime.setHours(koreaTime.getHours() + 9); // UTC → KST 변환
+  
+      // **Supabase 업데이트 (유저 정보)**
       const { error: updateError } = await supabase
         .from("users_info")
         .update({
@@ -116,13 +122,28 @@ export default function Shop() {
           bag_item: updatedBagitem,
         })
         .eq("user_id", userId);
-
+  
       if (updateError) {
         console.error("데이터 업데이트 중 오류 발생:", updateError);
         alert("구매 처리 중 문제가 발생했습니다.");
       } else {
+        // **📌 구매 기록 저장 (KST 적용)**
+        const { error: recordError } = await supabase.from("users_record").insert([
+          {
+            user_id: userId,
+            item_id: selectedProduct.id,
+            item_name: selectedProduct.name,
+            type: "purchase",
+            timestamp: koreaTime.toISOString(), // ✅ 한국 시간 저장
+          },
+        ]);
+  
+        if (recordError) {
+          console.error("구매 기록 저장 오류:", recordError);
+        }
+  
         alert("구매가 완료되었습니다!");
-        setUserCoin(updatedCoins); // **소지금 UI 업데이트**
+        setUserCoin(updatedCoins);
       }
     } catch (err) {
       console.error("예기치 않은 오류 발생:", err);
@@ -131,13 +152,17 @@ export default function Shop() {
       setLoading(false);
     }
   };
+  
+  
 
   return (
     <div className={style.container}>
       {/* 상단 텍스트 박스 */}
       <div className={style.c01}>
         <div className={style.imgBox}>
-          <div className={style.coin}><img src={Coin} alt="Coin" />{userCoin}c</div> {/* 💰 유저 코인 표시 */}
+          <div className={style.coin}>
+            <img src={Coin} alt="Coin" /> {userCoin}c
+          </div>
         </div>
         <div className={style.textBox}>
           {currentDialogue}
