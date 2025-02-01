@@ -49,7 +49,7 @@ function App() {
         <Route path="/bag" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Bag /></ProtectedRoute>} />
         <Route path="/record" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Record /></ProtectedRoute>} />
 
-        <Route path="*" element={<ProtectedRoute isLoggedIn={isLoggedIn}><NotFound /></ProtectedRoute>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
   </Router>

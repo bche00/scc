@@ -70,7 +70,7 @@ export default function Record() {
       {loading ? (
         <p>로딩 중...</p>
       ) : records.length === 0 ? (
-        <p>아직 기록이 없습니다😮!</p>
+        <p>아직 기록이 없습니다!😮</p>
       ) : (
         <ul className={style.recordList}>
           {records.map((record) => (

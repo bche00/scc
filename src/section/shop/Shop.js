@@ -188,10 +188,13 @@ export default function Shop() {
         {/* 선택된 상품 상세 정보 */}
         {selectedProduct && (
           <div className={style.productInfo}>
-            <img src={selectedProduct.image} alt={selectedProduct.name} />
+            <div class={style.imgBox}>
+              <img src={selectedProduct.image} alt={selectedProduct.name} />
+              {selectedProduct.price}c
+            </div>
             <div className={style.infoMore}>
               <span className={style.productN}>
-                {selectedProduct.name} - {selectedProduct.price}c
+                {selectedProduct.name}
               </span>
               <span className={style.productD}>
                 {selectedProduct.description}

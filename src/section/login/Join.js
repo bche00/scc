@@ -80,7 +80,7 @@ export default function SignUpForm() {
         console.error("Supabase Error Details:", { error, status });
         alert(`회원가입 중 오류가 발생했습니다: ${error.message}`);
       } else if (status === 201) {
-        alert("입부 신청이 완료되었습니다! 관리자의 승인을 기다려주세요.");
+        alert("입부 신청이 완료되었습니다! 부장의 승인을 기다려주세요.");
         setForm({
           name: "",
           password: "",
