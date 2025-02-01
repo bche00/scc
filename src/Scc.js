@@ -38,19 +38,21 @@ function App() {
 
   return (
     <Router>
-      <Layout setIsLoggedIn={setIsLoggedIn}>
-        <Routes>
-          <Route path="/login" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}/>
-          <Route path="/" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Home /></ProtectedRoute>}/>
-          <Route path="/join-us" element={<Join />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>}/>
-          <Route path="/bag" element={<Bag />} />
-          <Route path="/record" element={<Record />} />
-          <Route path="*" element={<NotFound />} /> {/* 404 */}
-        </Routes>
-      </Layout>
-    </Router>
+    <Layout setIsLoggedIn={setIsLoggedIn}>
+      <Routes>
+        <Route path="/login" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />} />
+        <Route path="/join-us" element={<Join />} />
+
+        <Route path="/" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Home /></ProtectedRoute>} />
+        <Route path="/explore" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Explore /></ProtectedRoute>} />
+        <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>} />
+        <Route path="/bag" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Bag /></ProtectedRoute>} />
+        <Route path="/record" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Record /></ProtectedRoute>} />
+
+        <Route path="*" element={<ProtectedRoute isLoggedIn={isLoggedIn}><NotFound /></ProtectedRoute>} />
+      </Routes>
+    </Layout>
+  </Router>
   );
 }
 
