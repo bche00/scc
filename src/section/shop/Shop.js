@@ -157,12 +157,12 @@ export default function Shop() {
 
   return (
     <div className={style.container}>
-      {/* 상단 텍스트 박스 */}
-      <div className={style.c01}>
-        <div className={style.imgBox}>
           <div className={style.coin}>
             <img src={Coin} alt="Coin" /> {userCoin}c
           </div>
+      {/* 상단 이미지 */}
+      <div className={style.c01}>
+        <div className={style.imgBox}>
         </div>
         <div className={style.textBox}>
           {currentDialogue}
@@ -188,7 +188,7 @@ export default function Shop() {
         {/* 선택된 상품 상세 정보 */}
         {selectedProduct && (
           <div className={style.productInfo}>
-            <div class={style.imgBox}>
+            <div className={style.imgBox}>
               <img src={selectedProduct.image} alt={selectedProduct.name} />
               {selectedProduct.price}c
             </div>

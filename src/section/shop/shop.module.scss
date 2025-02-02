@@ -4,6 +4,30 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  position: relative;
+
+  .coin{
+    position: absolute;
+    background-color: #000;
+    border: 2px solid #FFF;
+    padding: 0.5rem;
+    border-radius: var(--border-radius-8);
+    right: 0;
+    top: 0;
+
+    display: flex;;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+
+    font-family: 'DungGeunMo';
+    color: #FFF;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+
+  }
 
   .c01{
     display: flex;
@@ -14,7 +38,6 @@
     .imgBox{
       background-image: url(../../asset/img/shop.png);
       
-      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -25,28 +48,6 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-
-      .coin{
-        position: absolute;
-        background-color: #000;
-        border: 2px solid #FFF;
-        padding: 0.5rem;
-        border-radius: var(--border-radius-8);
-        right: 0;
-        top: 0;
-
-        display: flex;;
-        justify-content: center;
-        align-items: center;
-        gap: 0.2rem;
-
-        font-family: 'DungGeunMo';
-        color: #FFF;
-        text-align: center;
-        font-size: 1.5rem;
-        font-weight: 400;
-        line-height: 1;
-      }
     }
 
     .textBox{

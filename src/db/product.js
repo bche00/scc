@@ -3,15 +3,15 @@ import { use } from "react";
 const products = [
   {
     id: 1,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/fortune.png",
     name: "포츈쿠키",
     price: 1,
-    description: "오늘 하루의 운세를 점쳐보세요! 맛있는 쿠키는 덤~.",
+    description: "오늘의 운세를 점쳐보세요! 맛있는 쿠키는 덤~.",
     used: "false",
   },
   {
     id: 2,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/note.png",
     name: "버려진 쪽지",
     price: 1,
     description: "학생들이 작성한 듯한 쪽지. 별별 잡다한 말이 적혀있다.",
@@ -19,7 +19,7 @@ const products = [
   },
   {
     id: 3,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/hotbar.png",
     name: "핫바",
     price: 4,
     description: "든든히 먹고 체력을 보충하자! 당일 탐사 횟수+1",
@@ -27,7 +27,7 @@ const products = [
   },
   {
     id: 4,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/badge.png",
     name: "뱃지",
     price: 30,
     description: "사용 시 3시간동안 동아리에서 권력을 행사할 수 있다.",
@@ -35,7 +35,7 @@ const products = [
   },
   {
     id: 5,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/megaphone.png",
     name: "확성기",
     price: 15,
     description: "사용 시 3시간동안 원하는 게시글을 공지할 수 있다.",
@@ -43,7 +43,7 @@ const products = [
   },
   {
     id: 6,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/paint.png",
     name: "페인트통",
     price: 15,
     description: "사용 시 3시간동안 동아리 커버 이미지를 변경할 수 있다.",
@@ -51,7 +51,7 @@ const products = [
   },
   {
     id: 7,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/amulet_mangsin.png",
     name: "망신부적",
     price: 8,
     description: "부착된 대상에게 원하는 의상을 입힐 수 있다.",
@@ -59,7 +59,7 @@ const products = [
   },
   {
     id: 8,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/amulet_sonjae.png",
     name: "손재부적",
     price: 5,
     description: "부착된 대상이 코인을 잃어버리게 만든다.(1c~5c)",
@@ -67,7 +67,7 @@ const products = [
   },
   {
     id: 9,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/amulet_bakbok.png",
     name: "박복부적",
     price: 1,
     description: "부착된 대상을 1일간 자신의 노예로 부릴 수 있다.",
@@ -75,15 +75,15 @@ const products = [
   },
   {
     id: 10,
-    image: "/asset/product/product_00.png",
+    image: "/asset/product/ddabong.png",
     name: "따봉고슴도치 스티커",
     price: 12,
     description: "부적의 효과를 무효화시킨다. 따봉고슴도치야 고마워!",
     used: "false",
   },
   {
-    id: 10,
-    image: "/asset/product/product_00.png",
+    id: 11,
+    image: "/asset/product/luckybox.png",
     name: "랜덤박스",
     price: 5,
     description: "판매중인 상품을 랜덤하게 얻을 수 있다. …어쩌면 특별한 상품이 등장할지도!",
