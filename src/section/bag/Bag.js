@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../db/supabase";
 import products from "../../db/product";
-import { handleUseItem, setPopupHandler } from "./itemHandler"; //  핸들러
+import { handleUseItem, setPopupHandler } from "./itemHandler"; // ✅ 핸들러 가져오기
 import style from "./bag.module.scss";
 
 export default function Bag() {
@@ -36,7 +36,7 @@ export default function Bag() {
     };
 
     fetchBagItems();
-    setPopupHandler(setPopup);
+    setPopupHandler(setPopup); // ✅ 팝업 핸들러 등록
   }, []);
 
   return (
@@ -68,6 +68,7 @@ export default function Bag() {
         })
       )}
 
+      {/* ✅ 팝업 UI */}
       {popup.visible && (
         <div className={style.popup}>
           <div className={style.popupContent}>

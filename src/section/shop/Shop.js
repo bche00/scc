@@ -173,7 +173,7 @@ export default function Shop() {
       {/* 상품 리스트 */}
       <div className={style.c02}>
         <div className={style.productList}>
-          {products.map((product) => (
+          {products.slice(0, 11).map((product) => ( // 11개까지만 표시
             <div
               key={product.id}
               className={style.product}
@@ -184,6 +184,7 @@ export default function Shop() {
             </div>
           ))}
         </div>
+
 
         {/* 선택된 상품 상세 정보 */}
         {selectedProduct && (
