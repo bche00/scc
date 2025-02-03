@@ -17,8 +17,6 @@ export default function Record() {
         return;
       }
 
-      console.log("📢 Fetching records for user:", loggedInUser.id);
-
       const { data, error } = await supabase
       .from("users_record")
       .select("*")
@@ -31,7 +29,6 @@ export default function Record() {
         return;
       }
 
-      console.log("✅ 가져온 기록 데이터:", data);
       setRecords(data);
       setLoading(false);
     };
@@ -45,7 +42,6 @@ export default function Record() {
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "users_record" }, // 변경된 테이블명 반영
       (payload) => {
-        console.log("🆕 새로운 기록이 추가됨:", payload.new);
         setRecords((prevRecords) => [payload.new, ...prevRecords]);
       }
     )
@@ -54,16 +50,14 @@ export default function Record() {
   
 
     return () => {
-      console.log("🛑 Unsubscribing from real-time updates.");
       supabase.removeChannel(subscription);
     };
   }, []);
 
-const formatDate = (timestamp) => {
-  const date = new Date(timestamp);
-  return `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-};
-
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+  };
 
   return (
     <div className={style.container}>
@@ -71,12 +65,16 @@ const formatDate = (timestamp) => {
       {loading ? (
         <p>로딩 중...</p>
       ) : records.length === 0 ? (
-        <p>아직 기록이 없습니다!😮</p>
+        <p>기록 없음.</p>
       ) : (
         <ul className={style.recordList}>
           {records.map((record) => (
             <li key={`${record.user_id}-${record.item_id}-${record.timestamp}`} className={style.recordItem}>
-              <strong>[{record.type === "used" ? "사용" : record.type === "purchase" ? "구매" : "알 수 없음"}]</strong>
+              <strong>[
+                {record.type === "used" ? "사용" : 
+                 record.type === "purchase" ? "구매" : 
+                 record.type === "obtained" ? "획득" : "알 수 없음"}
+              ]</strong>
               {record.item_name}  
               <span className={style.timestamp}>{formatDate(record.timestamp)}</span>
             </li>

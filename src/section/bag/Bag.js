@@ -44,7 +44,7 @@ export default function Bag() {
       {loading ? (
         <p>로딩 중...</p>
       ) : bagItems.length === 0 ? (
-        <p className={style.noItems}>소지하신 아이템이 없습니다!😮</p>
+        <p className={style.noItems}>소지하신 아이템이 없습니다!</p>
       ) : (
         bagItems.map((bagItem, index) => {
           const product = products.find((p) => p.id === bagItem.itemId);
