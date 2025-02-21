@@ -1,5 +1,5 @@
 import { supabase } from "../../db/supabase";
-import products from "../../db/product"; // ✅ 아이템 정보 가져오기
+import products from "../../db/product";
 import style from "./home.module.scss";
 import { useState, useEffect } from "react";
 
@@ -8,7 +8,7 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!giftPopup) return; // ✅ 팝업이 열릴 때만 실행
+    if (!giftPopup) return; //팝업이 열릴 때만 실행
 
     const fetchMailbox = async () => {
       setLoading(true);
@@ -25,9 +25,9 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
           .order("timestamp", { ascending: false });
 
         if (error) {
-          console.error("📨 우편 데이터를 가져오는 중 오류 발생:", error);
+          console.error("우편 데이터를 가져오는 중 오류 발생:", error);
         } else {
-          // ✅ 보낸이의 이름 가져오기
+          //보낸이의 이름 가져오기
           const senderIds = [...new Set(data.map((gift) => gift.sender_id))];
 
           const { data: senderData, error: senderError } = await supabase
@@ -36,7 +36,7 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
             .in("id", senderIds);
 
           if (senderError) {
-            console.error("📨 보낸이 정보를 가져오는 중 오류 발생:", senderError);
+            console.error("보낸이 정보를 가져오는 중 오류 발생:", senderError);
           }
 
           const senderMap = senderData.reduce((acc, sender) => {
@@ -58,7 +58,7 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
           setMail(sortedMailbox.filter((m) => !m.received).length);
         }
       } catch (error) {
-        console.error("📨 우편 데이터를 불러오는 중 예기치 않은 오류 발생:", error);
+        console.error("우편 데이터를 불러오는 중 예기치 않은 오류 발생:", error);
       } finally {
         setLoading(false);
       }
@@ -111,7 +111,6 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
       return alert("우편 상태 업데이트 중 오류 발생!");
     }
 
-    // ✅ UI 업데이트
     setMailbox((prevMailbox) => {
       const updatedMailbox = prevMailbox.map((m) =>
         m.id === gift.id ? { ...m, received: true } : m

@@ -14,7 +14,7 @@ export default function Bag() {
   const [giftPopup, setGiftPopup] = useState({ visible: false, item: null });
   const [users, setUsers] = useState([]); // 유저 목록
   const [selectedUser, setSelectedUser] = useState(null);
-  const [userCoin, setUserCoin] = useState(0); // ✅ 코인 상태 추가
+  const [userCoin, setUserCoin] = useState(0); //코인 상태 추가
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,7 +28,7 @@ export default function Bag() {
 
       const { data, error } = await supabase
         .from("users_info")
-        .select("bag_item, coin") // ✅ 한 번에 가져오기
+        .select("bag_item, coin") //한 번에 가져오기
         .eq("user_id", loggedInUser.id)
         .single();
 
@@ -39,13 +39,13 @@ export default function Bag() {
       }
 
       setBagItems(data.bag_item || []);
-      setUserCoin(data.coin ?? 0); // ✅ 코인 null 방지
+      setUserCoin(data.coin ?? 0); //코인 null 방지
       setLoading(false);
     };
 
     const fetchUsers = async () => {
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-      if (!loggedInUser) return; // ✅ 로그인한 유저 없으면 실행 중단
+      if (!loggedInUser) return; //로그인한 유저 없으면 실행 중단
 
       const { data, error } = await supabase
         .from("users")
@@ -67,7 +67,7 @@ export default function Bag() {
 
   const handleOpenGiftPopup = (item) => {
     setGiftPopup({ visible: true, item });
-    setSelectedUser(null); // ✅ 유저 선택 초기화
+    setSelectedUser(null); //유저 선택 초기화
   };
 
   return (
@@ -78,7 +78,7 @@ export default function Bag() {
         <p className={style.noItems}>비어있습니다.</p>
       ) : (
         bagItems.map((bagItem, index) => {
-          const product = products.find((p) => p.id === Number(bagItem.itemId)) || {}; // ✅ id 변환하여 비교
+          const product = products.find((p) => p.id === Number(bagItem.itemId)) || {}; //id 변환하여 비교
           const isUsed = bagItem.used;
 
           return (
@@ -99,7 +99,6 @@ export default function Bag() {
         })
       )}
 
-      {/* 기존 팝업 유지 */}
       {popup.visible && (
         <div className={style.popup}>
           <div className={style.popupContent}>
@@ -134,8 +133,8 @@ export default function Bag() {
                   bagItems, 
                   setBagItems, 
                   setGiftPopup, 
-                  userCoin, // ✅ 추가
-                  setUserCoin // ✅ 추가
+                  userCoin,
+                  setUserCoin
                 )}
               >
                 보내기
