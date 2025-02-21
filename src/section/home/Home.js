@@ -134,9 +134,8 @@ export default function Home() {
             <img 
               src={mail > 0 ? MailH : Mail}
               alt="Mail" 
-              className={style.mailIcon} 
-              onClick={() => setGiftPopup(true)} 
-            />
+              className={`${style.mailIcon} cursorPointer`}
+              onClick={() => setGiftPopup(true)} />
 
               <p className={style.utilNumber}>{mail}</p> {/* ✅ 우편 개수 자동 업데이트 */}
             </div>

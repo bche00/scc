@@ -220,25 +220,26 @@ export default function Shop() {
                 <div
                   key={user.id}
                   className={`${style.userItem} ${selectedUser?.id === user.id ? style.selected : ""}`}
-                  onClick={() => setSelectedUser(user)}
-                >
+                  onClick={() => setSelectedUser(user)}>
                   {user.name}
                 </div>
               ))}
             </div>
-            <button 
-              onClick={() => handleGiftItem(
-                giftPopup.item, 
-                selectedUser, 
-                [], 
-                () => {}, 
-                setGiftPopup, 
-                userCoin,
-                setUserCoin
-              )}>
-              보내기
-            </button>
-            <button onClick={() => setGiftPopup({ visible: false, item: null })}>취소</button>
+            <div className={style.btn}>
+              <button 
+                onClick={() => handleGiftItem(
+                  giftPopup.item, 
+                  selectedUser, 
+                  [], 
+                  () => {}, 
+                  setGiftPopup, 
+                  userCoin,
+                  setUserCoin
+                )}>
+                보내기
+              </button>
+              <button onClick={() => setGiftPopup({ visible: false, item: null })}>취소</button>
+            </div>
           </div>
         </div>
       )}

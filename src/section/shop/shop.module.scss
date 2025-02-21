@@ -190,10 +190,18 @@
     padding: 0.5rem;
     word-break: keep-all;
 
-    .popupText{
+    h2{
       font-size: var( --font-size-20);
     }
 
+    .btn{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      }
+    
     .userList {
       display: flex;
       flex-direction: column;
@@ -239,14 +247,5 @@
         background-color: #636363;
       }
     }
-    
-    .btn{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      width: 100%;
-      }
-
   }
 }
