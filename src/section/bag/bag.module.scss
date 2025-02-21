@@ -35,6 +35,43 @@
       padding: 0.5rem;
       word-break: keep-all;
 
+      .popupText{
+        font-size: var( --font-size-20);
+      }
+
+      .userList {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+        max-height: 200px;
+        overflow-y: auto;
+      
+        .userItem {
+          padding: 10px;
+          background: #000;
+          border-radius: 5px;
+          text-align: center;
+          transition: background 0.2s, transform 0.1s;
+          cursor: pointer;
+      
+          &:hover {
+            background: #636363;
+          }
+      
+          /* 선택된 유저 스타일 */
+          &.selected {
+            background: #000 !important;
+            color: white;
+            font-weight: bold;
+            border: 2px solid #FFF;
+          }
+        }
+      }
+      
+      
+      
+
       button{
         border-radius: 0.25rem;
         border: 2px solid #FFF;
@@ -47,6 +84,15 @@
           background-color: #636363;
         }
       }
+      
+      .btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        }
+
     }
   }
 
@@ -80,7 +126,7 @@
         gap: 0.5rem;
         align-self: stretch;
         width: 100%;
-
+        
         button{
           display: flex;
           width: 100%;

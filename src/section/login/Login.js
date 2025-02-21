@@ -25,7 +25,6 @@ export default function Login({ onLogin }) {
 
   const handleLoginClick = async () => {
     try {
-      console.log(`로그인 시도: ${form.name} ${form.password}`);
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -40,7 +39,6 @@ export default function Login({ onLogin }) {
         return;
       }
   
-      console.log("로그인 성공:", data);
   
       // 유저 정보를 localStorage에 저장
       localStorage.setItem("loggedInUser", JSON.stringify(data));

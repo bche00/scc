@@ -21,7 +21,7 @@ export default function Record() {
       .from("users_record")
       .select("*")
       .eq("user_id", loggedInUser.id)
-      .order("timestamp", { ascending: false }); // 최신 기록이 위로 오도록 정렬
+      .order("timestamp", { ascending: false });
 
       if (error) {
         console.error("⚠️ 기록을 가져오는 중 오류 발생:", error);
@@ -40,14 +40,12 @@ export default function Record() {
     .channel("record_updates")
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "users_record" }, // 변경된 테이블명 반영
+      { event: "INSERT", schema: "public", table: "users_record" },
       (payload) => {
         setRecords((prevRecords) => [payload.new, ...prevRecords]);
       }
     )
     .subscribe();
-    
-  
 
     return () => {
       supabase.removeChannel(subscription);
@@ -65,15 +63,18 @@ export default function Record() {
       {loading ? (
         <p>로딩 중...</p>
       ) : records.length === 0 ? (
-        <p>기록 없음.</p>
+        <p>비어있습니다.</p>
       ) : (
         <ul className={style.recordList}>
           {records.map((record) => (
             <li key={`${record.user_id}-${record.item_id}-${record.timestamp}`} className={style.recordItem}>
-              <strong>[
+              <strong>[ 
                 {record.type === "used" ? "사용" : 
                  record.type === "purchase" ? "구매" : 
-                 record.type === "obtained" ? "획득" : "알 수 없음"}
+                 record.type === "obtained" ? "획득" :
+                 record.type === "gift_sent" ? "선물함" :
+                 record.type === "gift_received" ? "선물받음" :
+                 "알 수 없음"}
               ]</strong>
               {record.item_name}  
               <span className={style.timestamp}>{formatDate(record.timestamp)}</span>

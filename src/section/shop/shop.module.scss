@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  position: relative;
+
 
   .coin{
     position: absolute;
@@ -12,8 +12,8 @@
     border: 2px solid #FFF;
     padding: 0.5rem;
     border-radius: var(--border-radius-8);
-    right: 0;
-    top: 0;
+    right: 16px;
+    top: 56px;
 
     display: flex;;
     justify-content: center;
@@ -162,5 +162,91 @@
         }
       }
     }
+  }
+}
+
+
+.popup {
+  border: 2px solid #FFF;
+  background: #000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 1);
+  border-radius: var(--border-radius-8);
+  position: fixed;
+  width: 80%;
+  max-width: 20rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  z-index: 1000; 
+
+  .popupContent{
+    display: flex;;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 0.5rem;
+    word-break: keep-all;
+
+    .popupText{
+      font-size: var( --font-size-20);
+    }
+
+    .userList {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+    
+      .userItem {
+        padding: 10px;
+        background: #000;
+        border-radius: 5px;
+        text-align: center;
+        transition: background 0.2s, transform 0.1s;
+        cursor: pointer;
+    
+        &:hover {
+          background: #636363;
+        }
+    
+        /* 선택된 유저 스타일 */
+        &.selected {
+          background: #000 !important;
+          color: white;
+          font-weight: bold;
+          border: 2px solid #FFF;
+        }
+      }
+    }
+    
+    
+    
+
+    button{
+      border-radius: 0.25rem;
+      border: 2px solid #FFF;
+      color: #FFF;
+      background: #000;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      padding: 0.2rem 0.7rem;
+
+      &:hover{
+        background-color: #636363;
+      }
+    }
+    
+    .btn{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      }
+
   }
 }

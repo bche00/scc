@@ -5,14 +5,90 @@
   align-items: center;
   gap: 2.5rem;
   padding: 1rem;
-
+  position: relative;
+  
+  
   .user{
     border: 2px solid #FFF;
     border-radius: var(--border-radius-8);
     padding: 1rem;
     width: 100%;
   }
+
+
+  .noInteraction {
+    pointer-events: none;
+  }
   
+  /* 팝업 배경 (오버레이) */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+    z-index: 2;
+  }
+  
+  .popup{
+    width: 22rem;
+    border: 2px solid #FFF;
+    background-color: #000;
+    border-radius: var(--border-radius-8);
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    min-height: 10rem;
+    animation: slideUp 0.5s ease forwards;
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(10%); /* 시작 위치: 아래쪽 */
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0%); /* 최종 위치: 중앙 */
+        opacity: 1;
+      }
+    }
+    
+    
+    
+    .popupTop{
+      display: flex;
+      height: 2rem;
+      padding-left: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      background: #FFF;
+      color: #000;
+      font-size: var(--font-size-14);
+      border-top-right-radius: var(--border-radius-8);
+      
+      .popupClose{
+        display: flex;
+        width: 2.3rem;
+        height: 2rem;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 2px solid #FFF;
+        background: #000;
+        color: #FFF;
+        font-size: var(--font-size-24);
+        border-top-right-radius: var(--border-radius-8);
+        padding: 0 0 0.1rem 0.1rem;
+        cursor: pointer;
+      }
+    }
+
+    .popupInner{
+      padding: 1rem;
+    }
+    
+  }
+
+
   .c01{
     width: 100%;
     overflow: hidden;
@@ -136,6 +212,46 @@
     }
   }
 
+}
 
-  
+
+
+/* ✅ 우편 리스트 스타일 */
+.mailItem {
+  display: flex;
+  align-items: center;
+  gap: 10px; // 아이템 이미지와 텍스트 사이 간격 조정
+  padding: 10px;
+  justify-content: space-between;
+
+  .mail_left{
+    display: flex;
+    gap: 1rem;
+    p{
+      margin-bottom: unset !important;
+      align-items: center;
+      word-break: keep-all;
+    }
+  }
+
+  button{
+    border: 2px solid #FFF;
+    color: #FFF;
+    background-color: transparent;
+    border-radius: var(--border-radius-8);
+    white-space: nowrap;
+  }
+}
+
+.itemImage {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.receivedText {
+  min-width: 40px;
+  color: gray;
+  font-weight: bold;
 }

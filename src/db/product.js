@@ -12,7 +12,7 @@ const products = [
     image: "/asset/product/note.png",
     name: "버려진 쪽지",
     price: 1,
-    description: "학생들이 작성한 듯한 쪽지. 별별 잡다한 말이 적혀있다.",
+    description: "학생들이 작성한 듯한 쪽지. 별의별 잡다한 말이 적혀있다.",
     used: "false",
   },
   {
