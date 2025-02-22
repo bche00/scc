@@ -1,4 +1,4 @@
-import { exploreResults } from "./exploreData"; // 🔹 exploreResults 불러오기
+import { exploreResults } from "./exploreData";
 
 export function performExploration() {
   const successRate = Math.random();
@@ -6,28 +6,23 @@ export function performExploration() {
     const successType = Math.random();
     if (successType < 0.6) return getReward(exploreResults.success1);
     if (successType < 0.95) return getReward(exploreResults.success2);
-    return getSpecialReward();
+    return getReward(exploreResults.success3);
   }
-  return exploreResults.fail.text;
+  return getRandomFailMessage();
 }
 
 function getReward(result) {
-  let rewardText = result.text;
+  let rewardText = result.text.split("|")[0];
+  let rewardItem = "";
   result.rewards.forEach(reward => {
     if (Math.random() < reward.probability) {
-      rewardText += ` | ${reward.item}을(를) 획득했다.`;
-      if (reward.amount) rewardText += ` (${reward.amount}개)`;
+      rewardItem = reward.item;
     }
   });
-  return rewardText;
+  return rewardText + "|" + result.text.replace("{reward}", rewardItem);
 }
 
-function getSpecialReward() {
-  let rewardText = exploreResults.success3.text;
-  exploreResults.success3.rewards.forEach(reward => {
-    if (Math.random() < reward.probability) {
-      rewardText += ` | ${reward.item}을(를) 획득했다.`;
-    }
-  });
-  return rewardText;
+function getRandomFailMessage() {
+  const failMessages = exploreResults.fail.text;
+  return failMessages[Math.floor(Math.random() * failMessages.length)];
 }
