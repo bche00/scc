@@ -41,16 +41,16 @@ export default function Layout({ children, setIsLoggedIn }) {
       <div className={style.phone}>
         <div className={style.bar}>
           心靈捕捉部 {getRouteText()} {/* 고정 텍스트 뒤에 동적 텍스트 추가 */}
-          <span
-            className={`${style.close} cursorPointer`}
-            onClick={handleLogout}>
+          <span className={`${style.close} cursorPointer`} onClick={handleLogout}>
             ×
           </span>
         </div>
         <div className={style.content}>{children}</div>
-        <div className={style.util}>
-          <Util />
-        </div>
+        {location.pathname !== "/explore" && (
+          <div className={style.util}>
+            <Util />
+          </div>
+        )}
       </div>
     </div>
   );
