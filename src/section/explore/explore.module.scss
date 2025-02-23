@@ -22,6 +22,7 @@
     max-height: 15.875rem;
     border: 2px solid #fff;
     border-radius: var(--border-radius-8);
+    width: 100%;
     
     img{
       background-size: cover;
@@ -36,7 +37,7 @@
   .textBox{
     display: flex;
     // height: 12.5rem;
-    min-height: 12.5rem;
+    // min-height: 12.5rem;
     padding: 1rem;
     flex-direction: column;
     justify-content: space-between;
