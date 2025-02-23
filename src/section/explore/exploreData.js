@@ -21,9 +21,10 @@ export const exploreLocations = {
   },
   "모니터를 살펴본다.": {
     image: "/asset/img/class_room.png",
-    description: "구식으로 보이는 낡은 모니터들이다.|한참 오래 전 부터 사람의 손을 타지 않은 듯 화면엔 먼지가 쌓여있다.",
+    description:
+      "구식으로 보이는 낡은 모니터들이다.|한참 오래 전 부터 사람의 손을 타지 않은 듯 화면엔 먼지가 쌓여있다.",
     choices: [
-      { text: "조사한다.", triggersEvent: true },
+      { text: "▶ 조사한다.", triggersEvent: true },
       { text: "▶ 돌아간다." }
     ]
   }

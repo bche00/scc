@@ -1,6 +1,12 @@
+// exploreResults.js
 export const exploreResults = {
   success1: {
-    text: "…반짝이는 무언가가 떨어졌다.|동전이다!. ({reward})코인을 획득했다.",
+    type: "success",
+    segments: [
+      "…반짝이는 무언가가 떨어졌다.",
+      "동전이다!. {reward}코인을 획득했다.",
+      "이쯤이면 된 것 같다. 피곤하니 돌아가자."
+    ],
     rewards: [
       { item: "1", probability: 0.6 },
       { item: "2", probability: 0.3 },
@@ -8,14 +14,24 @@ export const exploreResults = {
     ]
   },
   success2: {
-    text: "…툭, 하는 소리와 함께 무언가가 떨어졌다.|{reward}을(를) 획득했다.",
+    type: "success",
+    segments: [
+      "…툭, 하는 소리와 함께 무언가가 떨어졌다.",
+      "{reward}을(를) 획득했다.",
+      "이쯤이면 된 것 같다. 피곤하니 돌아가자."
+    ],
     rewards: [
       { item: "쪽지", probability: 0.5 },
       { item: "포츈쿠키", probability: 0.5 }
     ]
   },
   success3: {
-    text: "…둔탁한 소리와 함께 무언가가 떨어졌다.|{reward}을(를) 획득했다.",
+    type: "success",
+    segments: [
+      "…둔탁한 소리와 함께 무언가가 떨어졌다.",
+      "{reward}을(를) 획득했다.",
+      "이쯤이면 된 것 같다. 피곤하니 돌아가자."
+    ],
     rewards: [
       { item: "랜덤박스", probability: 0.3 },
       { item: "핫바", probability: 0.3 },
@@ -26,7 +42,8 @@ export const exploreResults = {
     ]
   },
   fail: {
-    text: [
+    type: "fail",
+    segments: [
       "별다른 특이점은 없는 것 같다.",
       "별다른 특이사항은 없는 것 같다.",
       "특별히 눈길이 갈만한 건 없는 것 같다.",
