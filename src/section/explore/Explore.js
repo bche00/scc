@@ -8,53 +8,68 @@ import TextDone from "../../asset/util/text_done.gif";
 export default function Explore({ location = "1층 복도" }) {
   const navigate = useNavigate();
 
-  // 현재 위치와 이전 위치 (실패 시 복원용)
+  // 현재 위치와 이전 위치 스택 (실패 시 복원용)
   const [currentLocation, setCurrentLocation] = useState(
     exploreLocations[location] || exploreLocations["1층 복도"]
   );
-  const [previousLocation, setPreviousLocation] = useState(null);
+  const [previousLocations, setPreviousLocations] = useState([]);
 
-  // 재조사한 장소를 기록 (키: location name)
+  // 이미 조사 실패한(조사된) 장소 기록 (키: 위치 이름)
   const [investigated, setInvestigated] = useState({});
 
-  // 탐사 이벤트 결과: null이면 기본 모드, 아니면 { type: "success"|"fail", segments: [] }
+  // 탐사 이벤트 결과 객체: null이면 기본 모드, 아니면 { type:"success"|"fail", segments: [] }
   const [explorationResult, setExplorationResult] = useState(null);
 
-  // 타이핑 관련 상태
+  // 타이핑 효과 관련 상태
   const [activeTextSegments, setActiveTextSegments] = useState([]);
   const [textIndex, setTextIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
+
+  // UI 상태
   const [showChoices, setShowChoices] = useState(false);
   const [explorationCompleted, setExplorationCompleted] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  // 현재 위치 이름 (예: "방송실", "모니터를 살펴본다.")
+  // 탐사 이벤트 타입: "success" 또는 "fail"
+  const [eventType, setEventType] = useState(null);
+  // 탐사 종료 버튼 모달 (항상 보임)
+  const [showTerminateModal, setShowTerminateModal] = useState(false);
+
+  // 현재 위치 이름
   const currentLocationName =
     Object.keys(exploreLocations).find(
       (key) => exploreLocations[key] === currentLocation
     ) || "Location Image";
 
-  // 텍스트 세그먼트 로드:
-  // - 탐사 이벤트가 없으면 기본 description을 분할하여 사용
-  // - 탐사 이벤트 결과가 있으면 그 결과의 segments를 사용
+  // 기본 모드: explorationResult가 null이면 현재 위치의 description 사용
   useEffect(() => {
-    if (explorationResult) {
-      setActiveTextSegments(explorationResult.segments);
-    } else {
+    if (!explorationResult) {
       const texts = currentLocation.description
         ? currentLocation.description.split("|")
         : [""];
       setActiveTextSegments(texts);
+      setTextIndex(0);
+      setCharIndex(0);
+      setDisplayText("");
+      setShowChoices(false);
+      setExplorationCompleted(false);
     }
-    setTextIndex(0);
-    setCharIndex(0);
-    setDisplayText("");
-    setShowChoices(false);
-    setExplorationCompleted(false);
   }, [currentLocation, explorationResult]);
 
-  // 타입라이터 효과
+  // 탐사 이벤트 모드: explorationResult가 있으면 그 결과의 segments 사용
+  useEffect(() => {
+    if (explorationResult) {
+      setActiveTextSegments(explorationResult.segments);
+      setTextIndex(0);
+      setCharIndex(0);
+      setDisplayText("");
+      setShowChoices(false);
+      setExplorationCompleted(false);
+    }
+  }, [explorationResult]);
+
+  // 타입라이터 효과: activeTextSegments의 현재 세그먼트를 한 글자씩 출력
   useEffect(() => {
     if (activeTextSegments.length === 0) return;
     const segment = activeTextSegments[textIndex] || "";
@@ -65,34 +80,32 @@ export default function Explore({ location = "1층 복도" }) {
       }, 50);
       return () => clearTimeout(timer);
     } else {
-      // 한 세그먼트가 완전히 출력되었음.
+      // 세그먼트 출력 완료
       if (textIndex === activeTextSegments.length - 1) {
         const timer = setTimeout(() => {
           if (explorationResult) {
-            // 탐사 이벤트 모드
             if (explorationResult.type === "fail") {
-              setShowChoices(true); // 실패는 바로 선택지("돌아간다.") 표시
+              setShowChoices(true);
               setExplorationCompleted(true);
             } else if (explorationResult.type === "success") {
               setExplorationCompleted(true);
-              // 성공은 선택지를 렌더하지 않음 (팝업은 사용자의 클릭에 의해)
+              // 성공은 팝업은 사용자의 클릭으로 처리
             }
           } else {
-            // 기본 모드: 설명 출력 후 선택지 표시
             setShowChoices(true);
           }
         }, 300);
         return () => clearTimeout(timer);
       } else {
-        // 중간 세그먼트: ensure 선택지는 숨김
+        // 중간 세그먼트에서는 선택지 숨김
         setShowChoices(false);
       }
     }
   }, [charIndex, textIndex, activeTextSegments, explorationResult]);
 
-  // 텍스트 영역 클릭 처리
+  // 텍스트 박스 클릭 처리
   const handleTextClick = () => {
-    if (showPopup) return;
+    if (showTerminateModal || showPopup) return;
     const segment = activeTextSegments[textIndex] || "";
     if (charIndex < segment.length) {
       setDisplayText(segment);
@@ -103,8 +116,6 @@ export default function Explore({ location = "1층 복도" }) {
       setCharIndex(0);
       setShowChoices(false);
     } else {
-      // 만약 탐사 이벤트가 성공 모드이고 출력 완료되었으면,
-      // 텍스트 영역 클릭 시 팝업을 띄움
       if (explorationResult && explorationResult.type === "success" && explorationCompleted && !showPopup) {
         setShowPopup(true);
       } else {
@@ -121,11 +132,14 @@ export default function Explore({ location = "1층 복도" }) {
         : choice.text.replace("▶ ", "");
     if (!lookupChoice) return;
 
-    // "돌아간다." 선택 시
+    // "돌아간다." 선택 시: 이전 위치 스택에서 마지막 항목을 복원
     if (lookupChoice === "돌아간다.") {
-      if (previousLocation) {
-        // 리셋 후 이전 상태 복원
+      if (previousLocations.length > 0) {
+        const lastLocation = previousLocations[previousLocations.length - 1];
+        setPreviousLocations(prev => prev.slice(0, -1));
+        // 리셋 후 복원
         setExplorationResult(null);
+        setEventType(null);
         setExplorationCompleted(false);
         setShowPopup(false);
         setActiveTextSegments([]);
@@ -133,15 +147,14 @@ export default function Explore({ location = "1층 복도" }) {
         setCharIndex(0);
         setDisplayText("");
         setShowChoices(false);
-        setCurrentLocation(previousLocation);
-        setPreviousLocation(null);
+        setCurrentLocation(lastLocation);
       }
       return;
     }
 
-    // 일반 선택: 위치 전환
+    // 일반 선택: 현재 위치를 이전 위치 스택에 추가하고, 선택한 위치로 전환
     if (exploreLocations[lookupChoice]) {
-      setPreviousLocation(currentLocation);
+      setPreviousLocations(prev => [...prev, currentLocation]);
       setExplorationResult(null);
       setCurrentLocation(exploreLocations[lookupChoice]);
       return;
@@ -149,31 +162,36 @@ export default function Explore({ location = "1층 복도" }) {
 
     // "조사한다" (triggersEvent) 선택 시
     if (choice.triggersEvent) {
-      // 만약 이미 조사한 장소라면, 특수 실패 결과를 설정
+      // 이전 위치는 그대로 남겨두어 실패 시 복원 가능.
       if (investigated[currentLocationName]) {
+        // 이미 조사한 장소: 특수 실패 결과
         const specialResult = {
           type: "fail",
           segments: ["이미 조사했던 곳이다. 다른 곳을 살펴보자"]
         };
         setExplorationResult(specialResult);
-        // 선택지는 "돌아간다."만 남김
+        setEventType("fail");
+        // 실패 결과 시 선택지는 "돌아간다."만 남김
         if (currentLocation.choices) {
-          const newChoices = currentLocation.choices.filter((c) => {
+          const newChoices = currentLocation.choices.filter(c => {
             const t = typeof c === "string" ? c : c.text;
             return t.includes("돌아간다");
           });
           setCurrentLocation({ ...currentLocation, choices: newChoices });
         }
       } else {
-        // 일반 탐사 진행
-        // 저장: 이전 위치는 현재 위치(예: "방송실")로, 이 상태를 실패 시 복원용으로 사용
-        if (!previousLocation) setPreviousLocation(currentLocation);
+        // 아직 조사하지 않은 경우
+        // 이전 위치는 기록(만약 아직 기록되어 있지 않으면)
+        if (previousLocations.length === 0) {
+          setPreviousLocations([currentLocation]);
+        }
         const result = performExploration(); // { type, segments }
         setExplorationResult(result);
+        setEventType(result.type);
         if (result.type === "fail") {
-          setInvestigated((prev) => ({ ...prev, [currentLocationName]: true }));
+          setInvestigated(prev => ({ ...prev, [currentLocationName]: true }));
           if (currentLocation.choices) {
-            const newChoices = currentLocation.choices.filter((c) => {
+            const newChoices = currentLocation.choices.filter(c => {
               const t = typeof c === "string" ? c : c.text;
               return t.includes("돌아간다");
             });
@@ -181,7 +199,7 @@ export default function Explore({ location = "1층 복도" }) {
           }
         }
       }
-      // 초기화: 새 이벤트 결과를 위해 모든 텍스트 관련 상태 리셋
+      // 이벤트 결과 진입 시 모든 텍스트 상태 초기화
       setTextIndex(0);
       setCharIndex(0);
       setDisplayText("");
@@ -191,8 +209,25 @@ export default function Explore({ location = "1층 복도" }) {
     }
   };
 
+  // 탐사 종료 버튼 클릭 처리 (항상 보임)
+  const handleTerminateClick = () => {
+    setShowTerminateModal(true);
+  };
+
+  const confirmTerminate = () => {
+    navigate("/");
+  };
+
+  const cancelTerminate = () => {
+    setShowTerminateModal(false);
+  };
+
   return (
     <div className={style.container}>
+      {/* 탐사 종료 버튼 항상 보임 */}
+      <button className={style.terminateButton} onClick={handleTerminateClick}>
+        탐사 종료
+      </button>
       <div className={style.where}>{currentLocationName}</div>
       <div className={style.imgBox}>
         <img src={currentLocation.image} alt={currentLocationName} />
@@ -218,6 +253,22 @@ export default function Explore({ location = "1층 복도" }) {
         </div>
         <img src={TextDone} alt="Text done" />
       </div>
+
+      {/* 탐사 종료 확인 모달 */}
+      {showTerminateModal && (
+        <div className={style.modal}>
+          <div className={style.modalContent}>
+            탐사를 종료하시겠습니까? <br />
+            <span>차감되었던 횟수는 복구되지 않습니다.</span>
+          </div>
+          <div className={style.modalButtons}>
+            <button onClick={confirmTerminate}>종료</button>
+            <button onClick={cancelTerminate}>취소</button>
+          </div>
+        </div>
+      )}
+
+      {/* 성공 이벤트 팝업 */}
       {showPopup && (
         <div className={style.popup}>
           <div className={style.popupContent}>조사가 종료되었습니다.</div>
