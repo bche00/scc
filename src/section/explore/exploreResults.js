@@ -7,6 +7,7 @@ export const exploreResults = {
       "동전이다! {reward}코인을 획득했다.",
       "조사는 이만하면 된 것 같다. 피곤하니 마무리하고 돌아가자."
     ],
+    reward: 5,
     rewards: [
       { item: "1", probability: 0.6 },
       { item: "2", probability: 0.3 },
@@ -21,7 +22,7 @@ export const exploreResults = {
       "조사는 이만하면 된 것 같다. 피곤하니 마무리하고 돌아가자."
     ],
     rewards: [
-      { item: "쪽지", probability: 0.5 },
+      { item: "버려진 쪽지", probability: 0.5 },
       { item: "포츈쿠키", probability: 0.5 }
     ]
   },
@@ -49,6 +50,7 @@ export const exploreResults = {
       "특별히 눈길이 갈만한 건 없는 것 같다.",
       "…평범하다. 별다른 것은 없는 듯 하다.",
       "이외에 딱히 신경쓰이는 점은 없다."
-    ]
+    ],
+    rewards: [] 
   }
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { supabase } from "../../db/supabase";
 import { useNavigate } from "react-router-dom";
 import { exploreLocations } from "./exploreData";
 import { performExploration } from "./exploreLogic";
@@ -125,91 +126,119 @@ export default function Explore({ location = "1층 복도" }) {
   };
 
   // 선택지 클릭 처리
-  const handleChoiceClick = (choice) => {
-    const lookupChoice =
-      typeof choice === "string"
-        ? choice.replace("▶ ", "")
-        : choice.text.replace("▶ ", "");
-    if (!lookupChoice) return;
+const handleChoiceClick = async (choice) => {
+  const lookupChoice =
+    typeof choice === "string"
+      ? choice.replace("▶ ", "")
+      : choice.text.replace("▶ ", "");
+  if (!lookupChoice) return;
 
-    // "돌아간다." 선택 시: 이전 위치 스택에서 마지막 항목을 복원
-    if (lookupChoice === "돌아간다.") {
-      if (previousLocations.length > 0) {
-        const lastLocation = previousLocations[previousLocations.length - 1];
-        setPreviousLocations(prev => prev.slice(0, -1));
-        // 리셋 후 복원
-        setExplorationResult(null);
-        setEventType(null);
-        setExplorationCompleted(false);
-        setShowPopup(false);
-        setActiveTextSegments([]);
-        setTextIndex(0);
-        setCharIndex(0);
-        setDisplayText("");
-        setShowChoices(false);
-        setCurrentLocation(lastLocation);
-      }
-      return;
-    }
-
-    // 일반 선택: 현재 위치를 이전 위치 스택에 추가하고, 선택한 위치로 전환
-    if (exploreLocations[lookupChoice]) {
-      setPreviousLocations(prev => [...prev, currentLocation]);
+  if (lookupChoice === "돌아간다.") {
+    if (previousLocations.length > 0) {
+      const lastLocation = previousLocations[previousLocations.length - 1];
+      setPreviousLocations((prev) => prev.slice(0, -1));
       setExplorationResult(null);
-      setCurrentLocation(exploreLocations[lookupChoice]);
-      return;
+      setEventType(null);
+      setExplorationCompleted(false);
+      setShowPopup(false);
+      setActiveTextSegments([]);
+      setTextIndex(0);
+      setCharIndex(0);
+      setDisplayText("");
+      setShowChoices(false);
+      setCurrentLocation(lastLocation);
     }
+    return;
+  }
 
-    // "조사한다" (triggersEvent) 선택 시
-    if (choice.triggersEvent) {
-      // 이전 위치는 그대로 남겨두어 실패 시 복원 가능.
-      if (investigated[currentLocationName]) {
-        // 이미 조사한 장소: 특수 실패 결과
-        const specialResult = {
-          type: "fail",
-          segments: ["이미 조사했던 곳이다. 다른 곳을 살펴보자"]
-        };
-        setExplorationResult(specialResult);
-        setEventType("fail");
-        // 실패 결과 시 선택지는 "돌아간다."만 남김
+  if (exploreLocations[lookupChoice]) {
+    setPreviousLocations((prev) => [...prev, currentLocation]);
+    setExplorationResult(null);
+    setCurrentLocation(exploreLocations[lookupChoice]);
+    return;
+  }
+
+  if (choice.triggersEvent) {
+    if (investigated[currentLocationName]) {
+      const specialResult = {
+        type: "fail",
+        segments: ["이미 조사했던 곳이다. 다른 곳을 살펴보자"],
+      };
+      setExplorationResult(specialResult);
+      setEventType("fail");
+      if (currentLocation.choices) {
+        const newChoices = currentLocation.choices.filter((c) => {
+          const t = typeof c === "string" ? c : c.text;
+          return t.includes("돌아간다");
+        });
+        setCurrentLocation({ ...currentLocation, choices: newChoices });
+      }
+    } else {
+      if (previousLocations.length === 0) {
+        setPreviousLocations([currentLocation]);
+      }
+
+      const result = await performExploration(); // { type, segments, coinReward? }
+      setExplorationResult(result);
+      setEventType(result.type);
+
+      // ✅ 성공 시 코인 지급 처리
+      if (result.type === "success" && result.coinReward > 0) {
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        if (loggedInUser?.id) {
+          try {
+            const { data: userInfo, error } = await supabase
+              .from("users_info")
+              .select("coin")
+              .eq("user_id", loggedInUser.id)
+              .single();
+
+            if (!error && userInfo) {
+              const updatedCoin = userInfo.coin + result.coinReward;
+
+              const { error: updateError } = await supabase
+                .from("users_info")
+                .update({ coin: updatedCoin })
+                .eq("user_id", loggedInUser.id);
+
+              if (updateError) {
+                console.error("코인 업데이트 실패:", updateError);
+              } else {
+                console.log(`코인 ${result.coinReward}개 지급 완료`);
+              }
+            }
+          } catch (e) {
+            console.error("코인 지급 중 오류:", e);
+          }
+        }
+      }
+
+      if (result.type === "fail") {
+        setInvestigated((prev) => ({
+          ...prev,
+          [currentLocationName]: true,
+        }));
         if (currentLocation.choices) {
-          const newChoices = currentLocation.choices.filter(c => {
+          const newChoices = currentLocation.choices.filter((c) => {
             const t = typeof c === "string" ? c : c.text;
             return t.includes("돌아간다");
           });
           setCurrentLocation({ ...currentLocation, choices: newChoices });
         }
-      } else {
-        // 아직 조사하지 않은 경우
-        // 이전 위치는 기록(만약 아직 기록되어 있지 않으면)
-        if (previousLocations.length === 0) {
-          setPreviousLocations([currentLocation]);
-        }
-        const result = performExploration(); // { type, segments }
-        setExplorationResult(result);
-        setEventType(result.type);
-        if (result.type === "fail") {
-          setInvestigated(prev => ({ ...prev, [currentLocationName]: true }));
-          if (currentLocation.choices) {
-            const newChoices = currentLocation.choices.filter(c => {
-              const t = typeof c === "string" ? c : c.text;
-              return t.includes("돌아간다");
-            });
-            setCurrentLocation({ ...currentLocation, choices: newChoices });
-          }
-        }
       }
-      // 이벤트 결과 진입 시 모든 텍스트 상태 초기화
-      setTextIndex(0);
-      setCharIndex(0);
-      setDisplayText("");
-      setShowChoices(false);
-      setExplorationCompleted(false);
-      return;
     }
-  };
 
-  // 탐사 종료 버튼 클릭 처리 (항상 보임)
+    setTextIndex(0);
+    setCharIndex(0);
+    setDisplayText("");
+    setShowChoices(false);
+    setExplorationCompleted(false);
+    return;
+  }
+};
+
+
+  // 탐사 종료 버튼 클릭 처리
   const handleTerminateClick = () => {
     setShowTerminateModal(true);
   };

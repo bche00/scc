@@ -5,7 +5,7 @@ import style from "./home.module.scss";
 
 import Coin from "../../asset/util/coin.gif";
 import Mail from "../../asset/util/mail.png";
-import MailH from "../../asset/util/mail_have.gif"; // ✅ 새로운 이미지 추가
+import MailH from "../../asset/util/mail_have.gif"; // 새로운 이미지 추가
 import Shop from "../../asset/icon/shop.png";
 import Bag from "../../asset/icon/bag.png";
 import Record from "../../asset/icon/record.png";
@@ -14,9 +14,9 @@ import MailHandler from "./MailHandler.js";
 export default function Home() {
   const [userName, setUserName] = useState("");
   const [coin, setCoin] = useState(0);
-  const [mail, setMail] = useState(0); // ✅ 우편 개수 상태
+  const [mail, setMail] = useState(0); // 우편 개수 상태
   const [loading, setLoading] = useState(true);
-  const [giftPopup, setGiftPopup] = useState(false); // ✅ 우편 팝업 상태
+  const [giftPopup, setGiftPopup] = useState(false); // 우편 팝업 상태
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,7 +31,7 @@ export default function Home() {
       const userId = loggedInUser.id;
 
       try {
-        // ✅ `users_info`에서 코인 가져오기
+        // `users_info`에서 코인 가져오기
         const { data: userInfo, error: infoError } = await supabase
           .from("users_info")
           .select("coin")
@@ -39,7 +39,7 @@ export default function Home() {
           .single();
 
         if (infoError) {
-          console.error("유저 정보를 가져오는 중 오류:", infoError);
+          console.error("유저 정보를 가져오는 중 오류:", infoError); 
           setLoading(false);
           return;
         }
@@ -47,7 +47,7 @@ export default function Home() {
         setUserName(loggedInUser.name);
         setCoin(userInfo.coin);
         
-        // ✅ 서버에서 직접 우편 개수 가져오기
+        // 서버에서 직접 우편 개수 가져오기
         fetchMailboxCount(userId);
       } catch (error) {
         console.error("예기치 않은 오류:", error);
@@ -59,23 +59,23 @@ export default function Home() {
     fetchUserData();
   }, []);
 
-  // ✅ 서버에서 우편 개수 가져오는 함수
+  // 서버에서 우편 개수 가져오는 함수
   const fetchMailboxCount = async (userId) => {
     const { data, error } = await supabase
       .from("gift_records")
       .select("id")
       .eq("receiver_id", userId)
-      .eq("received", false); // ✅ 아직 받지 않은 우편만 가져오기
+      .eq("received", false); // 아직 받지 않은 우편만 가져오기
 
     if (error) {
       console.error("📨 우편 개수 불러오기 실패:", error);
       return;
     }
 
-    setMail(data.length); // ✅ 우편 개수 업데이트
+    setMail(data.length); // 우편 개수 업데이트
   };
 
-  // ✅ 탈퇴 확인 및 처리 함수
+  // 탈퇴 확인 및 처리 함수
   const handleLeaveClub = async () => {
     const userInput = prompt(
       `심령포착동아리를 탈퇴하시겠습니까?\n\n` +
@@ -137,7 +137,7 @@ export default function Home() {
               className={`${style.mailIcon} cursorPointer`}
               onClick={() => setGiftPopup(true)} />
 
-              <p className={style.utilNumber}>{mail}</p> {/* ✅ 우편 개수 자동 업데이트 */}
+              <p className={style.utilNumber}>{mail}</p> {/* 우편 개수 자동 업데이트 */}
             </div>
           </div>
           <Link to="/explore">
