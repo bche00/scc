@@ -4,8 +4,8 @@ export const exploreResults = {
     type: "success",
     segments: [
       "…반짝이는 무언가가 떨어졌다.",
-      "동전이다!. {reward}코인을 획득했다.",
-      "이쯤이면 된 것 같다. 피곤하니 돌아가자."
+      "동전이다! {reward}코인을 획득했다.",
+      "조사는 이만하면 된 것 같다. 피곤하니 마무리하고 돌아가자."
     ],
     rewards: [
       { item: "1", probability: 0.6 },
@@ -18,7 +18,7 @@ export const exploreResults = {
     segments: [
       "…툭, 하는 소리와 함께 무언가가 떨어졌다.",
       "{reward}을(를) 획득했다.",
-      "이쯤이면 된 것 같다. 피곤하니 돌아가자."
+      "조사는 이만하면 된 것 같다. 피곤하니 마무리하고 돌아가자."
     ],
     rewards: [
       { item: "쪽지", probability: 0.5 },
@@ -30,7 +30,7 @@ export const exploreResults = {
     segments: [
       "…둔탁한 소리와 함께 무언가가 떨어졌다.",
       "{reward}을(를) 획득했다.",
-      "이쯤이면 된 것 같다. 피곤하니 돌아가자."
+      "조사는 이만하면 된 것 같다. 피곤하니 마무리하고 돌아가자."
     ],
     rewards: [
       { item: "랜덤박스", probability: 0.3 },
