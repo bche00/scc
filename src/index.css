@@ -34,7 +34,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #fff;
-  background-color: black;
+  background-color: #000;
 
   cursor: url('./asset/util/cursor.png'), default;
 }

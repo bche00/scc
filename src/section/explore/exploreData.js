@@ -85,4 +85,42 @@ export const exploreLocations = {
       { text: "▶ 돌아간다." }
       ]
   },
+      "보건실": {
+    image: "/asset/img/class_room.png",
+    description: "약품 냄새가 코를 찌른다. 내부는 깨끗해 보인다.",
+    choices: ["▶ 침대를 살펴본다.", "▶ 서랍을 살펴본다.", "▶ 사물함을 살펴본다.", "▶ 돌아간다."]
+  },
+      "침대를 살펴본다.": {
+    image: "/asset/img/class_room.png",
+    description: "어떤 침대의 커튼을 들춰볼까?",
+    choices: ["▶ 첫 번째 침대", "▶ 두 번째 침대", "▶ 세 번째 침대", "▶ 돌아간다."]
+  },
+    "첫 번째 침대": {
+    image: "/asset/img/class_room.png",
+    description: "첫 번째 침대의 커튼을 들춰봤다.|….|…….|침구 위엔 먼지만 떠다닐 뿐 아무것도 없었다.",
+    choices: ["▶ 두 번째 침대", "▶ 세 번째 침대.", "▶ 돌아간다."]
+  },
+    "두 번째 침대": {
+    image: "/asset/img/class_room.png",
+    description: "두 번째 침대의 커튼을 들춰봤다.|아무도 없지만, 잘 정리된 이불 한 구석이 조금 불룩하다.",
+    choices: [
+      { text: "▶ 조사한다.", triggersEvent: true },
+      { text: "▶ 돌아간다." }
+    ]
+  },
+      "세 번째 침대": {
+    image: "/asset/img/class_room.png",
+    description: "커튼 너머로 긴 머리의 여자 인영이 보인다.|…들춰볼까?",
+    choices: ["▶ 들춰본다.", "▶ 돌아간다."]
+  },
+      "들춰본다.": {
+    image: "/asset/img/class_room.png",
+    description: "정말로?",
+    choices: ["▶ 들춰본다. ", "▶ 돌아간다."]
+  },
+      "들춰본다. ": {
+    image: "/asset/img/class_room.png",
+    description: "당신은 커튼을 들췄다.|….|……….|아무도 없다.",
+    choices: ["▶ 보건실"]
+  },
 };

@@ -36,10 +36,10 @@ const openRandomBox = async (bagItems, setBagItems) => {
     rand -= item.chance;
   }
 
-  // ✅ 획득한 아이템 정보 가져오기
+  // 획득한 아이템 정보 가져오기
   const productInfo = products.find((p) => p.id === selectedItem.id);
 
-  // ✅ 팝업 띄우기 (이미지 + 아이템명)
+  // 팝업 띄우기 (이미지 + 아이템명)
   showPopup(productInfo.image, `🎁 '${selectedItem.name}'을(를) 획득했습니다!`);
 
   // 🔹 현재 인벤토리 가져오기
@@ -94,18 +94,18 @@ const openRandomBox = async (bagItems, setBagItems) => {
 
   setBagItems(updatedBagItems);
 
-  // ✅ Supabase 기록 추가 (랜덤박스 사용 기록 & 획득한 아이템 기록)
+  // Supabase 기록 추가 (랜덤박스 사용 기록 & 획득한 아이템 기록)
   const koreaTime = new Date();
   koreaTime.setHours(koreaTime.getHours() + 9);
 
   try {
-    // ✅ 기록 데이터 확인 (콘솔 출력)
+    // 기록 데이터 확인 (콘솔 출력)
     const recordData = [
       {
         user_id: loggedInUser.id,
         item_id: 4, // 랜덤박스 ID
         item_name: "랜덤박스",
-        type: "used", // ✅ 사용 기록
+        type: "used", // 사용 기록
         timestamp: koreaTime.toISOString(),
       },
     ];
@@ -119,13 +119,13 @@ const openRandomBox = async (bagItems, setBagItems) => {
       return;
     }
 
-    // ✅ 획득한 아이템 기록 추가 (콘솔 출력)
+    // 획득한 아이템 기록 추가 (콘솔 출력)
     const obtainedData = [
       {
         user_id: loggedInUser.id,
         item_id: selectedItem.id,
         item_name: selectedItem.name,
-        type: "obtained", // ✅ 획득 기록
+        type: "obtained", // 획득 기록
         timestamp: koreaTime.toISOString(),
       },
     ];
@@ -235,16 +235,11 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
       await openRandomBox(bagItems, setBagItems);
       return;
 
+    // ✅ 부적류도 사용 가능하게 변경
     case 5: // 손재부적
     case 6: // 망신부적
     case 7: // 박복부적
-      alert("해당 물품은 선물 전용으로, 직접 사용이 불가합니다.");
-      return;
-
     case 8: // 따봉고슴도치 스티커
-      alert("해당 물품은 선물 방어 전용으로, 소지품에서 직접 사용이 불가합니다.");
-      return;
-
     case 9: // 확성기
     case 10: // 페인트통
     case 11: // 뱃지
@@ -257,6 +252,7 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
       return;
   }
 
+  // 개수 차감 및 업데이트
   updatedBagItems[itemIndex].count -= 1;
   updatedBagItems = updatedBagItems.filter((item) => item.count > 0 || item.used);
 

@@ -27,8 +27,8 @@ const products = [
     id: 4,
     image: "/asset/product/luckybox.png",
     name: "랜덤박스",
-    price: 5,
-    description: "판매중인 상품을 랜덤하게 얻을 수 있다. …어쩌면 특별한 물건이 등장할지도!",
+    price: 3,
+    description: "판매중인 상품을 랜덤하게 얻을 수 있다. 가끔 실수로 엉뚱한 물건이 등장하곤 한다는데….",
     used: "false",
   },
   {
@@ -90,9 +90,9 @@ const products = [
   {
     id: 12,
     image: "/asset/product/redpen.png",
-    name: "[★] 빨간펜",
+    name: "열쇠",
     price: "-",
-    description: "두꺼운 붓펜. 묘한 냄새가 난다.",
+    description: "네임택에 「교무실」이라고 쓰여있다.",
     used: "false",
   },
 ];
