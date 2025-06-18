@@ -9,16 +9,16 @@ export const exploreResults = {
     ],
     reward: 5,
     rewards: [
-      { item: "1", probability: 0.6 },
+      { item: "1", probability: 0.5 },
       { item: "2", probability: 0.3 },
-      { item: "3", probability: 0.1 }
+      { item: "3", probability: 0.2 }
     ]
   },
   success2: {
     type: "success",
     segments: [
       "…툭, 하는 소리와 함께 무언가가 떨어졌다.",
-      "{reward}을(를) 획득했다.",
+      "{reward}을(를) 획득했다!",
       "조사는 이만하면 된 것 같다. 피곤하니 마무리하고 돌아가자."
     ],
     rewards: [
@@ -30,7 +30,7 @@ export const exploreResults = {
     type: "success",
     segments: [
       "…둔탁한 소리와 함께 무언가가 떨어졌다.",
-      "{reward}을(를) 획득했다.",
+      "{reward}을(를) 획득했다!",
       "조사는 이만하면 된 것 같다. 피곤하니 마무리하고 돌아가자."
     ],
     rewards: [
@@ -39,7 +39,7 @@ export const exploreResults = {
       { item: "손재부적", probability: 0.1 },
       { item: "망신부적", probability: 0.1 },
       { item: "박복부적", probability: 0.1 },
-      { item: "따봉고슴도치", probability: 0.1 }
+      { item: "따봉고슴도치 스티커", probability: 0.1 }
     ]
   },
   fail: {

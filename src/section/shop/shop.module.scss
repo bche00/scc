@@ -213,6 +213,7 @@
       .userItem {
         padding: 10px;
         background: #000;
+        border: 2px solid transparent;
         border-radius: 5px;
         text-align: center;
         transition: background 0.2s, transform 0.1s;
@@ -227,7 +228,7 @@
           background: #000 !important;
           color: white;
           font-weight: bold;
-          border: 2px solid #FFF;
+          border-color: #FFF;
         }
       }
     }

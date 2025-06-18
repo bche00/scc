@@ -1,4 +1,4 @@
-.container{
+.container {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -6,9 +6,9 @@
   gap: 2.5rem;
   padding: 1rem;
   position: relative;
-  
-  
-  .user{
+
+
+  .user {
     border: 2px solid #FFF;
     border-radius: var(--border-radius-8);
     padding: 1rem;
@@ -19,7 +19,7 @@
   .noInteraction {
     pointer-events: none;
   }
-  
+
   /* 팝업 배경 (오버레이) */
   .overlay {
     position: fixed;
@@ -27,35 +27,42 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+    background: rgba(0, 0, 0, 0.5);
+    /* 어두운 배경 */
     z-index: 2;
   }
-  
-  .popup{
+
+  .popup {
     width: 22rem;
+    min-height: 10rem;
+    max-height: 25rem;
     border: 2px solid #FFF;
     background-color: #000;
     border-radius: var(--border-radius-8);
     position: absolute;
-    top: 50%;
+    top: 40%;
+    left: 0%;
+    transform: translate(-50%, -50%);
     z-index: 10;
-    min-height: 10rem;
     animation: slideUp 0.5s ease forwards;
 
     @keyframes slideUp {
       from {
-        transform: translateY(10%); /* 시작 위치: 아래쪽 */
+        transform: translateY(10%);
+        /* 시작 위치: 아래쪽 */
         opacity: 0;
       }
+
       to {
-        transform: translateY(0%); /* 최종 위치: 중앙 */
+        transform: translateY(0%);
+        /* 최종 위치: 중앙 */
         opacity: 1;
       }
     }
-    
-    
-    
-    .popupTop{
+
+
+
+    .popupTop {
       display: flex;
       height: 2rem;
       padding-left: 1rem;
@@ -65,8 +72,8 @@
       color: #000;
       font-size: var(--font-size-14);
       border-top-right-radius: var(--border-radius-8);
-      
-      .popupClose{
+
+      .popupClose {
         display: flex;
         width: 2.3rem;
         height: 2rem;
@@ -82,27 +89,87 @@
       }
     }
 
-    .popupInner{
-      padding: 1rem;
+    .userList {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+
+      .userItem {
+        width: 100%;
+        padding: 10px;
+        background: #000;
+        border: 2px solid transparent;
+        border-radius: 5px;
+        text-align: center;
+        transition: background 0.2s, transform 0.1s;
+        cursor: pointer;
+
+        &:hover {
+          background: #636363;
+        }
+
+        /* 선택된 유저 스타일 */
+        &.selected {
+          background: #000 !important;
+          color: white;
+          font-weight: bold;
+          border-color: #FFF;
+        }
+      }
     }
-    
+
+    .popupInner {
+      // max-height: 25rem;
+      max-height: calc(25rem -
+          /* 헤더 높이 + 여백 */
+          3rem);
+      padding: 1rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+
+    .popupContent {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      input {
+        width: 100%;
+        padding: 4px 16px;
+      }
+
+      .btn {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+    }
+
   }
 
 
-  .c01{
+  .c01 {
     width: 100%;
     overflow: hidden;
 
-    .top{
+    .top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       align-self: stretch;
 
 
-      .alarm{
-        div{
-          p.utilNumber{
+      .alarm {
+        div {
+          p.utilNumber {
             font-family: 'DungGeunMo';
             color: #FFF;
             text-align: center;
@@ -113,7 +180,7 @@
           }
         }
       }
-    
+
       .explore {
         width: 15.8125rem;
         height: 8.125rem;
@@ -124,7 +191,7 @@
         background-position: center;
         position: relative;
         overflow: hidden;
-      
+
         &::before {
           content: '';
           position: absolute;
@@ -136,11 +203,11 @@
           transition: background 0.3s ease;
           z-index: 1;
         }
-      
+
         &:hover::before {
           background: rgba(0, 0, 0, 0.3);
         }
-      
+
         p {
           margin: 0.5rem;
           padding: 0.125rem 0.325rem;
@@ -152,32 +219,34 @@
           z-index: 2;
         }
       }
-      
+
     }
-    
+
 
     .banner {
       width: 100%;
-    
+
       .planText {
         text-align: center;
         font-size: var(--font-size-16);
         line-height: normal;
         margin-bottom: unset;
-    
+
         display: inline-block;
         white-space: nowrap;
         position: relative;
         animation: slideLeft 12s linear infinite;
       }
-    
+
       @keyframes slideLeft {
         0% {
           transform: translateX(150%);
         }
+
         100% {
           transform: translateX(-100%);
         }
+
         100% {
           transform: translateX(-150%);
         }
@@ -185,26 +254,27 @@
     }
   }
 
-  .c02{
+  .c02 {
     display: flex;
     justify-content: space-between;
     width: 100%;
 
-    .utilIcon{
+    .utilIcon {
       display: flex;
       height: 6.25rem;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
 
-      p{
+      p {
         font-size: var(--font-size-16);
         line-height: normal;
         letter-spacing: 0.3rem;
         text-indent: 0.3rem;
         margin-bottom: unset;
       }
-      .icon{
+
+      .icon {
         width: 4.375rem;
         height: 4.375rem;
         flex-shrink: 0;
@@ -224,17 +294,18 @@
   padding: 10px;
   justify-content: space-between;
 
-  .mail_left{
+  .mail_left {
     display: flex;
     gap: 1rem;
-    p{
+
+    p {
       margin-bottom: unset !important;
       align-items: center;
       word-break: keep-all;
     }
   }
 
-  button{
+  button {
     border: 2px solid #FFF;
     color: #FFF;
     background-color: transparent;

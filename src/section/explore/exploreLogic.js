@@ -21,9 +21,10 @@ export async function performExploration() {
     const successType = Math.random();
     let result;
 
-    if (successType < 0.6) result = exploreResults.success1;
-    else if (successType < 0.95) result = exploreResults.success2;
-    else result = exploreResults.success3;
+  if (successType < 0.5) result = exploreResults.success1;       // 50%
+  else if (successType < 0.8) result = exploreResults.success2;  // 30%
+  else result = exploreResults.success3;                         // 20%
+
 
     // 보상 선택
     let reward = "";
@@ -75,17 +76,31 @@ if (!isNaN(Number(reward))) {
       const koreaTime = new Date();
       koreaTime.setHours(koreaTime.getHours() + 9);
 
-      await supabase.from("users_record").insert([{
+      const { error: recordError } = await supabase.from("users_record").insert([{
         user_id: userId,
         item_id: null,
         item_name: `${coinAmount}코인`,
-        type: "explore_coin",
+        type: "obtained",
         timestamp: koreaTime.toISOString(),
       }]);
+        console.log("기록 저장 확인용!!!:", {
+          user_id: userId,
+          item_id: null,
+          item_name: `${coinAmount}코인`,
+          type: "obtained",
+          timestamp: koreaTime.toISOString(),
+      });
+
+      // *기록 저장 확인용 콘솔
+      // if (recordError) {
+      //   console.error("기록 저장 실패:", recordError);
+      // } else {
+      //   console.log("기록 저장 성공");
+      // }
     }
   }
 } else {
-  // 기존 아이템 지급 로직 (그대로 유지)
+  // 아이템 지급 로직
   const product = products.find(p => p.name === reward);
   if (product) {
     const { data: userInfo, error: userError } = await supabase
@@ -121,7 +136,7 @@ if (!isNaN(Number(reward))) {
           user_id: userId,
           item_id: product.id,
           item_name: product.name,
-          type: "explore",
+          type: "obtained",
           timestamp: koreaTime.toISOString(),
         }]);
       }

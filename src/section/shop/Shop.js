@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { supabase } from "../../db/supabase"; // Supabase 연결
+import { supabase } from "../../db/supabase";
 import style from "./shop.module.scss";
 import TextDone from "../../asset/util/text_done.gif";
 import products from "../../db/product.js";
 import Coin from "../../asset/util/coin.gif";
-import { handleGiftItem } from "../bag/giftHandler.js"; // 선물 핸들러 가져오기
+import { handleGiftItem } from "../bag/giftHandler.js";
 
 export default function Shop() {
   const dialogues = [
@@ -24,6 +24,14 @@ export default function Shop() {
   const [giftPopup, setGiftPopup] = useState({ visible: false, item: null }); // 선물 팝업 상태
   const [users, setUsers] = useState([]); // 유저 목록
   const [selectedUser, setSelectedUser] = useState(null); // 선택된 유저
+
+  // ================== 추가: 검색어 상태 추가 ==================
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
+
+  // ================== 추가: 필터링된 유저 리스트 ==================
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     const randomDialogue =
@@ -59,14 +67,14 @@ export default function Shop() {
 
   const handlePurchase = async () => {
     if (!selectedProduct) return;
-  
+
     const confirmPurchase = window.confirm(
       `${selectedProduct.name}을(를) 구매하시겠습니까?(${selectedProduct.price}c)`
     );
     if (!confirmPurchase) return;
-  
+
     setLoading(true);
-  
+
     try {
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (!loggedInUser) {
@@ -74,35 +82,35 @@ export default function Shop() {
         setLoading(false);
         return;
       }
-  
+
       const userId = loggedInUser.id;
-  
+
       const { data: userInfo, error: userError } = await supabase
         .from("users_info")
         .select("coin, bag_item")
         .eq("user_id", userId)
         .single();
-  
+
       if (userError || !userInfo) {
         console.error("유저 정보를 가져오는 중 오류 발생:", userError);
         alert("유저 정보를 가져오는 데 실패했습니다.");
         setLoading(false);
         return;
       }
-  
+
       if (userInfo.coin < selectedProduct.price) {
-        alert("이런! 코인이 부족합니다😥");
+        alert("이런! 코인이 부족합니다.");
         setLoading(false);
         return;
       }
-  
+
       const updatedCoins = userInfo.coin - selectedProduct.price;
       const updatedBagitem = [...userInfo.bag_item];
 
       const existingItem = updatedBagitem.find(
         (item) => item.itemId === selectedProduct.id && !item.used
       );
-  
+
       if (existingItem) {
         existingItem.count += 1;
       } else {
@@ -111,7 +119,7 @@ export default function Shop() {
 
       const koreaTime = new Date();
       koreaTime.setHours(koreaTime.getHours() + 9);
-  
+
       const { error: updateError } = await supabase
         .from("users_info")
         .update({
@@ -119,7 +127,7 @@ export default function Shop() {
           bag_item: updatedBagitem,
         })
         .eq("user_id", userId);
-  
+
       if (updateError) {
         console.error("데이터 업데이트 중 오류 발생:", updateError);
         alert("구매 처리 중 문제가 발생했습니다.");
@@ -133,11 +141,11 @@ export default function Shop() {
             timestamp: koreaTime.toISOString(),
           },
         ]);
-  
+
         if (recordError) {
           console.error("구매 기록 저장 오류:", recordError);
         }
-  
+
         alert("구매가 완료되었습니다!");
         setUserCoin(updatedCoins);
       }
@@ -151,6 +159,8 @@ export default function Shop() {
 
   const handleOpenGiftPopup = async () => {
     setGiftPopup({ visible: true, item: selectedProduct });
+    setSelectedUser(null);  // 추가: 팝업 열 때 이전 선택 초기화
+    setSearchTerm("");      // 추가: 검색어 초기화
 
     const { data, error } = await supabase
       .from("users")
@@ -159,7 +169,8 @@ export default function Shop() {
     if (error) {
       console.error("유저 목록을 가져오는 중 오류 발생:", error);
     } else {
-      setUsers(data.filter(user => user.id !== JSON.parse(localStorage.getItem("loggedInUser")).id));
+      const loggedInUserId = JSON.parse(localStorage.getItem("loggedInUser")).id;
+      setUsers(data.filter(user => user.id !== loggedInUserId));
     }
   };
 
@@ -168,7 +179,7 @@ export default function Shop() {
       <div className={style.coin}>
         <img src={Coin} alt="Coin" /> {userCoin}c
       </div>
-      
+
       <div className={style.c01}>
         <div className={style.imgBox}></div>
         <div className={style.textBox}>
@@ -211,31 +222,51 @@ export default function Shop() {
         )}
       </div>
 
+      {/* ================== 선물하기 팝업 (검색창 추가 및 필터링된 유저 리스트로 수정) ================== */}
       {giftPopup.visible && (
         <div className={style.popup}>
           <div className={style.popupContent}>
             <h2>누구에게 선물할까?</h2>
+
+            {/* 검색창 추가 */}
+            <input
+              type="text"
+              placeholder="이름 검색"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={style.searchInput}
+            />
+
+            {/* 필터링된 유저 리스트로 변경 */}
             <div className={style.userList}>
-              {users.map(user => (
-                <div
-                  key={user.id}
-                  className={`${style.userItem} ${selectedUser?.id === user.id ? style.selected : ""}`}
-                  onClick={() => setSelectedUser(user)}>
-                  {user.name}
-                </div>
-              ))}
+              {filteredUsers.length === 0 ? (
+                <p>검색 결과가 없습니다.</p>
+              ) : (
+                filteredUsers.map(user => (
+                  <div
+                    key={user.id}
+                    className={`${style.userItem} ${selectedUser?.id === user.id ? style.selected : ""}`}
+                    onClick={() => setSelectedUser(user)}
+                  >
+                    {user.name}
+                  </div>
+                ))
+              )}
             </div>
+
             <div className={style.btn}>
-              <button 
+              <button
                 onClick={() => handleGiftItem(
-                  giftPopup.item, 
-                  selectedUser, 
-                  [], 
-                  () => {}, 
-                  setGiftPopup, 
+                  giftPopup.item,
+                  selectedUser,
+                  [],
+                  () => {},
+                  setGiftPopup,
                   userCoin,
                   setUserCoin
-                )}>
+                )}
+                disabled={!selectedUser}  // 선택 전 비활성화
+              >
                 보내기
               </button>
               <button onClick={() => setGiftPopup({ visible: false, item: null })}>취소</button>

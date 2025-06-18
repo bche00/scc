@@ -25,6 +25,17 @@
     padding: 1rem;
     z-index: 1000; 
 
+    
+    .dim {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
     .popupContent{
       display: flex;;
       flex-direction: column;
@@ -54,6 +65,7 @@
           text-align: center;
           transition: background 0.2s, transform 0.1s;
           cursor: pointer;
+          border: 2px solid transparent;
       
           &:hover {
             background: #636363;
@@ -64,7 +76,7 @@
             background: #000 !important;
             color: white;
             font-weight: bold;
-            border: 2px solid #FFF;
+            border-color: #FFF;
           }
         }
       }

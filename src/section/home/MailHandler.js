@@ -2,8 +2,9 @@ import { supabase } from "../../db/supabase";
 import products from "../../db/product";
 import style from "./home.module.scss";
 import { useState, useEffect } from "react";
+import Coin from "../../asset/util/coin.gif";
 
-export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
+export default function MailHandler({ giftPopup, setGiftPopup, setMail, setUserCoin }) {
   const [mailbox, setMailbox] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,14 +21,13 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
       try {
         const { data, error } = await supabase
           .from("gift_records")
-          .select("*, sender_id")
+          .select("*")
           .eq("receiver_id", userId)
           .order("timestamp", { ascending: false });
 
         if (error) {
           console.error("우편 데이터를 가져오는 중 오류 발생:", error);
         } else {
-          //보낸이의 이름 가져오기
           const senderIds = [...new Set(data.map((gift) => gift.sender_id))];
 
           const { data: senderData, error: senderError } = await supabase
@@ -44,15 +44,17 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
             return acc;
           }, {});
 
-          const sortedMailbox = data.map((gift) => ({
-            ...gift,
-            sender_name: senderMap[gift.sender_id] || "알 수 없음",
-          })).sort((a, b) => {
-            if (a.received === b.received) {
-              return new Date(b.timestamp) - new Date(a.timestamp);
-            }
-            return a.received ? 1 : -1;
-          });
+          const sortedMailbox = data
+            .map((gift) => ({
+              ...gift,
+              sender_name: senderMap[gift.sender_id] || "알 수 없음",
+            }))
+            .sort((a, b) => {
+              if (a.received === b.received) {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+              }
+              return a.received ? 1 : -1;
+            });
 
           setMailbox(sortedMailbox);
           setMail(sortedMailbox.filter((m) => !m.received).length);
@@ -76,29 +78,54 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
 
     const { data: userData, error: userError } = await supabase
       .from("users_info")
-      .select("bag_item")
+      .select("bag_item, coin")
       .eq("user_id", userId)
       .single();
 
-    if (!userError && userData?.bag_item) {
-      updatedBagItems = [...userData.bag_item];
+    if (userError) {
+      alert("유저 정보를 불러오지 못했습니다.");
+      return;
     }
 
-    const existingItem = updatedBagItems.find((item) => item.itemId === gift.item_id);
-    if (existingItem) {
-      existingItem.count += gift.count;
+    if (gift.item_id === null) {
+      // 코인 선물 받은 경우
+      const newCoinAmount = (userData.coin || 0) + gift.count;
+
+      const { error: coinUpdateError } = await supabase
+        .from("users_info")
+        .update({ coin: newCoinAmount })
+        .eq("user_id", userId);
+
+      if (coinUpdateError) {
+        console.error("코인 업데이트 실패:", coinUpdateError);
+        return alert("코인 업데이트 실패!");
+      }
+
+      // 실시간 UI 반영 (부모 컴포넌트가 setUserCoin 함수 전달받아야 함)
+      if (setUserCoin) setUserCoin(newCoinAmount);
+
     } else {
-      updatedBagItems.push({ itemId: gift.item_id, count: gift.count, used: false });
-    }
+      // 아이템 선물 받은 경우
+      if (userData?.bag_item) {
+        updatedBagItems = [...userData.bag_item];
+      }
 
-    const { error: updateError } = await supabase
-      .from("users_info")
-      .update({ bag_item: updatedBagItems })
-      .eq("user_id", userId);
+      const existingItem = updatedBagItems.find((item) => item.itemId === gift.item_id);
+      if (existingItem) {
+        existingItem.count += gift.count;
+      } else {
+        updatedBagItems.push({ itemId: gift.item_id, count: gift.count, used: false });
+      }
 
-    if (updateError) {
-      console.error("🚨 소지품 업데이트 실패:", updateError);
-      return alert("소지품 업데이트 중 오류 발생!");
+      const { error: updateError } = await supabase
+        .from("users_info")
+        .update({ bag_item: updatedBagItems })
+        .eq("user_id", userId);
+
+      if (updateError) {
+        console.error("🚨 소지품 업데이트 실패:", updateError);
+        return alert("소지품 업데이트 중 오류 발생!");
+      }
     }
 
     const { error: receivedError } = await supabase
@@ -126,7 +153,7 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
 
     setMail((prev) => Math.max(prev - 1, 0));
 
-    alert(`${gift.item_name}을(를) 받았습니다!`);
+    alert(gift.item_id === null ? `${gift.count} 코인을 받았습니다!` : `${gift.item_name}을(를) 받았습니다!`);
   };
 
   return (
@@ -145,7 +172,7 @@ export default function MailHandler({ giftPopup, setGiftPopup, setMail }) {
             <p style={{ color: "#888" }}>비어있습니다.</p>
           ) : (
             mailbox.map((gift) => {
-              const product = products.find((p) => p.id === gift.item_id);
+              const product = gift.item_id === null ? { image: Coin } : products.find((p) => p.id === gift.item_id);
 
               return (
                 <div key={gift.id} className={`${style.mailItem} ${gift.received ? style.dimmed : ""}`}>

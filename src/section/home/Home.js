@@ -10,6 +10,7 @@ import Shop from "../../asset/icon/shop.png";
 import Bag from "../../asset/icon/bag.png";
 import Record from "../../asset/icon/record.png";
 import MailHandler from "./MailHandler.js";
+import CoinGiftPopup from "./CoinGiftPopup.js";
 
 export default function Home() {
   const [userName, setUserName] = useState("");
@@ -17,6 +18,10 @@ export default function Home() {
   const [mail, setMail] = useState(0); // 우편 개수 상태
   const [loading, setLoading] = useState(true);
   const [giftPopup, setGiftPopup] = useState(false); // 우편 팝업 상태
+  const [coinClickCount, setCoinClickCount] = useState(0); 
+  const [showCoinGiftPopup, setShowCoinGiftPopup] = useState(false); // 코인 전달(어드민만)
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const allowedUserIds = [1]; //추후 코인 전달 사용 가능 어드민 추가 시 배열에 user_id 추가
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,7 +36,7 @@ export default function Home() {
       const userId = loggedInUser.id;
 
       try {
-        // `users_info`에서 코인 가져오기
+        // users_info에서 코인 가져오기
         const { data: userInfo, error: infoError } = await supabase
           .from("users_info")
           .select("coin")
@@ -46,8 +51,8 @@ export default function Home() {
 
         setUserName(loggedInUser.name);
         setCoin(userInfo.coin);
-        
-        // 서버에서 직접 우편 개수 가져오기
+
+        // 서버에서 우편 개수 가져오기
         fetchMailboxCount(userId);
       } catch (error) {
         console.error("예기치 않은 오류:", error);
@@ -74,6 +79,77 @@ export default function Home() {
 
     setMail(data.length); // 우편 개수 업데이트
   };
+
+  // 실시간 코인 수 업데이트 구독
+  useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser) return;
+
+const subscription = supabase
+  .channel("coin-updates")
+  .on(
+    "postgres_changes",
+    {
+      event: "UPDATE",
+      schema: "public",
+      table: "users_info",
+      filter: `user_id=eq.${loggedInUser.id}`,
+    },
+    (payload) => {
+      console.log("Realtime coin update payload:", payload);
+      setCoin(payload.new.coin);
+    }
+  )
+  .subscribe();
+
+console.log("Subscribed to coin updates:", subscription);
+
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }, []);
+
+  // 실시간 우편함 개수 업데이트 구독
+  useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser) return;
+
+    const subscription = supabase
+      .channel("mail-updates")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "gift_records",
+          filter: `receiver_id=eq.${loggedInUser.id}`,
+        },
+        (payload) => {
+          setMail((prevMail) => prevMail + 1);
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "gift_records",
+          filter: `receiver_id=eq.${loggedInUser.id}`,
+        },
+        (payload) => {
+          // 받은 우편이 'received'로 표시되면 우편 개수 -1
+          if (payload.new.received && !payload.old.received) {
+            setMail((prevMail) => Math.max(prevMail - 1, 0));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }, []);
 
   // 탈퇴 확인 및 처리 함수
   const handleLeaveClub = async () => {
@@ -119,7 +195,7 @@ export default function Home() {
     <div className={`${style.container} ${giftPopup ? style.noInteraction : ""}`}>
       <div className={style.user}>
         환영합니다! &lceil;{" "}
-        <span className='cursorPointer' onClick={handleLeaveClub}>
+        <span className="cursorPointer" onClick={handleLeaveClub}>
           {userName}
         </span>{" "}
         &rfloor; 부원님 😊
@@ -128,15 +204,37 @@ export default function Home() {
         <div className={style.top}>
           <div className={style.alarm}>
             <div className="d-flex flex-column align-items-center gap-1">
-            <img src={Coin} alt="Coin" />               <p className={style.utilNumber}>{coin}c</p>
+              {showCoinGiftPopup && <CoinGiftPopup setShowCoinGiftPopup={setShowCoinGiftPopup} />}
+              <img
+                src={Coin}
+                alt="Coin"
+                onClick={() => {
+                  // 허용된 유저인지 체크
+                  if (!allowedUserIds.includes(loggedInUser?.id)) {
+                    // 허용 안되면 클릭 카운트 초기화 및 팝업 절대 안 열림
+                    setCoinClickCount(0);
+                    return;
+                  }
+
+                  setCoinClickCount((prev) => {
+                    if (prev === 2) {
+                      setShowCoinGiftPopup(true);
+                      return 0; // 클릭 카운트 초기화
+                    }
+                    return prev + 1;
+                  });
+                }}
+              />
+
+              <p className={style.utilNumber}>{coin}c</p>
             </div>
             <div className="d-flex flex-column align-items-center gap-1">
-            <img 
-              src={mail > 0 ? MailH : Mail}
-              alt="Mail" 
-              className={`${style.mailIcon} cursorPointer`}
-              onClick={() => setGiftPopup(true)} />
-
+              <img
+                src={mail > 0 ? MailH : Mail}
+                alt="Mail"
+                className={`${style.mailIcon} cursorPointer`}
+                onClick={() => setGiftPopup(true)}
+              />
               <p className={style.utilNumber}>{mail}</p> {/* 우편 개수 자동 업데이트 */}
             </div>
           </div>

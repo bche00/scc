@@ -15,6 +15,11 @@ export default function Bag() {
   const [users, setUsers] = useState([]); // 유저 목록
   const [selectedUser, setSelectedUser] = useState(null);
   const [userCoin, setUserCoin] = useState(0); //코인 상태 추가
+  const [searchTerm, setSearchTerm] = useState("");
+
+const filteredUsers = users.filter((user) =>
+  user.name.toLowerCase().includes(searchTerm.toLowerCase())
+);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -112,39 +117,62 @@ export default function Bag() {
       {/* 선물하기 팝업 */}
       {giftPopup.visible && (
         <div className={style.popup}>
+
           <div className={style.popupContent}>
             <h2 className={style.popupText}>누구에게 선물할까?</h2>
+
+            {/* 검색창 */}
+            <input
+              type="text"
+              placeholder="이름 검색"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={style.searchInput}/>
+
+            {/* 필터링된 유저 리스트 */}
             <div className={style.userList}>
-              {users.length === 0 ? <p>선물할 대상이 없습니다.</p> : users.map(user => (
-                <div 
-                  key={user.id} 
-                  className={`${style.userItem} ${selectedUser?.id === user.id ? style.selected : ""}`} 
-                  onClick={() => setSelectedUser(user)}
-                >
-                  {user.name}
-                </div>
-              ))}
+              {filteredUsers.length === 0 ? (
+                <p>검색 결과가 없습니다.</p>
+              ) : (
+                filteredUsers.map((user) => (
+                  <div
+                    key={user.id}
+                    className={`${style.userItem} ${
+                      selectedUser?.id === user.id ? style.selected : ""
+                    }`}
+                    onClick={() => setSelectedUser(user)}
+                  >
+                    {user.name}
+                  </div>
+                ))
+              )}
             </div>
+
+            {/* 버튼 */}
             <div className={style.btn}>
-              <button 
-                onClick={() => handleGiftItem(
-                  giftPopup.item, 
-                  selectedUser, 
-                  bagItems, 
-                  setBagItems, 
-                  setGiftPopup, 
-                  userCoin,
-                  setUserCoin
-                )}
-              >
+              <button
+                onClick={() =>
+                  handleGiftItem(
+                    giftPopup.item,
+                    selectedUser,
+                    bagItems,
+                    setBagItems,
+                    setGiftPopup,
+                    userCoin,
+                    setUserCoin
+                  )
+                }
+                disabled={!selectedUser}>
                 보내기
               </button>
-
-              <button onClick={() => setGiftPopup({ visible: false, item: null })}>취소</button>
+              <button onClick={() => setGiftPopup({ visible: false, item: null })}>
+                취소
+              </button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }

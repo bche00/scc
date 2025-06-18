@@ -41,7 +41,7 @@ export default function Explore({ location = "1층 복도" }) {
   const currentLocationName =
     Object.keys(exploreLocations).find(
       (key) => exploreLocations[key] === currentLocation
-    ) || "Location Image";
+    ) || "조사한다.";
 
   // 기본 모드: explorationResult가 null이면 현재 위치의 description 사용
   useEffect(() => {
@@ -133,6 +133,31 @@ const handleChoiceClick = async (choice) => {
       : choice.text.replace("▶ ", "");
   if (!lookupChoice) return;
 
+    if (choice.coinPenalty) {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser?.id) {
+      const { data: userInfo, error } = await supabase
+        .from("users_info")
+        .select("coin")
+        .eq("user_id", loggedInUser.id)
+        .single();
+
+      if (!error && userInfo) {
+        const updatedCoin = Math.max(0, userInfo.coin - choice.coinPenalty);
+        const { error: updateError } = await supabase
+          .from("users_info")
+          .update({ coin: updatedCoin })
+          .eq("user_id", loggedInUser.id);
+
+        // if (updateError) {
+        //   console.error("코인 차감 실패:", updateError);
+        // } else {
+        //   console.log(`코인 ${choice.coinPenalty}개 차감 완료`);
+        // }
+      }
+    }
+  }
+
   if (lookupChoice === "돌아간다.") {
     if (previousLocations.length > 0) {
       const lastLocation = previousLocations[previousLocations.length - 1];
@@ -181,37 +206,46 @@ const handleChoiceClick = async (choice) => {
       const result = await performExploration(); // { type, segments, coinReward? }
       setExplorationResult(result);
       setEventType(result.type);
+      
 
-      // ✅ 성공 시 코인 지급 처리
-      if (result.type === "success" && result.coinReward > 0) {
-        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        if (loggedInUser?.id) {
-          try {
-            const { data: userInfo, error } = await supabase
-              .from("users_info")
-              .select("coin")
-              .eq("user_id", loggedInUser.id)
-              .single();
+      // 성공 시 코인 지급 처리
+if (result.type === "success" && result.coinReward > 0) {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (loggedInUser?.id) {
+    try {
+      const { data: userInfo, error } = await supabase
+        .from("users_info")
+        .select("coin")
+        .eq("user_id", loggedInUser.id)
+        .single();
 
-            if (!error && userInfo) {
-              const updatedCoin = userInfo.coin + result.coinReward;
+      if (!error && userInfo) {
+        const currentCoin = Number(userInfo.coin) || 0;
+        const updatedCoin = currentCoin + result.coinReward;
 
-              const { error: updateError } = await supabase
-                .from("users_info")
-                .update({ coin: updatedCoin })
-                .eq("user_id", loggedInUser.id);
+        const { error: updateError } = await supabase
+          .from("users_info")
+          .update({ coin: updatedCoin })
+          .eq("user_id", loggedInUser.id);
 
-              if (updateError) {
-                console.error("코인 업데이트 실패:", updateError);
-              } else {
-                console.log(`코인 ${result.coinReward}개 지급 완료`);
-              }
-            }
-          } catch (e) {
-            console.error("코인 지급 중 오류:", e);
-          }
+        if (updateError) {
+          console.error("코인 업데이트 실패:", updateError);
+        } else {
+          console.log(`코인 ${result.coinReward}개 지급 완료`);
+          // 여기서 필요하면 React 상태 업데이트도 수행
         }
+      } else {
+        console.error("유저 정보 조회 실패:", error);
       }
+    } catch (e) {
+      console.error("코인 지급 중 오류:", e);
+    }
+  } else {
+    console.warn("로그인된 유저 정보가 없습니다.");
+  }
+}
+
+
 
       if (result.type === "fail") {
         setInvestigated((prev) => ({
@@ -237,7 +271,6 @@ const handleChoiceClick = async (choice) => {
   }
 };
 
-
   // 탐사 종료 버튼 클릭 처리
   const handleTerminateClick = () => {
     setShowTerminateModal(true);
@@ -250,6 +283,7 @@ const handleChoiceClick = async (choice) => {
   const cancelTerminate = () => {
     setShowTerminateModal(false);
   };
+  
 
   return (
     <div className={style.container}>

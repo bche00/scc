@@ -67,7 +67,7 @@ export default function Record() {
       ) : (
         <ul className={style.recordList}>
           {records.map((record) => (
-            <li key={`${record.user_id}-${record.item_id}-${record.timestamp}`} className={style.recordItem}>
+            <li key={record.id} className={style.recordItem}>
               <strong>[ 
                 {record.type === "used" ? "사용" : 
                  record.type === "purchase" ? "구매" : 
