@@ -73,7 +73,7 @@ export default function Home() {
       .eq("received", false); // 아직 받지 않은 우편만 가져오기
 
     if (error) {
-      console.error("📨 우편 개수 불러오기 실패:", error);
+      console.error("우편 개수 불러오기 실패:", error);
       return;
     }
 
@@ -96,13 +96,13 @@ const subscription = supabase
       filter: `user_id=eq.${loggedInUser.id}`,
     },
     (payload) => {
-      console.log("Realtime coin update payload:", payload);
+      // console.log("Realtime coin update payload:", payload);
       setCoin(payload.new.coin);
     }
   )
   .subscribe();
 
-console.log("Subscribed to coin updates:", subscription);
+// console.log("Subscribed to coin updates:", subscription);
 
 
     return () => {

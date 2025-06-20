@@ -74,6 +74,7 @@ export default function Record() {
                  record.type === "obtained" ? "획득" :
                  record.type === "gift_sent" ? "선물함" :
                  record.type === "gift_received" ? "받음" :
+                 record.type === "penalty" ? "잃음" :
                  "알 수 없음"}
               ]</strong>
               {record.item_name}  

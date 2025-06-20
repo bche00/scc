@@ -133,31 +133,83 @@ const handleChoiceClick = async (choice) => {
       : choice.text.replace("▶ ", "");
   if (!lookupChoice) return;
 
-    if (choice.coinPenalty) {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (loggedInUser?.id) {
-      const { data: userInfo, error } = await supabase
+  let actualChoice = typeof choice === "string" ? { text: choice } : choice;
+
+  // 코인 패널티 먼저 적용
+if (actualChoice.coinPenalty) {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  console.log("로그인된 유저:", loggedInUser);
+
+  if (loggedInUser?.id) {
+    const { data: userInfo, error } = await supabase
+      .from("users_info")
+      .select("coin")
+      .eq("user_id", loggedInUser.id)
+      .single();
+
+    // console.log("유저 코인 정보 조회 error:", error);
+    // console.log("유저 코인 정보:", userInfo);
+    const now = new Date();
+    const koreaTime = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString();
+
+    if (!error && userInfo) {
+      const updatedCoin = Math.max(0, userInfo.coin - actualChoice.coinPenalty);
+      const { error: updateError } = await supabase
         .from("users_info")
-        .select("coin")
-        .eq("user_id", loggedInUser.id)
-        .single();
+        .update({ coin: updatedCoin })
+        .eq("user_id", loggedInUser.id);
 
-      if (!error && userInfo) {
-        const updatedCoin = Math.max(0, userInfo.coin - choice.coinPenalty);
-        const { error: updateError } = await supabase
-          .from("users_info")
-          .update({ coin: updatedCoin })
-          .eq("user_id", loggedInUser.id);
+      if (updateError) {
+        console.error("코인 차감 실패:", updateError);
+        alert("코인을 차감하는 중 문제가 발생했습니다.");
+        return;
+      } else {
+        // console.log(`코인 차감 성공: ${actualChoice.coinPenalty}개`);
 
-        // if (updateError) {
-        //   console.error("코인 차감 실패:", updateError);
+        const { data: insertData, error: insertError } = await supabase
+          .from("users_record")
+          .insert({
+            user_id: loggedInUser.id,
+            type: "penalty",
+            item_name: `${actualChoice.coinPenalty}코인`,
+            timestamp: koreaTime,
+          });
+
+        // if (insertError) {
+        //   console.error("기록 추가 실패:", insertError);
+        //   if (insertError.details) console.error("세부 내용:", insertError.details);
+        //   if (insertError.hint) console.error("힌트:", insertError.hint);
         // } else {
-        //   console.log(`코인 ${choice.coinPenalty}개 차감 완료`);
+        //   console.log("기록 추가 성공:", insertData);
         // }
+
       }
     }
+  } else {
+    console.warn("로그인된 유저 정보가 없습니다.");
+  }
+}
+
+
+
+  // triggersEvent가 true면 exploreResults 출력
+  if (actualChoice.triggersEvent) {
+    const result = await performExploration();
+    if (result?.segments) {
+      setExplorationResult(result);
+    }
+    return;
   }
 
+  // goTo가 있으면 해당 위치로 이동
+  if (actualChoice.goTo && exploreLocations[actualChoice.goTo]) {
+    setPreviousLocations((prev) => [...prev, currentLocation]);
+    setExplorationResult(null);
+    setCurrentLocation(exploreLocations[actualChoice.goTo]);
+    return;
+  }
+
+  // 돌아간다.
   if (lookupChoice === "돌아간다.") {
     if (previousLocations.length > 0) {
       const lastLocation = previousLocations[previousLocations.length - 1];
@@ -176,6 +228,7 @@ const handleChoiceClick = async (choice) => {
     return;
   }
 
+  // 그냥 선택지 이동
   if (exploreLocations[lookupChoice]) {
     setPreviousLocations((prev) => [...prev, currentLocation]);
     setExplorationResult(null);
@@ -183,6 +236,7 @@ const handleChoiceClick = async (choice) => {
     return;
   }
 
+  // 조사 이벤트 (중복 방지)
   if (choice.triggersEvent) {
     if (investigated[currentLocationName]) {
       const specialResult = {
@@ -206,46 +260,41 @@ const handleChoiceClick = async (choice) => {
       const result = await performExploration(); // { type, segments, coinReward? }
       setExplorationResult(result);
       setEventType(result.type);
-      
 
-      // 성공 시 코인 지급 처리
-if (result.type === "success" && result.coinReward > 0) {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (loggedInUser?.id) {
-    try {
-      const { data: userInfo, error } = await supabase
-        .from("users_info")
-        .select("coin")
-        .eq("user_id", loggedInUser.id)
-        .single();
+      if (result.type === "success" && result.coinReward > 0) {
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        if (loggedInUser?.id) {
+          try {
+            const { data: userInfo, error } = await supabase
+              .from("users_info")
+              .select("coin")
+              .eq("user_id", loggedInUser.id)
+              .single();
 
-      if (!error && userInfo) {
-        const currentCoin = Number(userInfo.coin) || 0;
-        const updatedCoin = currentCoin + result.coinReward;
+            if (!error && userInfo) {
+              const currentCoin = Number(userInfo.coin) || 0;
+              const updatedCoin = currentCoin + result.coinReward;
 
-        const { error: updateError } = await supabase
-          .from("users_info")
-          .update({ coin: updatedCoin })
-          .eq("user_id", loggedInUser.id);
+              const { error: updateError } = await supabase
+                .from("users_info")
+                .update({ coin: updatedCoin })
+                .eq("user_id", loggedInUser.id);
 
-        if (updateError) {
-          console.error("코인 업데이트 실패:", updateError);
+              if (updateError) {
+                console.error("코인 업데이트 실패:", updateError);
+              } else {
+                console.log(`코인 ${result.coinReward}개 지급 완료`);
+              }
+            } else {
+              console.error("유저 정보 조회 실패:", error);
+            }
+          } catch (e) {
+            console.error("코인 지급 중 오류:", e);
+          }
         } else {
-          console.log(`코인 ${result.coinReward}개 지급 완료`);
-          // 여기서 필요하면 React 상태 업데이트도 수행
+          console.warn("로그인된 유저 정보가 없습니다.");
         }
-      } else {
-        console.error("유저 정보 조회 실패:", error);
       }
-    } catch (e) {
-      console.error("코인 지급 중 오류:", e);
-    }
-  } else {
-    console.warn("로그인된 유저 정보가 없습니다.");
-  }
-}
-
-
 
       if (result.type === "fail") {
         setInvestigated((prev) => ({
@@ -270,6 +319,8 @@ if (result.type === "success" && result.coinReward > 0) {
     return;
   }
 };
+
+
 
   // 탐사 종료 버튼 클릭 처리
   const handleTerminateClick = () => {
