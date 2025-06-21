@@ -83,20 +83,14 @@ if (!isNaN(Number(reward))) {
         type: "obtained",
         timestamp: koreaTime.toISOString(),
       }]);
-        console.log("기록 저장 확인용!!!:", {
-          user_id: userId,
-          item_id: null,
-          item_name: `${coinAmount}코인`,
-          type: "obtained",
-          timestamp: koreaTime.toISOString(),
-      });
-
-      // *기록 저장 확인용 콘솔
-      // if (recordError) {
-      //   console.error("기록 저장 실패:", recordError);
-      // } else {
-      //   console.log("기록 저장 성공");
-      // }
+    //     console.log("기록 저장 확인용!!!:", {
+    //       user_id: userId,
+    //       item_id: null,
+    //       item_name: `${coinAmount}코인`,
+    //       type: "obtained",
+    //       timestamp: koreaTime.toISOString(),
+    //   }
+    // );
     }
   }
 } else {

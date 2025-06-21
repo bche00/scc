@@ -9,7 +9,7 @@ const randomBoxItems = [
   { id: 11, name: "뱃지", chance: 2 },
   { id: 9, name: "확성기", chance: 5 },
   { id: 10, name: "페인트통", chance: 5 },
-  { id: 12, name: "교무실 열쇠", chance: 2 }, // 특수 아이템
+  { id: 13, name: "빨간 펜", chance: 2 }, // 특수 아이템
 ];
 
 export default randomBoxItems;

@@ -89,10 +89,18 @@ const products = [
   },
   {
     id: 12,
-    image: "/asset/product/redpen.png",
+    image: "/asset/product/key.png",
     name: "열쇠",
     price: "-",
-    description: "네임택에 「교무실」이라고 쓰여있다.",
+    description: "「교무실」이라고 쓰여있다.",
+    used: "false",
+  },
+  {
+    id: 13,
+    image: "/asset/product/redpen.png",
+    name: "빨간 펜",
+    price: "-",
+    description: "이상한 냄새가 난다.",
     used: "false",
   },
 ];

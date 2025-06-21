@@ -40,7 +40,7 @@ const openRandomBox = async (bagItems, setBagItems) => {
   const productInfo = products.find((p) => p.id === selectedItem.id);
 
   // 팝업 띄우기 (이미지 + 아이템명)
-  showPopup(productInfo.image, `🎁 '${selectedItem.name}'을(를) 획득했습니다!`);
+  showPopup(productInfo.image, `'${selectedItem.name}'을(를) 획득했습니다!`);
 
   // 🔹 현재 인벤토리 가져오기
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -190,7 +190,7 @@ const updateExploreLimit = async () => {
 
   if (updateError) {
     console.error("탐사 횟수 업데이트 실패:", updateError);
-    alert("오류가 발생했습니다.😥");
+    alert("오류가 발생했습니다.");
   } else {
     alert(`기력을 회복했다!\n탐사 횟수가 증가했습니다.\n\n(현재 탐사 가능 횟수: ${exploreData.remaining})`);
   }
@@ -202,7 +202,7 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
   const item = products.find((p) => p.id === itemId);
 
   if (!item) {
-    alert("이 아이템을 사용할 수 없습니다.😥");
+    alert("이 아이템을 사용할 수 없습니다.");
     return;
   }
 
@@ -231,50 +231,54 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
       break;
 
     case 4: // 랜덤박스
-      showPopup("/asset/product/luckybox.png", "랜덤박스를 열었습니다! 🎁");
+      showPopup("/asset/product/luckybox.png", "랜덤박스를 열었습니다!");
       await openRandomBox(bagItems, setBagItems);
       return;
 
-    // ✅ 부적류도 사용 가능하게 변경
-    case 5: // 손재부적
-    case 6: // 망신부적
-    case 7: // 박복부적
-    case 8: // 따봉고슴도치 스티커
-    case 9: // 확성기
-    case 10: // 페인트통
-    case 11: // 뱃지
-      updatedBagItems[itemIndex].used = true;
-      alert(`${item.name}을(를) 사용했습니다!`);
-      break;
+      case 5: // 손재부적
+      case 6: // 망신부적
+      case 7: // 박복부적
+      case 8: // 따봉고슴도치 스티커
+      case 9: // 확성기
+      case 10: // 페인트통
+      case 11: // 뱃지
+  updatedBagItems.push({ itemId, count: 1, used: true });
+
+  // 2. 기존 usable 아이템의 개수 1 감소
+  if (updatedBagItems[itemIndex].count > 1) {
+    updatedBagItems[itemIndex].count -= 1;
+  } else {
+    // count가 1이면 해당 usable 항목 제거
+    updatedBagItems.splice(itemIndex, 1);
+  }
+
+  alert(`${item.name}을(를) 사용했습니다!`);
+  break;
+
 
     default:
       alert("이 아이템은 사용할 수 없습니다.");
       return;
   }
 
-  // 개수 차감 및 업데이트
-  updatedBagItems[itemIndex].count -= 1;
-  updatedBagItems = updatedBagItems.filter((item) => item.count > 0 || item.used);
-
   try {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     const koreaTime = new Date();
     koreaTime.setHours(koreaTime.getHours() + 9);
 
-    await supabase.from("users_record").insert([
-      {
-        user_id: loggedInUser.id,
-        item_id: itemId,
-        item_name: item.name,
-        type: "used",
-        timestamp: koreaTime.toISOString(),
-      },
-    ]);
+  await supabase.from("users_record").insert([{
+    user_id: loggedInUser.id,
+    item_id: itemId,
+    item_name: item.name,
+    type: "used",
+    timestamp: koreaTime.toISOString(),
+  }]);
 
-    await supabase
-      .from("users_info")
-      .update({ bag_item: updatedBagItems })
-      .eq("user_id", loggedInUser.id);
+  await supabase
+    .from("users_info")
+    .update({ bag_item: updatedBagItems })
+    .eq("user_id", loggedInUser.id);
+
 
     setBagItems(updatedBagItems);
   } catch (err) {
