@@ -4,8 +4,8 @@ import products from "../../db/product";
 export const handleGiftItem = async (item, selectedUser, bagItems, setBagItems, setGiftPopup, userCoin, setUserCoin) => {
   if (!selectedUser || !item) return alert("선물할 친구를 선택해주세요.");
 
-  console.log("📌 handleGiftItem 받은 item:", item);
-  console.log("📌 item.id 값:", item?.id);
+  // console.log("📌 handleGiftItem 받은 item:", item);
+  // console.log("📌 item.id 값:", item?.id);
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) return alert("로그인이 필요합니다.");
@@ -19,7 +19,7 @@ export const handleGiftItem = async (item, selectedUser, bagItems, setBagItems, 
 
   // 아이템 ID 확인
   const itemId = Number(item.id || item.itemId);
-  console.log("📌 최종 아이템 ID:", itemId);
+  // console.log("📌 최종 아이템 ID:", itemId);
 
   const product = products.find(p => p.id === itemId);
 

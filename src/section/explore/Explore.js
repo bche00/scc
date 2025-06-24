@@ -112,56 +112,141 @@ export default function Explore({ location = "1층 복도" }) {
   };
 
 const handleChoiceClick = async (choice) => {
-  const lookupChoice =
-    typeof choice === "string"
-      ? choice.replace("▶ ", "")
-      : choice.text.replace("▶ ", "");
+  const isStringChoice = typeof choice === "string";
+  const choiceText = isStringChoice ? choice.replace("▶ ", "") : choice.text.replace("▶ ", "");
+  const lookupChoice = choiceText;
   if (!lookupChoice) return;
 
-  let actualChoice = typeof choice === "string" ? { text: choice } : choice;
+  const actualChoice = isStringChoice ? { text: choice } : choice;
 
-  // 이미 조사한 장소라면 탐사 이벤트 막기
-  if (actualChoice.triggersEvent) {
-    if (investigated[currentLocationName]) {
-      const specialResult = {
-        type: "fail",
-        segments: ["이미 조사했던 곳이다. 다른 곳을 살펴보자"],
-      };
-      setExplorationResult(specialResult);
-      setEventType("fail");
+  // 중복 조사 방지
+  if (
+    investigated[currentLocationName] &&
+    (actualChoice.triggersEvent || lookupChoice === "조사한다.")
+  ) {
+    const specialResult = {
+      type: "fail",
+      segments: ["이미 조사했던 곳이다. 다른 곳을 살펴보자."],
+    };
+    setExplorationResult(specialResult);
+    setEventType("fail");
 
-      if (currentLocation.choices) {
-        const newChoices = currentLocation.choices.filter((c) => {
-          const t = typeof c === "string" ? c : c.text;
-          return t.includes("돌아간다");
-        });
-        setCurrentLocation({ ...currentLocation, choices: newChoices });
-      }
-      return;
+    if (currentLocation.choices) {
+      const newChoices = currentLocation.choices.filter((c) => {
+        const t = typeof c === "string" ? c : c.text;
+        return t.includes("돌아간다");
+      });
+      setCurrentLocation({ ...currentLocation, choices: newChoices });
     }
+    return;
   }
 
   // 코인 차감
   if (actualChoice.coinPenalty) {
-    // ... 생략 (기존 코드 그대로 유지)
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser?.id) {
+      const { data: userInfo, error } = await supabase
+        .from("users_info")
+        .select("coin")
+        .eq("user_id", loggedInUser.id)
+        .single();
+      const now = new Date();
+      const koreaTime = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString();
+
+      if (!error && userInfo) {
+        const updatedCoin = Math.max(0, userInfo.coin - actualChoice.coinPenalty);
+        const { error: updateError } = await supabase
+          .from("users_info")
+          .update({ coin: updatedCoin })
+          .eq("user_id", loggedInUser.id);
+
+        if (!updateError) {
+          await supabase.from("users_record").insert({
+            user_id: loggedInUser.id,
+            type: "penalty",
+            item_name: `${actualChoice.coinPenalty}코인`,
+            timestamp: koreaTime,
+          });
+        } else {
+          alert("코인을 차감하는 중 문제가 발생했습니다.");
+          return;
+        }
+      }
+    }
   }
 
   // 아이템 획득
   if (actualChoice.itemId) {
-    // ... 생략 (기존 코드 그대로 유지)
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser?.id) {
+      const product = products.find((p) => p.id === actualChoice.itemId);
+      if (product) {
+        const { data: userInfo, error } = await supabase
+          .from("users_info")
+          .select("bag_item")
+          .eq("user_id", loggedInUser.id)
+          .single();
+
+        if (!error && userInfo) {
+          const updatedBag = [...(userInfo.bag_item || [])];
+          const existing = updatedBag.find(
+            (item) => item.itemId === product.id && !item.used
+          );
+
+          if (existing) {
+            existing.count += 1;
+          } else {
+            updatedBag.push({ itemId: product.id, count: 1, used: false });
+          }
+
+          const koreaTime = new Date();
+          koreaTime.setHours(koreaTime.getHours() + 9);
+
+          const { error: updateError } = await supabase
+            .from("users_info")
+            .update({ bag_item: updatedBag })
+            .eq("user_id", loggedInUser.id);
+
+          if (!updateError) {
+            await supabase.from("users_record").insert({
+              user_id: loggedInUser.id,
+              item_id: product.id,
+              item_name: product.name,
+              type: "obtained",
+              timestamp: koreaTime.toISOString(),
+            });
+          }
+        }
+      }
+    }
   }
 
+  // 조사 이벤트 처리
   if (actualChoice.triggersEvent) {
     if (previousLocations.length === 0) {
       setPreviousLocations([currentLocation]);
     }
 
-    const result = await performExploration(); // { type, segments, coinReward? }
+    const result = await performExploration();
     setExplorationResult(result);
     setEventType(result.type);
 
     if (result.type === "success" && result.coinReward > 0) {
-      // ... 생략 (코인 지급 로직 유지)
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (loggedInUser?.id) {
+        const { data: userInfo, error } = await supabase
+          .from("users_info")
+          .select("coin")
+          .eq("user_id", loggedInUser.id)
+          .single();
+        if (!error && userInfo) {
+          const updatedCoin = (userInfo.coin || 0) + result.coinReward;
+          await supabase
+            .from("users_info")
+            .update({ coin: updatedCoin })
+            .eq("user_id", loggedInUser.id);
+        }
+      }
     }
 
     if (result.type === "fail") {
@@ -187,14 +272,7 @@ const handleChoiceClick = async (choice) => {
     return;
   }
 
-  // 이동
-  if (actualChoice.goTo && exploreLocations[actualChoice.goTo]) {
-    setPreviousLocations((prev) => [...prev, currentLocation]);
-    setExplorationResult(null);
-    setCurrentLocation(exploreLocations[actualChoice.goTo]);
-    return;
-  }
-
+  // 돌아간다 처리
   if (lookupChoice === "돌아간다.") {
     if (previousLocations.length > 0) {
       const lastLocation = previousLocations[previousLocations.length - 1];
@@ -213,14 +291,16 @@ const handleChoiceClick = async (choice) => {
     return;
   }
 
-  // 그냥 선택지 이동
-  if (exploreLocations[lookupChoice]) {
+  // 이동 (goTo 우선, 없으면 텍스트 기반)
+  const destination = actualChoice.goTo || lookupChoice;
+  if (exploreLocations[destination]) {
     setPreviousLocations((prev) => [...prev, currentLocation]);
     setExplorationResult(null);
-    setCurrentLocation(exploreLocations[lookupChoice]);
+    setCurrentLocation(exploreLocations[destination]);
     return;
   }
 };
+
 
 
   const handleTerminateClick = () => {

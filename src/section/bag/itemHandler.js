@@ -110,7 +110,7 @@ const openRandomBox = async (bagItems, setBagItems) => {
       },
     ];
 
-    console.log("📌 기록 추가 요청 데이터 (랜덤박스 사용):", recordData);
+    // console.log("📌 기록 추가 요청 데이터 (랜덤박스 사용):", recordData);
 
     const { error: recordError } = await supabase.from("users_record").insert(recordData);
 
@@ -130,7 +130,7 @@ const openRandomBox = async (bagItems, setBagItems) => {
       },
     ];
 
-    console.log("📌 기록 추가 요청 데이터 (획득 아이템):", obtainedData);
+    // console.log("📌 기록 추가 요청 데이터 (획득 아이템):", obtainedData);
 
     const { error: obtainError } = await supabase.from("users_record").insert(obtainedData);
 
@@ -175,11 +175,7 @@ const updateExploreLimit = async () => {
     timeZone: "Asia/Seoul",
   });
 
-  // 날짜가 변경되었으면 remaining을 2로 초기화
-  if (exploreData.date !== today) {
-    exploreData = { date: today, remaining: 2 };
-  }
-
+  
   // remaining 값 +1 증가
   exploreData.remaining += 1;
 

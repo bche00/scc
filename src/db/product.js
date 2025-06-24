@@ -90,7 +90,7 @@ const products = [
   {
     id: 12,
     image: "/asset/product/key.png",
-    name: "열쇠",
+    name: "*열쇠",
     price: "-",
     description: "「교무실」이라고 쓰여있다.",
     used: "false",
@@ -98,9 +98,17 @@ const products = [
   {
     id: 13,
     image: "/asset/product/redpen.png",
-    name: "빨간 펜",
+    name: "*빨간 펜",
     price: "-",
     description: "이상한 냄새가 난다.",
+    used: "false",
+  },
+  {
+    id: 99,
+    image: "/asset/product/salt.png",
+    name: "소금",
+    price: "-",
+    description: "삿된 것에게 뿌려버리자!",
     used: "false",
   },
 ];

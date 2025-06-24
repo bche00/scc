@@ -13,6 +13,8 @@ import Bag from './section/bag/Bag.js';
 import Record from './section/record/Record.js';
 import NotFound from './section/notFound.js';
 
+import PreventRefresh from './section/explore/PreventRefresh';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
@@ -35,7 +37,7 @@ function App() {
   };
 
   if (isLoggedIn === null) {
-    return <p>로딩 중...</p>; // ✅ 로그인 상태 확인 전 로딩 화면 추가
+    return <p>로딩 중...</p>; // 로그인 상태 확인 전 로딩 화면 추가
   }
 
   return (
@@ -50,10 +52,10 @@ function App() {
           <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>} />
           <Route path="/bag" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Bag /></ProtectedRoute>} />
           <Route path="/record" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Record /></ProtectedRoute>} />
-
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
+      <PreventRefresh />
     </Router>
   );
 }

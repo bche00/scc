@@ -64,6 +64,48 @@ export default function Home() {
     fetchUserData();
   }, []);
 
+  // 🔽 탐사 횟수 초기화 함수
+  useEffect(() => {
+    const checkExploreReset = async () => {
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (!loggedInUser) return;
+
+      const { data, error } = await supabase
+        .from("users_info")
+        .select("explore_limit")
+        .eq("user_id", loggedInUser.id)
+        .single();
+
+      if (error || !data) {
+        console.error("탐사 초기화 정보 불러오기 실패:", error);
+        return;
+      }
+
+      let exploreData = data.explore_limit;
+
+      const today = new Date().toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        timeZone: "Asia/Seoul",
+      });
+
+      if (exploreData.date !== today) {
+        const newData = { date: today, remaining: 2 };
+        const { error: updateError } = await supabase
+          .from("users_info")
+          .update({ explore_limit: newData })
+          .eq("user_id", loggedInUser.id);
+
+        if (updateError) {
+          console.error("탐사 초기화 실패:", updateError);
+        }
+      }
+    };
+
+    checkExploreReset();
+  }, []);
+
   // 서버에서 우편 개수 가져오는 함수
   const fetchMailboxCount = async (userId) => {
     const { data, error } = await supabase

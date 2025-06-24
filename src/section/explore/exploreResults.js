@@ -1,4 +1,3 @@
-// exploreResults.js
 export const exploreResults = {
   success1: {
     type: "success",

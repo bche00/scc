@@ -1,4 +1,3 @@
-// exploreLogic.js
 import { exploreResults } from "./exploreResults";
 import products from "../../db/product"; // 상품 DB 불러오기
 import { supabase } from "../../db/supabase"; // Supabase 불러오기
