@@ -1,5 +1,5 @@
 export const exploreLocations = {
-  "1층 복도": {
+  "1층 계단": {
     image: "/asset/img/hallway.png",
     description: "시간이 얼마나 흘렀는지 잘 모르겠다.\n어딜 둘러볼까?",
     choices: ["▶ 1층", "▶ 2층", "▶ 3층", "▶ 외부"]
@@ -7,7 +7,14 @@ export const exploreLocations = {
   "1층": {
     image: "/asset/img/hallway.png",
     description: "교문은 굳게 닫혀있고, 창 밖은 어둡기만하다.",
-    choices: ["▶ 교무실", "▶ 방송실", "▶ 행정실", "▶ 보건실", "▶ 복도를 살펴본다(1층)", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 교무실" },
+      { text: "▶ 방송실" },
+      { text: "▶ 행정실" },
+      { text: "▶ 보건실" },
+      { text: "▶ 복도를 살펴본다(1층)" },
+      { text: "▶ 돌아간다. ", goTo: "1층 계단" }
+    ]
   },
   "교무실": {
     image: "/asset/img/hallway.png",
@@ -17,7 +24,12 @@ export const exploreLocations = {
   "방송실": {
     image: "/asset/img/broadcasting.png",
     description: "여러 방송 기기들이 구비되어있다. 서늘한 기운이 감돈다.",
-    choices: ["▶ 모니터를 살펴본다.", "▶ 마이크를 살펴본다.", "▶ 카메라를 살펴본다.", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 모니터를 살펴본다." },
+      { text: "▶ 마이크를 살펴본다." },
+      { text: "▶ 카메라를 살펴본다." },
+      { text: "▶ 돌아간다. ", goTo: "1층" }
+    ]
   },
   "모니터를 살펴본다.": {
     image: "/asset/img/broadcasting.png",
@@ -58,7 +70,12 @@ export const exploreLocations = {
     "행정실": {
     image: "/asset/img/office.png",
     description: "사무용 책상과 모니터들이 즐비하다.",
-    choices: ["▶ 게시판을 살펴본다.", "▶ 사무용 책상을 살펴본다.", "▶ 사물함을 살펴본다.", "▶ 돌아간다."]
+      choices: [
+      { text: "▶ 게시판을 살펴본다." },
+      { text: "▶ 사무용 책상을 살펴본다." },
+      { text: "▶ 사물함을 살펴본다." },
+      { text: "▶ 돌아간다. ", goTo: "1층" }
+    ]
   },
     "게시판을 살펴본다.": {
     image: "/asset/img/office.png",
@@ -119,7 +136,12 @@ export const exploreLocations = {
       "보건실": {
     image: "/asset/img/health_Room.png",
     description: "약품 냄새가 코를 찌른다. 내부는 깨끗해 보인다.",
-    choices: ["▶ 침대를 살펴본다.", "▶ 서랍을 살펴본다.", "▶ 트레이를 살펴본다.", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 침대를 살펴본다." },
+      { text: "▶ 서랍을 살펴본다." },
+      { text: "▶ 트레이를 살펴본다." },
+      { text: "▶ 돌아간다. ", goTo: "1층" }
+    ]
   },
       "침대를 살펴본다.": {
     image: "/asset/img/health_Room.png",
@@ -369,13 +391,24 @@ export const exploreLocations = {
     "2층": {
     image: "/asset/img/hallway.png",
     description: "계단을 통해 2층으로 올라왔다.\n마룻바닥 여기저기 축축한 습기가 배어있다. 섬뜩한 한기가 느껴진다.",
-    choices: ["▶ 교실", "▶ 도서실", "▶ 미술실", "▶ 복도를 살펴본다(2층)", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 교실"},
+      { text: "▶ 도서실"},
+      { text: "▶ 미술실"},
+      { text: "▶ 복도를 살펴본다(2층)"},
+      { text: "▶ 돌아간다. ", goTo: "1층 계단"}
+    ],
   },
   // 2층 교실
     "교실": {
     image: "/asset/img/class_room.png",
     description: "1학년과 2학년의 교실들.\n떠들썩한 낮과 달리, 고요하고 섬뜩한 분위기가 흐른다.",
-    choices: ["▶ 칠판을 살펴본다.", "▶ 책상을 살펴본다.", "▶ 사물함을 살펴본다. ", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 칠판을 살펴본다."},
+      { text: "▶ 책상을 살펴본다."},
+      { text: "▶ 사물함을 살펴본다. "},
+      { text: "▶ 돌아간다. ", goTo: "2층"}
+    ],
   },
     "칠판을 살펴본다.": {
     image: "/asset/img/class_room.png",
@@ -387,7 +420,7 @@ export const exploreLocations = {
   },
     "책상을 살펴본다.": {
     image: "/asset/img/class_room.png",
-    description: "책상 밑면에 말라붙은 무언가가 있다. 으… 자세히 보고 싶지 않다.",
+    description: "책상 밑면에 말라붙은 무언가가 있다.\n으… 자세히 보고 싶지 않다.",
     choices: [
       { text: "▶ 조사한다.", triggersEvent: true},
       { text: "▶ 돌아간다." }
@@ -404,8 +437,13 @@ export const exploreLocations = {
   // 3층 교실
     "교실 ": {
     image: "/asset/img/class_room.png",
-    description: "1학년과 2학년의 교실들.\n떠들썩한 낮과 달리, 고요하고 섬뜩한 분위기가 흐른다.",
-    choices: ["▶ 칠판을 살펴본다. ", "▶ 책상을 살펴본다. ", "▶ 사물함을 살펴본다.  ", "▶ 돌아간다."]
+    description: "3층은 3학년만 교실을 사용하고 있다.\n…고요하다.",
+    choices: [
+      { text: "▶ 칠판을 살펴본다. "},
+      { text: "▶ 책상을 살펴본다. "},
+      { text: "▶ 사물함을 살펴본다.  "},
+      { text: "▶ 돌아간다. ", goTo: "3층"}
+    ],
   },
     "칠판을 살펴본다. ": {
     image: "/asset/img/class_room.png",
@@ -434,12 +472,22 @@ export const exploreLocations = {
     "도서실": {
     image: "/asset/img/library.png",
     description: "눅눅한 종이 냄새가 난다. 큰 소리를 내면 안될 것 같다.",
-    choices: ["▶ 책장을 살펴본다.", "▶ 컴퓨터를 살펴본다.", "▶ 프린터기를 살펴본다.", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 책장을 살펴본다."},
+      { text: "▶ 컴퓨터를 살펴본다."},
+      { text: "▶ 프린터기를 살펴본다."},
+      { text: "▶ 돌아간다. ", goTo: "2층"}
+    ],
   },
   "책장을 살펴본다.": {
     image: "/asset/img/library.png",
     description: "다양한 서적들이 빼곡하게 들어서있다.\n눈에 띄는 책들이 몇 권 있다.\n…뭔가 읽어볼까?",
-    choices: ["▶ 「분신사바」", "▶ 「해녀 괴담」", "▶ 「퇴마부 제작법」", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 「분신사바」"},
+      { text: "▶ 「해녀 괴담」"},
+      { text: "▶ 「퇴마부 제작법」"},
+      { text: "▶ 돌아간다. ", goTo: "도서실"}
+    ],
   },
     "「분신사바」": {
     image: "/asset/img/library.png",
@@ -481,7 +529,12 @@ export const exploreLocations = {
   "미술실": {
     image: "/asset/img/art_room.png",
     description: "눅눅한 종이 냄새가 난다.\n석고로 된 흉상들이 나를 노려보는 것만 같다.",
-    choices: ["▶ 미술도구함을 살펴본다.", "▶ 책상을 살펴본다.　", "▶ 흉상을 살펴본다.", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 미술도구함을 살펴본다."},
+      { text: "▶ 책상을 살펴본다.　"},
+      { text: "▶ 흉상을 살펴본다."},
+      { text: "▶ 돌아간다. ", goTo: "2층"}
+    ],
   },
   "미술도구함을 살펴본다.": {
     image: "/asset/img/art_room.png",
@@ -510,20 +563,31 @@ export const exploreLocations = {
   },
   "부숴본다.": {
     image: "/asset/img/art_room.png",
-    description: "당신은 석고 흉상을 들어 바닥에 내던졌다.|뿌드득, 하는 둔탁한 소리와 함께 얼굴이 산산조각 나며 하얀 석고 가루가 휘날린다.|…흉상 내부는 텅 비어있다.\n………어라?|몸을 크게 움직여서인지, 주머니에서 코인이 떨어져나와 서랍장 아래로 굴러들어간 듯 하다.|[[1코인]를 잃었다.",
+    description: "당신은 석고 흉상을 들어 바닥에 내던졌다.|뿌드득, 하는 둔탁한 소리와 함께 얼굴이 산산조각 나며 하얀 석고 가루가 휘날린다.|…흉상 내부는 텅 비어있다.|………어라?|몸을 크게 움직여서인지, 주머니에서 코인이 떨어져나와 서랍장 아래로 굴러들어간 듯 하다.|[1코인]를 잃었다.",
     choices: [
-      { text: "▶ 돌아간다." }
+      { text: "▶ 돌아간다. ", goTo: "미술실" }
     ],
   },
     "3층": {
     image: "/asset/img/hallway.png",
     description: "계단을 통해 3층으로 올라왔다.\n바닥과 벽 여기저기에 금이 가 있다.",
-    choices: ["▶ 교실 ", "▶ 과학실", "▶ 음악실", "▶ 복도를 살펴본다(3층)", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 교실 "},
+      { text: "▶ 과학실"},
+      { text: "▶ 음악실"},
+      { text: "▶ 복도를 살펴본다(3층)"},
+      { text: "▶ 돌아간다. ", goTo: "1층 계단"}
+    ],
   },
     "과학실": {
     image: "/asset/img/science_room.png",
     description: "찌든 화학품 냄새가 불쾌하게 코를 찌른다.",
-    choices: ["▶ 비품실을 살펴본다.", "▶ 인체모형을 살펴본다.", "▶ 서랍장을 살펴본다. ", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 비품실을 살펴본다."},
+      { text: "▶ 인체모형을 살펴본다."},
+      { text: "▶ 서랍장을 살펴본다.　"},
+      { text: "▶ 돌아간다. ", goTo: "3층"}
+    ],
   },
   "비품실을 살펴본다.": {
     image: "/asset/img/science_room.png",
@@ -541,7 +605,7 @@ export const exploreLocations = {
       { text: "▶ 돌아간다." }
     ],
   },
-  "서랍장을 살펴본다.": {
+  "서랍장을 살펴본다.　": {
     image: "/asset/img/science_room.png",
     description: "비커, 눈금실린더, 알코올램프 등이 가지런히 정리되어있다.",
     choices: [
@@ -552,7 +616,12 @@ export const exploreLocations = {
     "음악실": {
     image: "/asset/img/music_room.png",
     description: "두꺼운 방음문을 지나 목재식 내부의 음악실 안으로 들어왔다.",
-    choices: ["▶ 피아노를 살펴본다.", "▶ 보면대를 살펴본다.", "▶ 사물함을 살펴본다.　", "▶ 돌아간다."]
+      choices: [
+      { text: "▶ 피아노를 살펴본다."},
+      { text: "▶ 보면대를 살펴본다."},
+      { text: "▶ 사물함을 살펴본다.　"},
+      { text: "▶ 돌아간다. ", goTo: "3층"}
+    ],
   },
   "피아노를 살펴본다.": {
     image: "/asset/img/music_room.png",
@@ -575,7 +644,7 @@ export const exploreLocations = {
     image: "/asset/img/music_room.png",
     description: "당신은 보표를 더듬어가며 희미하게 새겨진 음계를 읽어내본다.|(E) (D#) (E)… (D#)…… (E) (B) (D)…… (C)… (A)……\n이 다음은 흐려져 알아보기 힘들다.",
     choices: [
-      { text: "▶ 돌아간다." }
+      { text: "▶ 돌아간다. ", goTo: "음악실" }
     ],
   },
   "사물함을 살펴본다.　": {
@@ -589,12 +658,21 @@ export const exploreLocations = {
   "외부": {
     image: "/asset/img/hallway.png",
     description: "본관 내부 통로를 이용해 옆 건물로 이동했다.",
-    choices: ["▶ 체육관", "▶ 급식실", "▶ 돌아간다."]
+      choices: [
+      { text: "▶ 체육관" },
+      { text: "▶ 급식실" },
+      { text: "▶ 돌아간다. ", goTo: "1층 계단" }
+    ]
   },
   "체육관": {
     image: "/asset/img/gym.png",
     description: "체육관은 광활했지만 조금도 인기척을 느낄 수 없다.\n소리를 내면 메아리가 울릴 듯 하다.",
-    choices: ["▶ 농구골대를 살펴본다.", "▶ 무대를 살펴본다", "▶ 창고를 살펴본다.", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 농구골대를 살펴본다."},
+      { text: "▶ 무대를 살펴본다."},
+      { text: "▶ 창고를 살펴본다."},
+      { text: "▶ 돌아간다. ", goTo: "외부"}
+    ],
   },
   "농구골대를 살펴본다.": {
     image: "/asset/img/gym.png",
@@ -623,7 +701,12 @@ export const exploreLocations = {
     "급식실": {
     image: "/asset/img/cafeteria.png",
     description: "희미한 음식 냄새가 난다.",
-    choices: ["▶ 조리실을 살펴본다.", "▶ 배식대를 살펴본다", "▶ 식탁을 살펴본다.", "▶ 돌아간다."]
+      choices: [
+      { text: "▶ 조리실을 살펴본다."},
+      { text: "▶ 배식대를 살펴본다."},
+      { text: "▶ 식탁을 살펴본다."},
+      { text: "▶ 돌아간다. ", goTo: "외부"}
+    ],
   },
     "조리실을 살펴본다.": {
     image: "/asset/img/cafeteria.png",
@@ -649,7 +732,7 @@ export const exploreLocations = {
       { text: "▶ 돌아간다. ", goTo: "급식실" }
     ],
   },
-      "배식대를 살펴본다.": {
+    "배식대를 살펴본다.": {
     image: "/asset/img/cafeteria.png",
     description: "누군가 안쪽에서 긁은 듯한 흠집이 바닥까지 이어져 있다.",
     choices: [
@@ -657,7 +740,7 @@ export const exploreLocations = {
       { text: "▶ 돌아간다." }
     ],
   },
-      "식탁을 살펴본다.": {
+    "식탁을 살펴본다.": {
     image: "/asset/img/cafeteria.png",
     description: "의자들이 가지런히 정리되어있다.",
     choices: [

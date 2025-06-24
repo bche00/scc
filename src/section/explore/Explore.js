@@ -7,11 +7,11 @@ import style from "./explore.module.scss";
 import TextDone from "../../asset/util/text_done.gif";
 import products from "../../db/product";
 
-export default function Explore({ location = "1층 복도" }) {
+export default function Explore({ location = "1층 계단" }) {
   const navigate = useNavigate();
 
   const [currentLocation, setCurrentLocation] = useState(
-    exploreLocations[location] || exploreLocations["1층 복도"]
+    exploreLocations[location] || exploreLocations["1층 계단"]
   );
   const [previousLocations, setPreviousLocations] = useState([]);
   const [investigated, setInvestigated] = useState({});
