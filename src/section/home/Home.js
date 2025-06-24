@@ -6,7 +6,7 @@ import style from "./home.module.scss";
 
 import Coin from "../../asset/util/coin.gif";
 import Mail from "../../asset/util/mail.png";
-import MailH from "../../asset/util/mail_have.gif"; // 새로운 이미지 추가
+import MailH from "../../asset/util/mail_have.gif";
 import Shop from "../../asset/icon/shop.png";
 import Bag from "../../asset/icon/bag.png";
 import Record from "../../asset/icon/record.png";
@@ -365,9 +365,12 @@ const subscription = supabase
         </div>
 
         <div className={style.banner}>
-          <p className={style.planText}>
-            오늘의 일정은 ---- 입니다~! &rArr; 공지 바로가기 &lArr;
-          </p>
+          {/* 서버 오픈 후 추가 */}
+          {/* <a href="##" target="_blank">
+            <p className={style.planText}>
+              오늘의 일정은 ---- 입니다~! &rArr; 공지 바로가기 &lArr;
+            </p>
+          </a> */}
         </div>
       </div>
 

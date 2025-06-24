@@ -17,7 +17,7 @@ export const exploreLocations = {
     ]
   },
   "교무실": {
-    image: "/asset/img/hallway.png",
+    image: "/asset/img/teachers_room.png",
     description: "잠겨있다.",
     choices: ["▶ 돌아간다."]
   },
