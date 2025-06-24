@@ -50,6 +50,11 @@
         font-size: var( --font-size-20);
       }
 
+      .searchInput{
+        width: 100%;
+        padding: 4px 16px;
+      }
+
       .userList {
         display: flex;
         flex-direction: column;

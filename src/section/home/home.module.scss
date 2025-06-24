@@ -150,6 +150,27 @@
         justify-content: center;
         gap: 1rem;
         margin-top: 1rem;
+
+          button{
+          border-radius: 0.25rem;
+          border: 2px solid #FFF;
+          color: #FFF;
+          background: #000;
+          transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+          padding: 0.2rem 0.7rem;
+
+          &:hover{
+            background-color: #636363;
+          }
+        }
+      }
+
+      h5, p{
+        text-align: center;
+        margin-bottom: 0 !important;
+      }
+      p{
+        color: #636363;
       }
     }
 

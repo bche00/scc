@@ -194,11 +194,16 @@
       font-size: var( --font-size-20);
     }
 
+    input{
+      width: 100%;
+      padding: 4px 16px;
+    }
+
     .btn{
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 1rem;
       width: 100%;
       }
     

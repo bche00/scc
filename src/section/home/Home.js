@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../db/supabase";
 import { Link } from "react-router-dom";
 import style from "./home.module.scss";
@@ -22,6 +23,10 @@ export default function Home() {
   const [showCoinGiftPopup, setShowCoinGiftPopup] = useState(false); // 코인 전달(어드민만)
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const allowedUserIds = [1]; //추후 코인 전달 사용 가능 어드민 추가 시 배열에 user_id 추가
+  // 탐사 입장 카운트
+  const [showExplorePopup, setShowExplorePopup] = useState(false);
+  const [exploreRemaining, setExploreRemaining] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -105,6 +110,55 @@ export default function Home() {
 
     checkExploreReset();
   }, []);
+
+  // 탐사 입장 횟수 카운트 함수
+    const handleExploreClick = async () => {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser) return;
+
+    const { data, error } = await supabase
+      .from("users_info")
+      .select("explore_limit")
+      .eq("user_id", loggedInUser.id)
+      .single();
+
+    if (error || !data) {
+      alert("탐사 정보를 불러오지 못했습니다.");
+      return;
+    }
+
+    setExploreRemaining(data.explore_limit.remaining || 0);
+    setShowExplorePopup(true);
+  };
+
+    const handleStartExplore = async () => {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser) return;
+
+    const newRemaining = exploreRemaining - 1;
+
+    const today = new Date().toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      timeZone: "Asia/Seoul",
+    });
+
+    const { error } = await supabase
+      .from("users_info")
+      .update({ explore_limit: { date: today, remaining: newRemaining } })
+      .eq("user_id", loggedInUser.id);
+
+    if (error) {
+      alert("탐사 시작에 실패했습니다.");
+      return;
+    }
+
+    setShowExplorePopup(false);
+    navigate("/explore");
+  };
+
+
 
   // 서버에서 우편 개수 가져오는 함수
   const fetchMailboxCount = async (userId) => {
@@ -280,11 +334,35 @@ const subscription = supabase
               <p className={style.utilNumber}>{mail}</p> {/* 우편 개수 자동 업데이트 */}
             </div>
           </div>
-          <Link to="/explore">
-            <div className={style.explore}>
-              <p>*탐사하기*</p>
+
+          {showExplorePopup && (
+            <div className={style.popup}>
+              <div className={style.popupContent}>
+                <h5>탐사를 시작할까요?</h5>
+                <p>오늘 남은 탐사 횟수: {exploreRemaining}회</p>
+                <div className={style.btn}>
+                  <button
+                    onClick={() => {
+                      if (exploreRemaining > 0) {
+                        handleStartExplore();
+                      } else {
+                        alert("오늘의 탐사 횟수를 모두 사용했습니다!");
+                        setShowExplorePopup(false);
+                      }
+                    }}
+                  >
+                    탐사 시작
+                  </button>
+                  <button onClick={() => setShowExplorePopup(false)}>취소</button>
+                </div>
+              </div>
             </div>
-          </Link>
+          )}
+
+          <div className={style.explore} onClick={handleExploreClick}>
+            <p>*탐사하기*</p>
+          </div>
+
         </div>
 
         <div className={style.banner}>
