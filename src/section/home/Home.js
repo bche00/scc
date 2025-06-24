@@ -349,9 +349,8 @@ const subscription = supabase
                         alert("오늘의 탐사 횟수를 모두 사용했습니다!");
                         setShowExplorePopup(false);
                       }
-                    }}
-                  >
-                    탐사 시작
+                    }}>
+                    시작
                   </button>
                   <button onClick={() => setShowExplorePopup(false)}>취소</button>
                 </div>

@@ -13,11 +13,20 @@ fetch('/asset/sound/click_sound.mp3')
 
 document.addEventListener('click', () => {
   if (!buffer) return;
-  let source = audioContext.createBufferSource();
+  
+  const source = audioContext.createBufferSource();
+  const gainNode = audioContext.createGain();
+
   source.buffer = buffer;
-  source.connect(audioContext.destination);
+  
+  gainNode.gain.value = 0.5; // 크기
+  
+  source.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
   source.start(0);
 });
+
 
 
 // 100vh 모바일 ui(주소창, 하단바 등)에따라 유동적으로

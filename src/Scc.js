@@ -14,6 +14,7 @@ import Record from './section/record/Record.js';
 import NotFound from './section/notFound.js';
 
 import PreventRefresh from './section/explore/PreventRefresh';
+import { MusicProvider } from "./js/MusicProvider";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -42,20 +43,22 @@ function App() {
 
   return (
     <Router>
-      <Layout setIsLoggedIn={setIsLoggedIn}>
-        <Routes>
-          <Route path="/login" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />} />
-          <Route path="/join-us" element={<Join />} />
+      <MusicProvider>
+        <Layout setIsLoggedIn={setIsLoggedIn}>
+          <Routes>
+            <Route path="/login" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />} />
+            <Route path="/join-us" element={<Join />} />
 
-          <Route path="/" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Home /></ProtectedRoute>} />
-          <Route path="/explore" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Explore /></ProtectedRoute>} />
-          <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>} />
-          <Route path="/bag" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Bag /></ProtectedRoute>} />
-          <Route path="/record" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Record /></ProtectedRoute>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
-      <PreventRefresh />
+            <Route path="/" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Home /></ProtectedRoute>} />
+            <Route path="/explore" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Explore /></ProtectedRoute>} />
+            <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>} />
+            <Route path="/bag" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Bag /></ProtectedRoute>} />
+            <Route path="/record" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Record /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Layout>
+        <PreventRefresh />
+      </MusicProvider>
     </Router>
   );
 }
