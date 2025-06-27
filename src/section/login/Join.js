@@ -37,11 +37,9 @@ export default function SignUpForm() {
     });
   };
 
-
-  // 팝업 출력
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!form.name.trim()) {
       alert("이름을 입력해주세요.");
       return;
@@ -58,49 +56,101 @@ export default function SignUpForm() {
       alert("필수 체크박스를 모두 선택해주세요.");
       return;
     }
-  
+
     try {
-      const { data, error, status } = await supabase
-        .from('users')
+      const { error: insertError, status } = await supabase
+        .from("users")
         .insert(
           [
             {
               name: form.name.trim(),
               password: form.password,
               gender: form.gender,
-              status: 'pending',
+              status: "pending",
             },
-          ],
-          { returning: 'representation' }
+          ]
         );
-  
-      console.log("Response Details:", { data, error, status });
-  
-      if (error) {
-        console.error("Supabase Error Details:", { error, status });
-        alert(`회원가입 중 오류가 발생했습니다: ${error.message}`);
-      } else if (status === 201) {
-        alert("입부 신청이 완료되었습니다! 부장의 승인을 기다려주세요.");
-        setForm({
-          name: "",
-          password: "",
-          confirmPassword: "",
-          gender: "",
-          checkbox1: false,
-          checkbox2: false,
-        });
-      } else {
-        alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+
+      if (insertError) {
+        console.error("가입 실패:", insertError);
+        alert(`회원가입 중 오류가 발생했습니다: ${insertError.message}`);
+        return;
       }
+
+      // 방금 가입한 유저 ID 다시 조회
+      const { data: userQuery, error: queryError } = await supabase
+        .from("users")
+        .select("id")
+        .eq("name", form.name.trim())
+        .order("id", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (queryError || !userQuery) {
+        console.error("유저 조회 실패:", queryError);
+        alert("가입은 되었지만 사용자 정보를 찾을 수 없습니다.");
+        return;
+      }
+
+      const userId = userQuery.id;
+
+      // users_info 존재 여부 확인
+      const { data: infoCheck } = await supabase
+        .from("users_info")
+        .select("user_id")
+        .eq("user_id", userId)
+        .single();
+
+if (!infoCheck) {
+  // 신규 insert
+  const { error: infoInsertError, data: infoInsertData } = await supabase.from("users_info").insert([
+    {
+      user_id: userId,
+      name: form.name.trim(),
+      coin: 2,
+      bag_item: [],
+      explore_limit: { remaining: 3 },
+      mail: [],
+    },
+  ]);
+  if (infoInsertError) {
+    console.error("users_info 초기화 실패:", infoInsertError);
+    alert("가입은 성공했지만 정보 저장에 실패했습니다.");
+  } else {
+    //console.log("users_info에 코인 지급 완료:", infoInsertData);
+  }
+} else {
+  // 이미 있으면 코인 2개로 강제 업데이트 (필요시)
+  const { error: infoUpdateError } = await supabase
+    .from("users_info")
+    .update({ coin: 2 })
+    .eq("user_id", userId);
+
+  if (infoUpdateError) {
+    console.error("users_info 코인 업데이트 실패:", infoUpdateError);
+  } else {
+    //console.log("users_info 코인 2개로 업데이트 완료");
+  }
+}
+
+
+
+      alert("입부 신청이 완료되었습니다! 부장의 승인을 기다려주세요.");
+
+      setForm({
+        name: "",
+        password: "",
+        confirmPassword: "",
+        gender: "",
+        checkbox1: false,
+        checkbox2: false,
+      });
     } catch (err) {
-      console.error("Unexpected Error:", err);
+      console.error("예기치 않은 오류:", err);
       alert("예기치 않은 오류가 발생했습니다.");
     }
   };
-  
-  
 
-// html
   return (
     <div className={style.container}>
       <h2>회원가입</h2>
@@ -118,6 +168,7 @@ export default function SignUpForm() {
                   onChange={handleChange}
                   placeholder="이름을 입력해주세요."
                   required
+                  autoComplete="username"
                 />
               </td>
             </tr>
@@ -131,6 +182,7 @@ export default function SignUpForm() {
                   onChange={handleChange}
                   placeholder="비밀번호를 입력해주세요."
                   required
+                  autoComplete="new-password"
                 />
               </td>
             </tr>
@@ -144,6 +196,7 @@ export default function SignUpForm() {
                   onChange={handleChange}
                   placeholder="비밀번호를 확인해주세요."
                   required
+                  autoComplete="new-password"
                 />
               </td>
             </tr>
