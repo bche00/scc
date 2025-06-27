@@ -294,7 +294,7 @@ const subscription = supabase
         <span className="cursorPointer" onClick={handleLeaveClub}>
           {userName}
         </span>{" "}
-        &rfloor; 부원님 😊
+        &rfloor; 부원님.
       </div>
       <div className={style.c01}>
         <div className={style.top}>
