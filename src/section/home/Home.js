@@ -69,7 +69,7 @@ export default function Home() {
     fetchUserData();
   }, []);
 
-  // 🔽 탐사 횟수 초기화 함수
+  // 탐사 횟수 초기화 함수
   useEffect(() => {
     const checkExploreReset = async () => {
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -131,17 +131,12 @@ export default function Home() {
     setShowExplorePopup(true);
   };
 
-    const handleStartExplore = async () => {
+  const handleStartExplore = async () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    sessionStorage.setItem("allowExplore", "true");
-    localStorage.setItem("allowExplore", "true");
-
-    
-
     if (!loggedInUser) return;
 
+    // 탐사 횟수 차감
     const newRemaining = exploreRemaining - 1;
-
     const today = new Date().toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "2-digit",
@@ -159,7 +154,12 @@ export default function Home() {
       return;
     }
 
+    localStorage.setItem("allowExplore", "true"); // 진입 허용
+
     setShowExplorePopup(false);
+
+    // 0.1초 딜레이 후 이동
+    await new Promise((resolve) => setTimeout(resolve, 100));
     navigate("/explore");
   };
 

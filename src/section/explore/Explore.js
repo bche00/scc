@@ -31,14 +31,20 @@ export default function Explore({ location = "1층 계단" }) {
       (key) => exploreLocations[key] === currentLocation
     ) || "조사한다.";
 
-useEffect(() => {
-  const allowed = localStorage.getItem("allowExplore");
-  if (allowed !== "true") {
-    alert("우회 접근이 확인되었습니다. 『탐사하기』를 통해 진입해 주세요.");
-    navigate("/");
-  }
-  // 탐사 종료 시에만 삭제
-}, []);
+  const [allowed, setAllowed] = useState(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("allowExplore");
+    if (stored === "true") setAllowed(true);
+    else setAllowed(false);
+  }, []);
+
+  useEffect(() => {
+    if (allowed === false) {
+      alert("우회 접근이 확인되었습니다. 『탐사하기』를 통해 진입해 주세요.");
+      navigate("/");
+    }
+  }, [allowed]);
 
 
   useEffect(() => {
