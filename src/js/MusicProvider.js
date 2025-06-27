@@ -25,7 +25,7 @@ export const MusicProvider = ({ children }) => {
 
     // 자동재생 제한으로 play는 따로 컨트롤
     if (isPlaying && currentPath !== "/explore") {
-      publicAudio.play().catch((err) => console.warn("공용 음악 재생 실패:", err));
+      //publicAudio.play().catch((err) => console.warn("공용 음악 재생 실패:", err));
     }
 
     return () => {
@@ -67,13 +67,13 @@ export const MusicProvider = ({ children }) => {
       }
 
       publicAudioRef.current?.pause();
-      exploreAudioRef.current.play().catch((err) => console.warn("탐사 음악 재생 실패:", err));
+      //exploreAudioRef.current.play().catch((err) => console.warn("탐사 음악 재생 실패:", err));
       setCurrentTrack("explore");
     } else {
       exploreAudioRef.current?.pause();
 
       if (isPlaying) {
-        publicAudioRef.current?.play().catch((err) => console.warn("공용 음악 재생 실패:", err));
+        //publicAudioRef.current?.play().catch((err) => console.warn("공용 음악 재생 실패:", err));
         setCurrentTrack("public");
       }
     }

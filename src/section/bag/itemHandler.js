@@ -207,7 +207,7 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
 
   let updatedBagItems = [...bagItems];
 
-  // 사용 가능한 아이템 찾기 (used가 false인 것만)
+  // 사용 가능한 (used: false) 아이템 찾기
   const itemIndex = updatedBagItems.findIndex((item) => item.itemId === itemId && !item.used);
   if (itemIndex === -1) {
     alert("사용할 수 있는 아이템이 없습니다.");
@@ -224,47 +224,55 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
   koreaTime.setHours(koreaTime.getHours() + 9);
 
   try {
-    switch (itemId) {
-      case 1: // 포츈쿠키
-        showPopup("/asset/product/fortune.png", getRandomMessage(fortuneMessages));
-        break;
+switch (itemId) {
+  case 1: // 포츈쿠키
+    showPopup("/asset/product/fortune.png", getRandomMessage(fortuneMessages));
+    break;
 
-      case 2: // 버려진 쪽지
-        showPopup("/asset/product/note.png", getRandomMessage(noteMessages));
-        break;
+  case 2: // 버려진 쪽지
+    showPopup("/asset/product/note.png", getRandomMessage(noteMessages));
+    break;
 
-      case 3: // 핫바
-        await updateExploreLimit();
-        break;
+  case 3: // 핫바
+    await updateExploreLimit();
+    break;
 
-      case 4: // 랜덤박스
-        showPopup("/asset/product/luckybox.png", "랜덤박스를 열었습니다!");
-        await openRandomBox(bagItems, setBagItems);
-        return; // 여기서 직접 처리
+  case 4: // 랜덤박스
+    showPopup("/asset/product/luckybox.png", "랜덤박스를 열었습니다!");
+    await openRandomBox(bagItems, setBagItems);
+    return; // 여기서 아이템 감소 포함되므로 종료
 
-      case 5: // 손재부적
-      case 6: // 망신부적
-      case 7: // 박복부적
-      case 8: // 따봉고슴도치 스티커
-      case 9: // 확성기
-      case 10: // 페인트통
-      case 11: // 뱃지
-        alert(`${item.name}을(를) 사용했습니다!`);
-        break;
+  case 5: case 6: case 7:
+  case 8: case 9: case 10: case 11:
+    // 사용한 아이템을 used: true로 추가
+    updatedBagItems.push({ itemId, count: 1, used: true });
 
-      default:
-        alert("이 아이템은 사용할 수 없습니다.");
-        return;
-    }
-
-
+    // 기존 usable 아이템 1개 감소
     if (updatedBagItems[itemIndex].count > 1) {
       updatedBagItems[itemIndex].count -= 1;
     } else {
       updatedBagItems.splice(itemIndex, 1);
     }
 
-    // 기록 저장
+    alert(`${item.name}을(를) 사용했습니다!`);
+    break;
+
+  default:
+    alert("이 아이템은 사용할 수 없습니다.");
+    return;
+}
+
+// 공통 처리 (1~3번 아이템용)
+if ([1, 2, 3].includes(itemId)) {
+  if (updatedBagItems[itemIndex].count > 1) {
+    updatedBagItems[itemIndex].count -= 1;
+  } else {
+    updatedBagItems.splice(itemIndex, 1);
+  }
+}
+
+
+    // 사용 기록 DB에 저장
     await supabase.from("users_record").insert([
       {
         user_id: loggedInUser.id,
@@ -275,13 +283,12 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
       },
     ]);
 
-    // Supabase에 bag_item 업데이트
+    // Supabase에 소지품 업데이트
     await supabase
       .from("users_info")
       .update({ bag_item: updatedBagItems })
       .eq("user_id", loggedInUser.id);
 
-    // 상태 반영
     setBagItems(updatedBagItems);
   } catch (err) {
     console.error("아이템 사용 오류:", err);
