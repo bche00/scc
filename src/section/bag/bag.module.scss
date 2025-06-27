@@ -11,7 +11,21 @@
     margin-top: 3.75rem;
   }
 
-  
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 3;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .popup {
     border: 2px solid #FFF;
     background: #000;
@@ -24,9 +38,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 1rem;
-    z-index: 1000; 
+    z-index: 1000;
 
-    
+
     .dim {
       position: fixed;
       top: 0;
@@ -37,8 +51,9 @@
       z-index: 999;
     }
 
-    .popupContent{
-      display: flex;;
+    .popupContent {
+      display: flex;
+      ;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -47,11 +62,11 @@
       padding: 0.5rem;
       word-break: keep-all;
 
-      .popupText{
-        font-size: var( --font-size-20);
+      .popupText {
+        font-size: var(--font-size-20);
       }
 
-      .searchInput{
+      .searchInput {
         width: 100%;
         padding: 4px 16px;
       }
@@ -63,7 +78,7 @@
         gap: 8px;
         max-height: 200px;
         overflow-y: auto;
-      
+
         .userItem {
           padding: 10px;
           background: #000;
@@ -72,11 +87,11 @@
           transition: background 0.2s, transform 0.1s;
           cursor: pointer;
           border: 2px solid transparent;
-      
+
           &:hover {
             background: #636363;
           }
-      
+
           /* 선택된 유저 스타일 */
           &.selected {
             background: #000 !important;
@@ -86,11 +101,11 @@
           }
         }
       }
-      
-      
-      
 
-      button{
+
+
+
+      button {
         border-radius: 0.25rem;
         border: 2px solid #FFF;
         color: #FFF;
@@ -98,54 +113,64 @@
         transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
         padding: 0.2rem 0.7rem;
 
-        &:hover{
+        &:hover {
           background-color: #636363;
         }
       }
-      
-      .btn{
+
+      .btn {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
         width: 100%;
-        }
 
+        :first-child {
+          color: #000;
+          background-color: #FFF;
+
+          &:hover {
+            color: #FFF;
+            background-color: #636363;
+          }
+        }
+      }
     }
   }
 
-  .haveItem{
+  .haveItem {
     display: flex;
     border: 2px solid #fff;
     border-radius: var(--border-radius-8);
     padding: 1rem;
     gap: 1rem;
 
-    img{
+    img {
       height: 64px;
     }
 
-    .itemInfo{
+    .itemInfo {
       display: flex;
       flex-direction: column;
       width: 100%;
       gap: 0.5rem;
 
-      .itemN{
+      .itemN {
         font-size: 1.25rem;
       }
-      .itemD{
+
+      .itemD {
         word-break: keep-all;
       }
 
-      .btn{
+      .btn {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         align-self: stretch;
         width: 100%;
-        
-        button{
+
+        button {
           display: flex;
           width: 100%;
           justify-content: center;
@@ -155,7 +180,7 @@
           background: #000;
           transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 
-          &:hover{
+          &:hover {
             background-color: #636363;
           }
         }

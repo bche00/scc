@@ -142,10 +142,20 @@
           border: 2px solid #FFF;
           color: #FFF;
           background: #000;
-          transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+          transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
           padding: 0.2rem 0.7rem;
 
           &:hover{
+            background-color: #636363;
+          }
+        }
+        
+        :first-child{
+          color: #000;
+          background-color: #FFF;
+
+          &:hover{
+            color: #FFF;
             background-color: #636363;
           }
         }
