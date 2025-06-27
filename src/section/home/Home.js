@@ -133,6 +133,7 @@ export default function Home() {
 
   const handleStartExplore = async () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    localStorage.setItem("allowExplore", "true");
     if (!loggedInUser) return;
 
     // 탐사 횟수 차감
