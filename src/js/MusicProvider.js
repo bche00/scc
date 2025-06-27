@@ -13,20 +13,20 @@ export const MusicProvider = ({ children }) => {
   const publicAudioRef = useRef(null);
   const exploreAudioRef = useRef(null);
 
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [currentTrack, setCurrentTrack] = useState("public"); // "public" | "explore"
+  // 1. 저장된 재생 상태 불러오기 (초기값: true)
+  const [isPlaying, setIsPlaying] = useState(() => {
+    const stored = localStorage.getItem("isPlaying");
+    return stored === null ? true : stored === "true";
+  });
 
-  // 공용 음악 초기화 (최초 1회만)
+  const [currentTrack, setCurrentTrack] = useState("public");
+
+  // 공용 음악 초기화
   useEffect(() => {
     const publicAudio = new Audio("/asset/sound/public_music.mp3");
     publicAudio.loop = true;
     publicAudio.volume = 0.4;
     publicAudioRef.current = publicAudio;
-
-    // 자동재생 제한으로 play는 따로 컨트롤
-    if (isPlaying && currentPath !== "/explore") {
-      //publicAudio.play().catch((err) => console.warn("공용 음악 재생 실패:", err));
-    }
 
     return () => {
       publicAudio.pause();
@@ -34,29 +34,25 @@ export const MusicProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-  const handleFirstClick = () => {
-    if (isPlaying) {
-      if (currentTrack === "explore" && exploreAudioRef.current) {
-        exploreAudioRef.current.play().catch(() => {});
-      } else if (currentTrack === "public" && publicAudioRef.current) {
-        publicAudioRef.current.play().catch(() => {});
+    const handleFirstClick = () => {
+      if (isPlaying) {
+        if (currentTrack === "explore" && exploreAudioRef.current) {
+          exploreAudioRef.current.play().catch(() => {});
+        } else if (currentTrack === "public" && publicAudioRef.current) {
+          publicAudioRef.current.play().catch(() => {});
+        }
       }
-    }
 
-    // 딱 한 번만 실행하고 제거
-    document.removeEventListener("click", handleFirstClick);
-  };
+      document.removeEventListener("click", handleFirstClick);
+    };
 
-  // 첫 클릭 이벤트 감지
-  document.addEventListener("click", handleFirstClick);
+    document.addEventListener("click", handleFirstClick);
 
-  return () => {
-    document.removeEventListener("click", handleFirstClick);
-  };
-}, [isPlaying, currentTrack]);
+    return () => {
+      document.removeEventListener("click", handleFirstClick);
+    };
+  }, [isPlaying, currentTrack]);
 
-
-  // explore 음악만 경로 바뀔 때 컨트롤
   useEffect(() => {
     if (currentPath === "/explore") {
       if (!exploreAudioRef.current) {
@@ -67,44 +63,40 @@ export const MusicProvider = ({ children }) => {
       }
 
       publicAudioRef.current?.pause();
-      //exploreAudioRef.current.play().catch((err) => console.warn("탐사 음악 재생 실패:", err));
       setCurrentTrack("explore");
     } else {
       exploreAudioRef.current?.pause();
-
       if (isPlaying) {
-        //publicAudioRef.current?.play().catch((err) => console.warn("공용 음악 재생 실패:", err));
         setCurrentTrack("public");
       }
     }
   }, [currentPath]);
 
-  // 🎚 음악 토글
+  // 2. 음악 토글 시 로컬스토리지에 저장
   const toggleMusic = () => {
     if (currentTrack === "explore" && exploreAudioRef.current) {
       if (isPlaying) {
         exploreAudioRef.current.pause();
-        setIsPlaying(false);
       } else {
         exploreAudioRef.current.play().catch(() => {});
-        setIsPlaying(true);
       }
     } else if (currentTrack === "public" && publicAudioRef.current) {
       if (isPlaying) {
         publicAudioRef.current.pause();
-        setIsPlaying(false);
       } else {
         publicAudioRef.current.play().catch(() => {});
-        setIsPlaying(true);
       }
     }
+
+    const newState = !isPlaying;
+    setIsPlaying(newState);
+    localStorage.setItem("isPlaying", String(newState)); // 저장
   };
 
   return (
     <MusicContext.Provider value={{ isPlaying, toggleMusic }}>
       {children}
 
-      {/* explore 라우터에서만 노출 */}
       {currentPath === "/explore" && (
         <img
           src={isPlaying ? soundOn : soundOff}
@@ -118,8 +110,10 @@ export const MusicProvider = ({ children }) => {
             height: "40px",
             cursor: "pointer",
             zIndex: 9999,
-          }}/>
+          }}
+        />
       )}
     </MusicContext.Provider>
   );
 };
+
