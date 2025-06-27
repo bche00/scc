@@ -225,7 +225,7 @@ export const exploreLocations = {
       { text: "▶ 창문을 살펴본다."},
       { text: "▶ 화장실로 이동한다.  " },
       { text: "▶ 돌아간다." },
-      { text: "　 ", itemId: 98 }
+      { text: "　 ", itemId: 98, oneTimeOnly: true }
       ]
   },
   "창문을 살펴본다.": {
