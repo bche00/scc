@@ -38,7 +38,7 @@ function App() {
   };
 
   if (isLoggedIn === null) {
-    return <p>로딩 중...</p>; // 로그인 상태 확인 전 로딩 화면 추가
+    return <p>로딩 중...</p>;
   }
 
   return (
@@ -50,7 +50,15 @@ function App() {
             <Route path="/join-us" element={<Join />} />
 
             <Route path="/" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Home /></ProtectedRoute>} />
-            <Route path="/explore" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Explore /></ProtectedRoute>} />
+            <Route
+              path="/explore"
+              element={
+                isLoggedIn && sessionStorage.getItem("allowExplore") === "true" ? (
+                  <Explore />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }/>
             <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>} />
             <Route path="/bag" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Bag /></ProtectedRoute>} />
             <Route path="/record" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Record /></ProtectedRoute>} />

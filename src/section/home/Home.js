@@ -133,8 +133,10 @@ export default function Home() {
 
     const handleStartExplore = async () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    sessionStorage.setItem("allowExplore", "true");
     localStorage.setItem("allowExplore", "true");
     navigate("/explore");
+    
 
     if (!loggedInUser) return;
 
