@@ -133,6 +133,9 @@ export default function Home() {
 
     const handleStartExplore = async () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    localStorage.setItem("allowExplore", "true");
+    navigate("/explore");
+
     if (!loggedInUser) return;
 
     const newRemaining = exploreRemaining - 1;
@@ -345,12 +348,13 @@ const subscription = supabase
                     <button
                       onClick={() => {
                         if (exploreRemaining > 0) {
-                          handleStartExplore();
+                          localStorage.setItem("allowExplore", "true"); // 진입 허용
+                          handleStartExplore(); // navigate("/explore") 포함되어 있어야 함. 악의적 접근 막기용
                         } else {
                           alert("오늘의 탐사 횟수를 모두 사용했습니다!");
                           setShowExplorePopup(false);
                         }
-                      }}>
+                    }}>
                       시작
                     </button>
                     <button onClick={() => setShowExplorePopup(false)}>취소</button>

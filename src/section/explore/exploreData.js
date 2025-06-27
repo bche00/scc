@@ -222,13 +222,13 @@ export const exploreLocations = {
     image: "/asset/img/hallway.png",
     description: "3층의 복도다.\n걸을 때 마다 삐걱거리는 소리가 조금 들린다.",
     choices: [
-      { text: "▶ 창문을 열어본다. "},
+      { text: "▶ 창문을 살펴본다."},
       { text: "▶ 화장실로 이동한다.  " },
       { text: "▶ 돌아간다." },
       { text: "　 ", itemId: 98 }
       ]
   },
-  "창문을 열어본다. ": {
+  "창문을 살펴본다.": {
     image: "/asset/img/hallway.png",
     description: "창 밖은 칠흑같은 어둠 뿐이다.\n시간도 날씨도 알 수 없다.",
     choices: [
@@ -244,7 +244,9 @@ export const exploreLocations = {
     "창문을 열어본다": {
     image: "/asset/img/hallway.png",
     description: "…창문을 열었다.|바람 한 점 불지 않는다. 별다른 특이사항은 없는 것 같……|…아!|손이 미끄러져 창 밖으로 무언가 떨어트리고 말았다.|[2코인]을 잃었다.",
-    choices: ["▶ 돌아간다."]
+    choices: [
+      { text: "▶ 돌아간다.", goTo: "창문을 살펴본다."}
+    ]
   },
   // ===1층화장실===
     "화장실로 이동한다.": {
@@ -528,7 +530,7 @@ export const exploreLocations = {
       { text: "▶ 돌아간다." }
       ],
     },
-    "컴퓨터를 살펴본다. ": {
+    "컴퓨터를 살펴본다.": {
     image: "/asset/img/library.png",
     description: "책을 검색하거나, 출력을 위해 학생들에게 마련된 컴퓨터.\n…당연하게도 켜지진 않는다.",
     choices: [

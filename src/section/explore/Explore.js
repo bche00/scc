@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { supabase } from "../../db/supabase";
 import { useNavigate } from "react-router-dom";
 import { exploreLocations } from "./exploreData";
@@ -30,6 +30,20 @@ export default function Explore({ location = "1층 계단" }) {
     Object.keys(exploreLocations).find(
       (key) => exploreLocations[key] === currentLocation
     ) || "조사한다.";
+
+  useEffect(() => {
+    const allowed = localStorage.getItem("allowExplore");
+    if (allowed !== "true") {
+      // setTimeout으로 분리해주면 alert 이후에 navigate가 실행됩니다
+      setTimeout(() => {
+        alert("우회 접근이 확인되었습니다. 『탐사하기』를 통해 진입해 주세요.");
+        navigate("/");
+      }, 0);
+    } else {
+      localStorage.removeItem("allowExplore");
+    }
+  }, []);
+
 
   useEffect(() => {
     if (!explorationResult) {
