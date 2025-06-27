@@ -392,7 +392,7 @@ const subscription = supabase
         <Link to="/shop">
           <div className={style.utilIcon}>
             <img src={Shop} alt="Shop" className={style.icon} />
-            <p>매점</p>
+            <p>잠시적용확인좀</p>
           </div>
         </Link>
         <Link to="/bag">
