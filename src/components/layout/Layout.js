@@ -25,16 +25,22 @@ export default function Layout({ children, setIsLoggedIn }) {
     }
   };
 
-  const handleLogout = () => {
-    const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
-    if (confirmLogout) {
-      // 로컬 스토리지 초기화
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("loggedInUser"); // 유저 정보 삭제
-      setIsLoggedIn(false); // 상태 초기화
-      navigate("/login"); // 로그인 페이지로 이동
-    }
-  };
+const handleLogout = () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  if (!isLoggedIn) {
+    alert("현재 로그아웃된 상태입니다.");
+    return;
+  }
+
+  const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
+  if (confirmLogout) {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("loggedInUser");
+    setIsLoggedIn(false);
+    navigate("/login");
+  }
+};
 
   return (
     <div className={style.container}>
