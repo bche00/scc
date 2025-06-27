@@ -134,58 +134,59 @@ const sendCoin = async () => {
 
   return (
     <>
-      <div className={style.overlay} onClick={() => setShowCoinGiftPopup(false)}></div>
-      <div className={style.popup} onClick={(e) => e.stopPropagation()}>
-        <div className={style.popupTop}>
-          코인 선물하기
-          <span
-            className={`${style.popupClose} cursorPointer`}
-            onClick={() => setShowCoinGiftPopup(false)}>
-            ×
-          </span>
-        </div>
-
-        <div className={style.popupContent}>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="검색"
-            className={style.searchInput}
-          />
-
-          <div className={style.userList}>
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => (
-                <div
-                  key={user.id}
-                  className={`${style.userItem} ${
-                    selectedUser?.id === user.id ? style.selected : ""
-                  }`}
-                  onClick={() => setSelectedUser(user)}
-                >
-                  {user.name}
-                </div>
-              ))
-            ) : (
-              <div className={style.noUser}>검색 결과 없음</div>
-            )}
+      <div className={style.overlay} onClick={() => setShowCoinGiftPopup(false)}>
+        <div className={style.popup} onClick={(e) => e.stopPropagation()}>
+          <div className={style.popupTop}>
+            코인 선물하기
+            <span
+              className={`${style.popupClose} cursorPointer`}
+              onClick={() => setShowCoinGiftPopup(false)}>
+              ×
+            </span>
           </div>
 
-          <div className={style.coinAmount}>
+          <div className={style.popupContent}>
             <input
-              type="number"
-              min={1}
-              value={coinAmount}
-              onChange={(e) => setCoinAmount(parseInt(e.target.value) || 1)}
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="검색"
+              className={style.searchInput}
             />
-          </div>
 
-          <div className={style.btn}>
-            <button disabled={!selectedUser || sending} onClick={sendCoin}>
-              {sending ? "보내는 중..." : "보내기"}
-            </button>
-            <button onClick={() => setShowCoinGiftPopup(false)}>취소</button>
+            <div className={style.userList}>
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <div
+                    key={user.id}
+                    className={`${style.userItem} ${
+                      selectedUser?.id === user.id ? style.selected : ""
+                    }`}
+                    onClick={() => setSelectedUser(user)}
+                  >
+                    {user.name}
+                  </div>
+                ))
+              ) : (
+                <div className={style.noUser}>검색 결과 없음</div>
+              )}
+            </div>
+
+            <div className={style.coinAmount}>
+              <input
+                type="text"
+                min={1}
+                value={coinAmount}
+                onChange={(e) => setCoinAmount(parseInt(e.target.value) || 1)}
+              />
+            </div>
+
+            <div className={style.btn}>
+              <button disabled={!selectedUser || sending} onClick={sendCoin}>
+                {sending ? "보내는 중..." : "보내기"}
+              </button>
+              <button onClick={() => setShowCoinGiftPopup(false)}>취소</button>
+            </div>
           </div>
         </div>
       </div>

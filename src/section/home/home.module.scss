@@ -20,7 +20,6 @@
     pointer-events: none;
   }
 
-  /* 팝업 배경 (오버레이) */
   .overlay {
     position: fixed;
     top: 0;
@@ -28,9 +27,13 @@
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.5);
-    /* 어두운 배경 */
-    z-index: 2;
+    z-index: 3;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+
 
   .popup {
     width: 22rem;
@@ -39,28 +42,11 @@
     border: 2px solid #FFF;
     background-color: #000;
     border-radius: var(--border-radius-8);
-    position: absolute;
-    top: 40%;
-    left: 0%;
-    transform: translate(-50%, -50%);
     z-index: 10;
-    animation: slideUp 0.5s ease forwards;
 
-    @keyframes slideUp {
-      from {
-        transform: translateY(10%);
-        /* 시작 위치: 아래쪽 */
-        opacity: 0;
-      }
-
-      to {
-        transform: translateY(0%);
-        /* 최종 위치: 중앙 */
-        opacity: 1;
-      }
-    }
-
-
+    position: fixed;
+    top: 50%;
+    transform: translatey(-50%);
 
     .popupTop {
       display: flex;
@@ -307,7 +293,6 @@
 
 
 
-/* ✅ 우편 리스트 스타일 */
 .mailItem {
   display: flex;
   align-items: center;

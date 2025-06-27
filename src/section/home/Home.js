@@ -276,7 +276,7 @@ const subscription = supabase
         return;
       }
 
-      alert("탈퇴가 완료되었습니다. 그동안 감사했습니다.🥺");
+      alert("탈퇴가 완료되었습니다.");
       localStorage.removeItem("loggedInUser");
       window.location.href = "/login";
     } catch (error) {
@@ -336,23 +336,25 @@ const subscription = supabase
           </div>
 
           {showExplorePopup && (
-            <div className={style.popup}>
-              <div className={style.popupContent}>
-                <h5>탐사를 시작할까요?</h5>
-                <p>오늘 남은 탐사 횟수: {exploreRemaining}회</p>
-                <div className={style.btn}>
-                  <button
-                    onClick={() => {
-                      if (exploreRemaining > 0) {
-                        handleStartExplore();
-                      } else {
-                        alert("오늘의 탐사 횟수를 모두 사용했습니다!");
-                        setShowExplorePopup(false);
-                      }
-                    }}>
-                    시작
-                  </button>
-                  <button onClick={() => setShowExplorePopup(false)}>취소</button>
+            <div className={style.overlay}>
+              <div className={style.popup}>
+                <div className={style.popupContent}>
+                  <h5>탐사를 시작할까요?</h5>
+                  <p>오늘 남은 탐사 횟수: {exploreRemaining}회</p>
+                  <div className={style.btn}>
+                    <button
+                      onClick={() => {
+                        if (exploreRemaining > 0) {
+                          handleStartExplore();
+                        } else {
+                          alert("오늘의 탐사 횟수를 모두 사용했습니다!");
+                          setShowExplorePopup(false);
+                        }
+                      }}>
+                      시작
+                    </button>
+                    <button onClick={() => setShowExplorePopup(false)}>취소</button>
+                  </div>
                 </div>
               </div>
             </div>
