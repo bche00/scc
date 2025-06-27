@@ -104,6 +104,14 @@ const products = [
     used: "false",
   },
   {
+    id: 98,
+    image: "/asset/product/toupee.png",
+    name: "교장선생님의 가발",
+    price: "-",
+    description: "교장선생님의 마지막 자존심.",
+    used: "false",
+  },
+  {
     id: 99,
     image: "/asset/product/salt.png",
     name: "소금",

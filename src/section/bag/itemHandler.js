@@ -42,7 +42,7 @@ const openRandomBox = async (bagItems, setBagItems) => {
   // 팝업 띄우기 (이미지 + 아이템명)
   showPopup(productInfo.image, `'${selectedItem.name}'을(를) 획득했습니다!`);
 
-  // 🔹 현재 인벤토리 가져오기
+  // 현재 인벤토리 가져오기
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
     alert("로그인이 필요합니다.");
@@ -62,7 +62,7 @@ const openRandomBox = async (bagItems, setBagItems) => {
 
   let updatedBagItems = data.bag_item || [];
 
-  // 🔹 획득한 아이템이 기존 인벤토리에 있는지 확인
+  // 획득한 아이템이 기존 인벤토리에 있는지 확인
   const itemIndex = updatedBagItems.findIndex((item) => item.itemId === selectedItem.id);
   if (itemIndex !== -1) {
     updatedBagItems[itemIndex].count += 1;
@@ -80,7 +80,7 @@ const openRandomBox = async (bagItems, setBagItems) => {
     }
   }
 
-  // 🔹 Supabase에 업데이트 (획득한 아이템 반영)
+  // Supabase에 업데이트 (획득한 아이템 반영)
   const { error: updateError } = await supabase
     .from("users_info")
     .update({ bag_item: updatedBagItems })
@@ -207,29 +207,40 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
 
   let updatedBagItems = [...bagItems];
 
+  // 사용 가능한 아이템 찾기 (used가 false인 것만)
   const itemIndex = updatedBagItems.findIndex((item) => item.itemId === itemId && !item.used);
   if (itemIndex === -1) {
     alert("사용할 수 있는 아이템이 없습니다.");
     return;
   }
 
-  switch (itemId) {
-    case 1: // 포츈쿠키
-      showPopup("/asset/product/fortune.png", getRandomMessage(fortuneMessages));
-      break;
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (!loggedInUser) {
+    alert("로그인이 필요합니다.");
+    return;
+  }
 
-    case 2: // 버려진 쪽지
-      showPopup("/asset/product/note.png", getRandomMessage(noteMessages));
-      break;
+  const koreaTime = new Date();
+  koreaTime.setHours(koreaTime.getHours() + 9);
 
-    case 3: // 핫바
-      await updateExploreLimit();
-      break;
+  try {
+    switch (itemId) {
+      case 1: // 포츈쿠키
+        showPopup("/asset/product/fortune.png", getRandomMessage(fortuneMessages));
+        break;
 
-    case 4: // 랜덤박스
-      showPopup("/asset/product/luckybox.png", "랜덤박스를 열었습니다!");
-      await openRandomBox(bagItems, setBagItems);
-      return;
+      case 2: // 버려진 쪽지
+        showPopup("/asset/product/note.png", getRandomMessage(noteMessages));
+        break;
+
+      case 3: // 핫바
+        await updateExploreLimit();
+        break;
+
+      case 4: // 랜덤박스
+        showPopup("/asset/product/luckybox.png", "랜덤박스를 열었습니다!");
+        await openRandomBox(bagItems, setBagItems);
+        return; // 여기서 직접 처리
 
       case 5: // 손재부적
       case 6: // 망신부적
@@ -238,47 +249,43 @@ export const handleUseItem = async (itemId, bagItems, setBagItems) => {
       case 9: // 확성기
       case 10: // 페인트통
       case 11: // 뱃지
-  updatedBagItems.push({ itemId, count: 1, used: true });
+        alert(`${item.name}을(를) 사용했습니다!`);
+        break;
 
-  // 2. 기존 usable 아이템의 개수 1 감소
-  if (updatedBagItems[itemIndex].count > 1) {
-    updatedBagItems[itemIndex].count -= 1;
-  } else {
-    // count가 1이면 해당 usable 항목 제거
-    updatedBagItems.splice(itemIndex, 1);
-  }
-
-  alert(`${item.name}을(를) 사용했습니다!`);
-  break;
+      default:
+        alert("이 아이템은 사용할 수 없습니다.");
+        return;
+    }
 
 
-    default:
-      alert("이 아이템은 사용할 수 없습니다.");
-      return;
-  }
+    if (updatedBagItems[itemIndex].count > 1) {
+      updatedBagItems[itemIndex].count -= 1;
+    } else {
+      updatedBagItems.splice(itemIndex, 1);
+    }
 
-  try {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    const koreaTime = new Date();
-    koreaTime.setHours(koreaTime.getHours() + 9);
+    // 기록 저장
+    await supabase.from("users_record").insert([
+      {
+        user_id: loggedInUser.id,
+        item_id: itemId,
+        item_name: item.name,
+        type: "used",
+        timestamp: koreaTime.toISOString(),
+      },
+    ]);
 
-  await supabase.from("users_record").insert([{
-    user_id: loggedInUser.id,
-    item_id: itemId,
-    item_name: item.name,
-    type: "used",
-    timestamp: koreaTime.toISOString(),
-  }]);
+    // Supabase에 bag_item 업데이트
+    await supabase
+      .from("users_info")
+      .update({ bag_item: updatedBagItems })
+      .eq("user_id", loggedInUser.id);
 
-  await supabase
-    .from("users_info")
-    .update({ bag_item: updatedBagItems })
-    .eq("user_id", loggedInUser.id);
-
-
+    // 상태 반영
     setBagItems(updatedBagItems);
   } catch (err) {
     console.error("아이템 사용 오류:", err);
     alert("아이템 사용 중 오류가 발생했습니다.");
   }
 };
+

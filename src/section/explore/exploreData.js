@@ -17,7 +17,7 @@ export const exploreLocations = {
     ]
   },
   "교무실": {
-    image: "/asset/img/teachers_room.png",
+    image: "/asset/img/hallway.png",
     description: "잠겨있다.",
     choices: ["▶ 돌아간다."]
   },
@@ -203,25 +203,43 @@ export const exploreLocations = {
   "복도를 살펴본다(1층)": {
     image: "/asset/img/hallway.png",
     description: "1층의 복도다.\n주변엔 아무도 없다. 고요하다.",
-    choices: ["▶ 창문을 살펴본다.", "▶ 화장실로 이동한다.", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 창문을 살펴본다." },
+      { text: "▶ 화장실로 이동한다." },
+      { text: "▶ 돌아간다." }
+    ]
   },
   "복도를 살펴본다(2층)": {
     image: "/asset/img/hallway.png",
     description: "2층의 복도다.\n동아리원들의 대화소리가 조금씩 들리는 것 같다.",
-    choices: ["▶ 창문을 살펴본다.", "▶ 화장실로 이동한다. ", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 창문을 살펴본다." },
+      { text: "▶ 화장실로 이동한다. " },
+      { text: "▶ 돌아간다." }
+    ]
   },
   "복도를 살펴본다(3층)": {
     image: "/asset/img/hallway.png",
     description: "3층의 복도다.\n걸을 때 마다 삐걱거리는 소리가 조금 들린다.",
-    choices: ["▶ 창문을 살펴본다.", "▶ 화장실로 이동한다.  ", "▶ 돌아간다."]
+    choices: [
+      { text: "▶ 창문을 열어본다. "},
+      { text: "▶ 화장실로 이동한다.  " },
+      { text: "▶ 돌아간다." },
+      { text: "　 ", itemId: 98 }
+      ]
   },
-  "창문을 살펴본다.": {
+  "창문을 열어본다. ": {
     image: "/asset/img/hallway.png",
     description: "창 밖은 칠흑같은 어둠 뿐이다.\n시간도 날씨도 알 수 없다.",
     choices: [
       { text: "▶ 창문을 열어본다.", coinPenalty: 2, goTo: "창문을 열어본다" },
       { text: "▶ 돌아간다." }
       ]
+  },
+    "　 ": {
+    image: "/asset/img/hallway.png",
+    description: "당신은 3층 복도 3학년 교실 앞, 시야 한 구석에에서 아른거리는 시꺼먼 형체를 들여다본다.|자세히 살펴보니 그것은…|가발이었다!|[교장선생님의 가발]을 획득했다.",
+    choices: [{ text: "▶ 돌아간다.", goTo: "복도를 살펴본다(3층)" }]
   },
     "창문을 열어본다": {
     image: "/asset/img/hallway.png",
@@ -244,7 +262,7 @@ export const exploreLocations = {
   },
   "　": {
     image: "/asset/img/restroom.png",
-    description: "쪽지의 내용이 떠올라서였을까, 혹은 문득 그냥 그러고싶어서였을까.\n당신은 거울에 대고 가위바위보를 해보았다.|당신은……",
+    description: "쪽지의 내용이 떠올라서였을까, 혹은 문득 그냥 그러고싶어서였을까.\n당신은 거울에 대고 가위바위보를 해보았다.",
     choices: ["▶ 가위를 낸다", "▶ 바위를 낸다", "▶ 보를 낸다", "▶ 돌아간다."]
   },
   "가위를 낸다": {

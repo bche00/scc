@@ -108,7 +108,7 @@ const filteredUsers = users.filter((user) =>
         <div className={style.popup}>
           <div className={style.popupContent}>
             <img src={popup.image} alt="popup" />
-            <p>{popup.text}</p>
+            <p style={{ whiteSpace: "pre-line" }}>{popup.text}</p>
             <button onClick={() => setPopup({ visible: false, image: "", text: "" })}>닫기</button>
           </div>
         </div>
