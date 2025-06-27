@@ -35,7 +35,6 @@ export default function Explore({ location = "1층 계단" }) {
 
   useEffect(() => {
     const stored = localStorage.getItem("allowExplore");
-    console.log("Explore: allowExplore from localStorage =", stored);
     if (stored === "true") setAllowed(true);
     else setAllowed(false);
   }, []);
@@ -46,6 +45,7 @@ export default function Explore({ location = "1층 계단" }) {
       navigate("/");
     }
   }, [allowed]);
+
 
 
   useEffect(() => {

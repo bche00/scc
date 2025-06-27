@@ -113,6 +113,7 @@ export default function Home() {
 
   // 탐사 입장 횟수 카운트 함수
     const handleExploreClick = async () => {
+        console.log("탐사하기 버튼 클릭됨");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (!loggedInUser) return;
 
@@ -161,7 +162,10 @@ export default function Home() {
 
     // 0.1초 딜레이 후 이동
     await new Promise((resolve) => setTimeout(resolve, 100));
-    navigate("/explore");
+    console.log("탐사 시작 - navigate 호출 전");
+navigate("/explore");
+console.log("탐사 시작 - navigate 호출 후");
+
   };
 
 
@@ -350,6 +354,7 @@ const subscription = supabase
                   <div className={style.btn}>
                     <button
                       onClick={() => {
+                        console.log("탐사 시작 버튼 클릭됨");
                         if (exploreRemaining > 0) {
                           localStorage.setItem("allowExplore", "true"); // 진입 허용
                           handleStartExplore(); // navigate("/explore") 포함되어 있어야 함. 악의적 접근 막기용
