@@ -257,19 +257,26 @@ export default function Shop() {
 
               <div className={style.btn}>
                 <button
-                  onClick={() => handleGiftItem(
-                    giftPopup.item,
-                    selectedUser,
-                    [],
-                    () => {},
-                    setGiftPopup,
-                    userCoin,
-                    setUserCoin
-                  )}
-                  disabled={!selectedUser}  // 선택 전 비활성화
+                  onClick={() => {
+                    if (userCoin < giftPopup.item.price) {
+                      alert("이런! 코인이 부족합니다.");
+                      return;
+                    }
+                    handleGiftItem(
+                      giftPopup.item,
+                      selectedUser,
+                      [],
+                      () => {},
+                      setGiftPopup,
+                      userCoin,
+                      setUserCoin
+                    );
+                  }}
+                  disabled={!selectedUser} // 선택 전 비활성화
                 >
                   보내기
                 </button>
+
                 <button onClick={() => setGiftPopup({ visible: false, item: null })}>취소</button>
               </div>
             </div>
