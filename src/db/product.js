@@ -112,6 +112,14 @@ const products = [
     used: "false",
   },
   {
+    id: 15,
+    image: "/asset/product/amulet.png",
+    name: "*부문",
+    price: "-",
+    description: "부적에 적히는 특수한 상형문자.",
+    used: "false",
+  },
+  {
     id: 98,
     image: "/asset/product/toupee.png",
     name: "교장선생님의 가발",
