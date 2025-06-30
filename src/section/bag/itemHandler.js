@@ -70,7 +70,7 @@ const openRandomBox = async (bagItems, setBagItems) => {
     updatedBagItems.push({ itemId: selectedItem.id, count: 1, used: false });
   }
 
-  // 🔥 **랜덤박스 개수 감소**
+  // 랜덤박스 개수 감소
   const boxIndex = updatedBagItems.findIndex((item) => item.itemId === 4);
   if (boxIndex !== -1) {
     if (updatedBagItems[boxIndex].count > 1) {

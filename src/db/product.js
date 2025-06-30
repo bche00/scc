@@ -19,7 +19,7 @@ const products = [
     id: 3,
     image: "/asset/product/hotbar.png",
     name: "핫바",
-    price: 4,
+    price: 3,
     description: "든든히 먹고 체력을 보충하자! 당일 탐사 횟수+1",
     used: "false",
   },
@@ -89,7 +89,7 @@ const products = [
   },
   {
     id: 12,
-    image: "/asset/product/key.png",
+    image: "/asset/product/room_key.png",
     name: "*열쇠",
     price: "-",
     description: "「교무실」이라고 쓰여있다.",
@@ -101,6 +101,14 @@ const products = [
     name: "*빨간 펜",
     price: "-",
     description: "이상한 냄새가 난다.",
+    used: "false",
+  },
+  {
+    id: 14,
+    image: "/asset/product/attendance_register.png",
+    name: "*출석부",
+    price: "-",
+    description: "2학년 O반의 출석부다.",
     used: "false",
   },
   {

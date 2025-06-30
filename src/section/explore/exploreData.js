@@ -224,7 +224,7 @@ export const exploreLocations = {
     choices: [
       { text: "▶ 창문을 살펴본다."},
       { text: "▶ 화장실로 이동한다.  " },
-      { text: "▶ (?)바닥을 살펴본다.", goTo: "바닥을 살펴본다", itemId: 98, oneTimeOnly: true },
+      // { text: "▶ (?)바닥을 살펴본다.", goTo: "바닥을 살펴본다", itemId: 98, oneTimeOnly: true },
       { text: "▶ 돌아간다." }
       ]
   },
@@ -745,7 +745,7 @@ export const exploreLocations = {
   },
   "무대를 살펴본다.": {
     image: "/asset/img/gym.png",
-    description: "무대 바닥이 일부 들떠 있다. 조명 장비는 전혀 작동하지 않고, 오래된 먼지만 쌓여 있다. 사용하지 않은지 5년은 더 되어 보인다.",
+    description: "무대 바닥이 일부 들떠 있다.\n조명 장비는 전혀 작동하지 않고, 오래된 먼지만 쌓여 있다.",
     choices: [
       { text: "▶ 조사한다.", triggersEvent: true},
       { text: "▶ 돌아간다." }
@@ -753,7 +753,7 @@ export const exploreLocations = {
   },
   "창고를 살펴본다.": {
     image: "/asset/img/gym.png",
-    description: "문을 열자마자 묵은 먼지가 훅 끼치며 공중에 흩날린다.\n 내부는 낡은 철제 캐비닛과 공보관함, 매트 등이 작은 공간을 꽉 채우고 있다.",
+    description: "문을 열자마자 묵은 먼지가 훅 끼치며 공중에 흩날린다.|내부는 낡은 철제 캐비닛과 공보관함, 매트 등이 작은 공간을 꽉 채우고 있다.",
     choices: [
       { text: "▶ 조사한다.", triggersEvent: true},
       { text: "▶ 돌아간다." }
