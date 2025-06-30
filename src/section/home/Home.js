@@ -69,7 +69,7 @@ export default function Home() {
     fetchUserData();
   }, []);
 
-  // 탐사 횟수 초기화 함수
+  // 🔽 탐사 횟수 초기화 함수
   useEffect(() => {
     const checkExploreReset = async () => {
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -113,7 +113,6 @@ export default function Home() {
 
   // 탐사 입장 횟수 카운트 함수
     const handleExploreClick = async () => {
-        console.log("탐사하기 버튼 클릭됨");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (!loggedInUser) return;
 
@@ -132,13 +131,12 @@ export default function Home() {
     setShowExplorePopup(true);
   };
 
-  const handleStartExplore = async () => {
+    const handleStartExplore = async () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    localStorage.setItem("allowExplore", "true");
     if (!loggedInUser) return;
 
-    // 탐사 횟수 차감
     const newRemaining = exploreRemaining - 1;
+
     const today = new Date().toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "2-digit",
@@ -156,16 +154,11 @@ export default function Home() {
       return;
     }
 
-    localStorage.setItem("allowExplore", "true"); // 진입 허용
+      // 탐사 진입 허용 세션 설정
+    sessionStorage.setItem("canEnterExplore", "true");
 
     setShowExplorePopup(false);
-
-    // 0.1초 딜레이 후 이동
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    console.log("탐사 시작 - navigate 호출 전");
-navigate("/explore");
-console.log("탐사 시작 - navigate 호출 후");
-
+    navigate("/explore");
   };
 
 
@@ -354,15 +347,13 @@ const subscription = supabase
                   <div className={style.btn}>
                     <button
                       onClick={() => {
-                        console.log("탐사 시작 버튼 클릭됨");
                         if (exploreRemaining > 0) {
-                          localStorage.setItem("allowExplore", "true"); // 진입 허용
-                          handleStartExplore(); // navigate("/explore") 포함되어 있어야 함. 악의적 접근 막기용
+                          handleStartExplore();
                         } else {
                           alert("오늘의 탐사 횟수를 모두 사용했습니다!");
                           setShowExplorePopup(false);
                         }
-                    }}>
+                      }}>
                       시작
                     </button>
                     <button onClick={() => setShowExplorePopup(false)}>취소</button>
@@ -392,7 +383,7 @@ const subscription = supabase
         <Link to="/shop">
           <div className={style.utilIcon}>
             <img src={Shop} alt="Shop" className={style.icon} />
-            <p>잠시적용확인좀</p>
+            <p>매점</p>
           </div>
         </Link>
         <Link to="/bag">

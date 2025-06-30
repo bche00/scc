@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../../db/supabase";
 import { useNavigate } from "react-router-dom";
 import { exploreLocations } from "./exploreData";
@@ -26,27 +26,14 @@ export default function Explore({ location = "1층 계단" }) {
   const [eventType, setEventType] = useState(null);
   const [showTerminateModal, setShowTerminateModal] = useState(false);
 
+  useEffect(() => {
+    sessionStorage.removeItem("canEnterExplore");
+  }, []);
+
   const currentLocationName =
     Object.keys(exploreLocations).find(
       (key) => exploreLocations[key] === currentLocation
     ) || "조사한다.";
-
-  const [allowed, setAllowed] = useState(null);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("allowExplore");
-    if (stored === "true") setAllowed(true);
-    else setAllowed(false);
-  }, []);
-
-  useEffect(() => {
-    if (allowed === false) {
-      alert("우회 접근이 확인되었습니다. 『탐사하기』를 통해 진입해 주세요.");
-      navigate("/");
-    }
-  }, [allowed]);
-
-
 
   useEffect(() => {
     if (!explorationResult) {
@@ -137,31 +124,26 @@ const handleChoiceClick = async (choice) => {
   const actualChoice = isStringChoice ? { text: choice } : choice;
 
   // 중복 조사 방지
-if (
-  investigated[currentLocationName] &&
-  (
-    actualChoice.triggersEvent ||
-    lookupChoice === "조사한다." ||
-    actualChoice.oneTimeOnly
-  )
-) {
-  const specialResult = {
-    type: "fail",
-    segments: ["이미 조사했던 곳이다. 다른 곳을 살펴보자."],
-  };
-  setExplorationResult(specialResult);
-  setEventType("fail");
+  if (
+    investigated[currentLocationName] &&
+    (actualChoice.triggersEvent || lookupChoice === "조사한다.")
+  ) {
+    const specialResult = {
+      type: "fail",
+      segments: ["이미 조사했던 곳이다. 다른 곳을 살펴보자."],
+    };
+    setExplorationResult(specialResult);
+    setEventType("fail");
 
-  if (currentLocation.choices) {
-    const newChoices = currentLocation.choices.filter((c) => {
-      const t = typeof c === "string" ? c : c.text;
-      return t.includes("돌아간다");
-    });
-    setCurrentLocation({ ...currentLocation, choices: newChoices });
+    if (currentLocation.choices) {
+      const newChoices = currentLocation.choices.filter((c) => {
+        const t = typeof c === "string" ? c : c.text;
+        return t.includes("돌아간다");
+      });
+      setCurrentLocation({ ...currentLocation, choices: newChoices });
+    }
+    return;
   }
-  return;
-}
-
 
   // 코인 차감
   if (actualChoice.coinPenalty) {
@@ -313,14 +295,6 @@ if (
     return;
   }
 
-  if (actualChoice.triggersEvent || actualChoice.oneTimeOnly) {
-  setInvestigated((prev) => ({
-    ...prev,
-    [currentLocationName]: true,
-  }));
-}
-
-
   // 이동 (goTo 우선, 없으면 텍스트 기반)
   const destination = actualChoice.goTo || lookupChoice;
   if (exploreLocations[destination]) {
@@ -338,7 +312,6 @@ if (
   };
 
   const confirmTerminate = () => {
-    localStorage.removeItem("allowExplore");  // 탐사 종료 시 권한 삭제
     navigate("/");
   };
 
@@ -397,7 +370,6 @@ if (
             <button
               onClick={() => {
                 setShowPopup(false);
-                localStorage.removeItem("allowExplore");  // 탐사 성공 종료 시 권한 삭제
                 navigate("/");
               }}
             >

@@ -31,6 +31,15 @@ function App() {
     }
   };
 
+  function ProtectedExplore({ children }) {
+    const allowed = sessionStorage.getItem("canEnterExplore") === "true";
+    if (!allowed) {
+      alert("우회 접근이 확인되었습니다. 『탐사하기』를 통해 진입해 주세요.");
+      return <Navigate to="/" replace />;
+    }
+    return children;
+  }
+
   const handleLogout = () => {
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("isLoggedIn");
@@ -53,11 +62,9 @@ function App() {
             <Route
               path="/explore"
               element={
-                isLoggedIn && sessionStorage.getItem("allowExplore") === "true" ? (
+                <ProtectedExplore>
                   <Explore />
-                ) : (
-                  <Navigate to="/" replace />
-                )
+                </ProtectedExplore>
               }/>
             <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>} />
             <Route path="/bag" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Bag /></ProtectedRoute>} />
