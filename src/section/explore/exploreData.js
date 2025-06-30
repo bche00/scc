@@ -224,8 +224,8 @@ export const exploreLocations = {
     choices: [
       { text: "▶ 창문을 살펴본다."},
       { text: "▶ 화장실로 이동한다.  " },
-      { text: "▶ 돌아간다." },
-      { text: "　 ", itemId: 98, oneTimeOnly: true }
+      { text: "▶ (?)바닥을 살펴본다.", goTo: "바닥을 살펴본다", itemId: 98, oneTimeOnly: true },
+      { text: "▶ 돌아간다." }
       ]
   },
   "창문을 살펴본다.": {
@@ -236,9 +236,9 @@ export const exploreLocations = {
       { text: "▶ 돌아간다." }
       ]
   },
-    "　 ": {
+    "바닥을 살펴본다": {
     image: "/asset/img/hallway.png",
-    description: "당신은 3층 복도 3학년 교실 앞, 시야 한 구석에에서 아른거리는 시꺼먼 형체를 들여다본다.|자세히 살펴보니 그것은…|가발이었다!|[교장선생님의 가발]을 획득했다.",
+    description: "당신은 3층 복도 3학년 교실 앞, 바닥 한 구석에 떨어져있는 시꺼먼 형체를 들여다본다.|자세히 살펴보니 그것은…|가발이었다!|[교장선생님의 가발]을 획득했다.",
     choices: [{ text: "▶ 돌아간다.", goTo: "복도를 살펴본다(3층)" }]
   },
     "창문을 열어본다": {
@@ -403,10 +403,51 @@ export const exploreLocations = {
   },
     "네 번째 칸": {
     image: "/asset/img/restroom.png",
-    description: "어라? 열리지 않는다.\n아래를 내려다봐도 사람의 다리 같은 건 보이지 않는다.",
+    description: "어라? 열리지 않는다.|아래를 내려다봐도 사람의 다리 같은 건 보이지 않는다.",
     choices: [
-    { text: "▶ 돌아간다." }
+    // { text: "▶ 문을 두들겨본다.", goTo:"문을 두들겨본다."},
+    { text: "▶ 돌아간다." },
     ],
+  },
+    "문을 두들겨본다.": {
+    image: "/asset/img/restroom.png",
+    description: "몇 번 두들길까?",
+    choices: [
+    { text: "▶ 한 번",  goTo:"한 번 두들겨본다." },
+    { text: "▶ 두 번",  goTo:"두 번 두들겨본다." },
+    { text: "▶ 세 번",  goTo:"세 번 두들겨본다." },
+    { text: "▶ 네 번", goTo:"네 번 두들겨본다.", coinPenalty: 1 },
+    { text: "▶ 그만둔다. ", goTo: "화장실 칸을 살펴본다.  " }
+    ],
+  },
+  "네 번 두들겨본다.": {
+    image: "/asset/img/restroom.png",
+    description: "당신은 네 번째 칸 화장실의 문을 네 번 두들겨보았다.|쾅!!!|안에서 누군가 문을 세게 내려친 듯 하다.|당신은 놀란 나머지, 코인을 떨어트리고 말았다.|[1코인]를 잃었다.",
+    choices: [
+    { text: "▶ 돌아간다. ", goTo: "문을 두들겨본다." }
+    ],
+  },
+    "한 번 두들겨본다.": {
+    image: "/asset/img/restroom.png",
+    description: "당신은 네 번째 칸 화장실의 문을 한 번 두들겨보았다.|….|아무일도 일어나지 않았다.",
+    choices: [
+    { text: "▶ 돌아간다. ", goTo: "문을 두들겨본다." }
+    ]
+  },
+    "두 번 두들겨본다.": {
+    image: "/asset/img/restroom.png",
+    description: "당신은 네 번째 칸 화장실의 문을 두 번 두들겨보았다.|….|화장실 문이 열렸다.|안에는 아무도 없다.",
+    choices: [
+    { text: "▶ 조사한다.", triggersEvent: true},
+    { text: "▶ 돌아간다. ", goTo: "문을 두들겨본다." }
+    ]
+  },
+    "세 번 두들겨본다.": {
+    image: "/asset/img/restroom.png",
+    description: "당신은 네 번째 칸 화장실의 문을 세 번 두들겨보았다.|….|아무일도 일어나지 않았다.",
+    choices: [
+    { text: "▶ 돌아간다. ", goTo: "문을 두들겨본다." }
+    ]
   },
     "2층": {
     image: "/asset/img/hallway.png",
@@ -525,7 +566,7 @@ export const exploreLocations = {
     },
     "「퇴마부 제작법」": {
       image: "/asset/img/library.png",
-      description: "누군가가 직접 수필로 작성한 듯, 삐뚤빼뚤한 글씨로 적혀있다.|「 “퇴마부“를 만드는 방법. 」|「 노란색 한지에 피나 붉은색 잉크 등으로 $#&(지워져있다)를 그려넣는다. 」|「 제령할 영혼의 이름을 삼창하며, 부적에 불을 붙여 태운다. 」|「 이 때, 모든 의식이 끝난 뒤 꼭 태운 재를 날려보낼 것. 」",
+      description: "누군가가 직접 수필로 작성한 듯, 삐뚤빼뚤한 글씨로 적혀있다.|「 “퇴마부“를 만드는 방법. 」|「 노란색 한지에 피나 붉은색 잉크 등으로 ㅂ$#문&(흐려져있다)를 그려넣는다. 」|「 제령할 영혼의 이름을 삼창하며, 부적에 불을 붙여 태운다. 」|「 이 때, 모든 의식이 끝난 뒤 꼭 태운 재를 날려보낼 것. 」",
       choices: [
       { text: "▶ 돌아간다." }
       ],

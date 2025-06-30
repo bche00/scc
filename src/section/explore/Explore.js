@@ -183,47 +183,72 @@ const handleChoiceClick = async (choice) => {
   if (actualChoice.itemId) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser?.id) {
+      const choiceText = actualChoice.text?.trim();
+
+      const { data: userInfo, error } = await supabase
+        .from("users_info")
+        .select("explored_choices, bag_item")
+        .eq("user_id", loggedInUser.id)
+        .single();
+
+      if (error || !userInfo) {
+        console.error("유저 정보 불러오기 실패", error);
+        return;
+      }
+
+      // 이미 조사한 적 있는 선택지일 경우 조사 차단(유저단위)
+      if (userInfo.explored_choices?.[choiceText]) {
+        setExplorationResult({
+          type: "fail",
+          segments: ["이미 조사했었던 곳이다.\n또 살펴볼 필요는 없을 것 같다."],
+        });
+        setEventType("fail");
+        return; // 조사 및 아이템 지급 진행하지 않도록 return
+      }
+
+      // 아이템 지급 로직 시작
       const product = products.find((p) => p.id === actualChoice.itemId);
       if (product) {
-        const { data: userInfo, error } = await supabase
+        const updatedBag = [...(userInfo.bag_item || [])];
+        const existing = updatedBag.find(
+          (item) => item.itemId === product.id && !item.used
+        );
+
+        if (existing) {
+          existing.count += 1;
+        } else {
+          updatedBag.push({ itemId: product.id, count: 1, used: false });
+        }
+
+        const updatedExplored = {
+          ...(userInfo.explored_choices || {}),
+          [choiceText]: true,
+        };
+
+        const koreaTime = new Date();
+        koreaTime.setHours(koreaTime.getHours() + 9);
+
+        const { error: updateError } = await supabase
           .from("users_info")
-          .select("bag_item")
-          .eq("user_id", loggedInUser.id)
-          .single();
+          .update({
+            bag_item: updatedBag,
+            explored_choices: updatedExplored,
+          })
+          .eq("user_id", loggedInUser.id);
 
-        if (!error && userInfo) {
-          const updatedBag = [...(userInfo.bag_item || [])];
-          const existing = updatedBag.find(
-            (item) => item.itemId === product.id && !item.used
-          );
-
-          if (existing) {
-            existing.count += 1;
-          } else {
-            updatedBag.push({ itemId: product.id, count: 1, used: false });
-          }
-
-          const koreaTime = new Date();
-          koreaTime.setHours(koreaTime.getHours() + 9);
-
-          const { error: updateError } = await supabase
-            .from("users_info")
-            .update({ bag_item: updatedBag })
-            .eq("user_id", loggedInUser.id);
-
-          if (!updateError) {
-            await supabase.from("users_record").insert({
-              user_id: loggedInUser.id,
-              item_id: product.id,
-              item_name: product.name,
-              type: "obtained",
-              timestamp: koreaTime.toISOString(),
-            });
-          }
+        if (!updateError) {
+          await supabase.from("users_record").insert({
+            user_id: loggedInUser.id,
+            item_id: product.id,
+            item_name: product.name,
+            type: "obtained",
+            timestamp: koreaTime.toISOString(),
+          });
         }
       }
     }
   }
+
 
   // 조사 이벤트 처리
   if (actualChoice.triggersEvent) {
