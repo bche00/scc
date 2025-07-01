@@ -110,7 +110,6 @@ if (!infoCheck) {
       coin: 2,
       bag_item: [],
       explore_limit: { remaining: 3 },
-      mail: [],
     },
   ]);
   if (infoInsertError) {
