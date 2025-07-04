@@ -33,12 +33,14 @@ export const handleGiftItem = async (item, selectedUser, bagItems, setBagItems, 
       .from("users")
       .select("name")
       .eq("id", senderId)
+      .eq("status", "approved")
       .single();
 
     const { data: receiverData, error: receiverError } = await supabase
       .from("users")
       .select("name")
       .eq("id", receiverId)
+      .eq("status", "approved")
       .single();
 
     if (senderError || receiverError) {

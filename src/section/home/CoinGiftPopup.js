@@ -24,6 +24,7 @@ export default function CoinGiftPopup({ setShowCoinGiftPopup }) {
       const { data, error } = await supabase
         .from("users")
         .select("id, name")
+        .eq("status", "approved")
         .neq("id", loggedInUser.id);
 
       if (error) {

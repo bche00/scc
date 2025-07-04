@@ -48,6 +48,7 @@ export default function Shop() {
         .from("users_info")
         .select("coin, bag_item")
         .eq("user_id", loggedInUser.id)
+        .eq("status", "approved")
         .single();
 
       if (error) {
