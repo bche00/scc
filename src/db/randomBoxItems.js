@@ -1,4 +1,4 @@
-const randomBoxItems = [
+export const randomBoxItems = [
   { id: 1, name: "포츈쿠키", chance: 23 },
   { id: 2, name: "버려진 쪽지", chance: 23 },
   { id: 3, name: "핫바", chance: 23 },

@@ -2,7 +2,7 @@ import { supabase } from "../../db/supabase";
 import products from "../../db/product";
 import fortuneMessages from "../../db/fortuneMessages"; 
 import noteMessages from "../../db/noteMessages";
-import randomBoxItems from "../../db/randomBoxItems";
+import { randomBoxItems } from "../../db/randomBoxItems";
 
 // 팝업 상태 관리
 let setPopupState = null;
@@ -95,8 +95,10 @@ const openRandomBox = async (bagItems, setBagItems) => {
   setBagItems(updatedBagItems);
 
   // Supabase 기록 추가 (랜덤박스 사용 기록 & 획득한 아이템 기록)
-  const koreaTime = new Date();
-  koreaTime.setHours(koreaTime.getHours() + 9);
+const usedTime = new Date();
+usedTime.setHours(usedTime.getHours() + 9);
+
+const obtainedTime = new Date(usedTime.getTime() + 500); // 획득이 사용 이후에 기록되게 딜레이
 
   try {
     // 기록 데이터 확인 (콘솔 출력)
@@ -106,7 +108,7 @@ const openRandomBox = async (bagItems, setBagItems) => {
         item_id: 4, // 랜덤박스 ID
         item_name: "랜덤박스",
         type: "used", // 사용 기록
-        timestamp: koreaTime.toISOString(),
+        timestamp: usedTime.toISOString(),
       },
     ];
 
@@ -126,11 +128,15 @@ const openRandomBox = async (bagItems, setBagItems) => {
         item_id: selectedItem.id,
         item_name: selectedItem.name,
         type: "obtained", // 획득 기록
-        timestamp: koreaTime.toISOString(),
+        timestamp: obtainedTime.toISOString(),
       },
     ];
 
     // console.log("📌 기록 추가 요청 데이터 (획득 아이템):", obtainedData);
+
+    // window.onerror = function (msg, url, line, col, error) {
+    // console.log("🌋 Uncaught error:", msg, error);
+    // };
 
     const { error: obtainError } = await supabase.from("users_record").insert(obtainedData);
 
