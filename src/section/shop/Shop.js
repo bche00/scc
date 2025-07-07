@@ -236,7 +236,7 @@ export default function Shop() {
                 placeholder="이름 검색"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={style.searchInput}
+                className={`${style.searchInput} inputText`}
               />
 
               {/* 필터링된 유저 리스트로 변경 */}
@@ -247,7 +247,7 @@ export default function Shop() {
                   filteredUsers.map(user => (
                     <div
                       key={user.id}
-                      className={`${style.userItem} ${selectedUser?.id === user.id ? style.selected : ""}`}
+                      className={`${style.userItem} cursorPointer ${selectedUser?.id === user.id ? style.selected : ""}`}
                       onClick={() => setSelectedUser(user)}
                     >
                       {user.name}

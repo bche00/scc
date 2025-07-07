@@ -152,7 +152,7 @@ const sendCoin = async () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="검색"
-              className={style.searchInput}
+              className={`${style.searchInput} inputText`}
             />
 
             <div className={style.userList}>
@@ -160,7 +160,7 @@ const sendCoin = async () => {
                 filteredUsers.map((user) => (
                   <div
                     key={user.id}
-                    className={`${style.userItem} ${
+                    className={`${style.userItem} cursorPointer ${
                       selectedUser?.id === user.id ? style.selected : ""
                     }`}
                     onClick={() => setSelectedUser(user)}

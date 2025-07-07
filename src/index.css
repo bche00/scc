@@ -43,9 +43,9 @@ body {
 a, button, .cursorPointer {
   cursor: url('./asset/util/cursor_pointer.png'), pointer !important;
 }
-/* span:hover, p:hover {
+.inputText {
   cursor: url('./asset/util/cursor_text.png'), pointer;
-} */
+}
 
 
 ::-webkit-scrollbar {

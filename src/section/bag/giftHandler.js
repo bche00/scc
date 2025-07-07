@@ -30,7 +30,7 @@ export const handleGiftItem = async (item, selectedUser, bagItems, setBagItems, 
 
   try {
     const { data: senderData, error: senderError } = await supabase
-      .from("users")
+      .from("`user`s")
       .select("name")
       .eq("id", senderId)
       .eq("status", "approved")

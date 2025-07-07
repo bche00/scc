@@ -128,7 +128,8 @@ const filteredUsers = users.filter((user) =>
                 placeholder="이름 검색"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={style.searchInput}/>
+                className={`${style.searchInput} inputText`}
+                />
 
               {/* 필터링된 유저 리스트 */}
               <div className={style.userList}>
@@ -138,7 +139,7 @@ const filteredUsers = users.filter((user) =>
                   filteredUsers.map((user) => (
                     <div
                       key={user.id}
-                      className={`${style.userItem} ${
+                      className={`${style.userItem} cursorPointer ${
                         selectedUser?.id === user.id ? style.selected : ""
                       }`}
                       onClick={() => setSelectedUser(user)}

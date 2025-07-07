@@ -69,7 +69,7 @@ export default function Home() {
     fetchUserData();
   }, []);
 
-  // 🔽 탐사 횟수 초기화 함수
+  // 탐사 횟수 초기화 함수
   useEffect(() => {
     const checkExploreReset = async () => {
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -308,9 +308,7 @@ const subscription = supabase
                 src={Coin}
                 alt="Coin"
                 onClick={() => {
-                  // 허용된 유저인지 체크
                   if (!allowedUserIds.includes(loggedInUser?.id)) {
-                    // 허용 안되면 클릭 카운트 초기화 및 팝업 절대 안 열림
                     setCoinClickCount(0);
                     return;
                   }
@@ -318,7 +316,7 @@ const subscription = supabase
                   setCoinClickCount((prev) => {
                     if (prev === 2) {
                       setShowCoinGiftPopup(true);
-                      return 0; // 클릭 카운트 초기화
+                      return 0;
                     }
                     return prev + 1;
                   });
