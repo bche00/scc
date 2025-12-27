@@ -8,7 +8,7 @@ export const exploreLocations = {
     image: "/asset/img/hallway.png",
     description: "교문은 굳게 닫혀있고, 창 밖은 어둡기만하다.",
     choices: [
-      { text: "▶ 교무실" },
+      { text: "▶ 교무실　" },
       { text: "▶ 방송실" },
       { text: "▶ 행정실" },
       { text: "▶ 보건실" },
@@ -16,10 +16,55 @@ export const exploreLocations = {
       { text: "▶ 돌아간다. ", goTo: "1층 계단" }
     ]
   },
-  "교무실": {
+  "교무실　": {
     image: "/asset/img/hallway.png",
     description: "잠겨있다.",
-    choices: ["▶ 돌아간다."]
+    choices: [
+      { text: "▶ [교무실 열쇠]를 사용한다.", goTo: "교무실" },
+      { text: "▶ 돌아간다. ", goTo: "1층" }
+    ]
+  },
+  "교무실": {
+    image: "/asset/img/teachers_room.png",
+    description: "잠겨있던 교무실에 들어왔다.|칸막이로 분리된 여러 책상들 위로 컴퓨터와 이런저런 서류, 학습지들이 널려있다.",
+    choices: [
+      { text: "▶ 미니 냉장고를 열어본다." },
+      { text: "▶ 책장을 살펴본다. ", goTo: "책장을 살펴본다.　" },
+      { text: "▶ 돌아간다. ", goTo: "1층"  }
+    ]
+  },
+  "미니 냉장고를 열어본다.": {
+    image: "/asset/img/teachers_room.png",
+    description: "미니 냉장고를 열자, 예상했던 차가운 공기는 느껴지지 않고 묘한 악취가 진동한다.|안에는 비타600, 박키스 등 자양강장제와 간단한 간식류들이 몇 보인다.|…냄새와 상태를 보아하니 먹으면 안될 것 같다.",
+    choices: [
+      { text: "▶ 조사한다." },
+      { text: "▶ 돌아간다. ", goTo: "교무실"  }
+    ]
+  },
+  "책장을 살펴본다.　": {
+    image: "/asset/img/teachers_room.png",
+    description: "커다란 책장에는 학교에서 수상한 트로피 몇 개와 표창장, 어려워보이는 서류들과 연간 졸업앨범, 학년과 반별 출석부들이 빼곡히 정리되어있다.",
+    choices: [
+      { text: "▶ 연간 졸업앨범을 펼쳐본다." },
+      { text: "▶ 출석부를 펼쳐본다." },
+      { text: "▶ 돌아간다. ", goTo: "교무실"  }
+    ]
+  },
+  "연간 졸업앨범을 펼쳐본다.": {
+    image: "/asset/img/teachers_room.png",
+    description: "연간 졸업앨범을 한 권씩 펼쳐보았다.|…우리 학교를 거쳐간 많은 선배님들의 얼굴과 이름, 연도를 거듭할수록 빛바래지는 학교의 옛 모습이 담긴 사진들이 기록되어있다.|당연히도, 아는 얼굴은 없다.",
+    choices: [
+      { text: "▶ 출석부를 펼쳐본다." },
+      { text: "▶ 돌아간다. ", goTo: "교무실"  }
+    ]
+  },
+  "출석부를 펼쳐본다.": {
+    image: "/asset/img/teachers_room.png",
+    description: "듀어어 어떻게 묘사하지",
+    choices: [
+      { text: "▶ 연간 졸업앨범을 펼쳐본다." },
+      { text: "▶ 돌아간다. ", goTo: "교무실"  }
+    ]
   },
   "방송실": {
     image: "/asset/img/broadcasting.png",
@@ -130,7 +175,58 @@ export const exploreLocations = {
     description: "대부분 잠겨있다.|…개중엔 끔찍한 냄새가 나는 사물함도 몇 있는데, 굳이 건들진 말자.",
     choices: [
       { text: "▶ 그럼에도 조사한다.", triggersEvent: true},
-      { text: "▶ 돌아간다." }
+      // { text: "▶ 냄새가 나는 사물함을 열어본다.", goTo: "끔찍한 냄새가 나는 사물함", oneTimeOnly: true },
+      { text: "▶ 돌아간다.", goTo: "행정실" }
+      ]
+  },
+    "끔찍한 냄새가 나는 사물함": {
+    image: "/asset/img/office.png",
+    description: "끔찍한 냄새가 나는 사물함을 열어보았다.|…끈덕진 것이 떨어져나가는 소리와 함께 힘겹게 열린 사물함 안에는…….|액정에 금이 간 구형 핸드폰과, 성냥 한 갑이 들어있다. 압수 물품을 보관해두는 사물함인듯 하다.",
+    choices: [
+      { text: "▶ 구형 핸드폰을 챙긴다." },
+      { text: "▶ 성냥을 챙긴다.", itemId: 17 }
+      ]
+  },
+    "성냥을 챙긴다.": {
+    image: "/asset/img/office.png",
+    description: "처참한 사물함 내부 상태와는 달리 이질적이리만치 깔끔한 상태의 성냥갑.|집어보니 살짝 축축하지만, 불은 붙을 것 같다.|[성냥]을 획득했다.",
+    choices: [
+      { text: "▶ 돌아간다. ", goTo: "행정실" }
+      ]
+  },
+    "구형 핸드폰을 챙긴다.": {
+    image: "/asset/img/office.png",
+    description: "핸드폰은 사람의 손길이 한참 동안이나 닿지 않은 듯 했다.|작동이 가능한지 의심될 만큼 여기저기 심하게 파손되어있으며, 어째서인지 조금… 축축했다.|검붉은 무언가가 묻어나옴과 동시에 끔찍한 냄새가 풍겨온다. 사물함에서 나던 냄새의 원흉이 이것이었나보다.|……핸드폰을 켜 보니, 놀랍게도 전원이 켜졌다.\n하지만 배터리가 2%밖에 남지 않아 금방 다시 방전될 듯하다. 무엇을 살펴볼까?",
+    choices: [
+      { text: "▶ 갤러리" },
+      { text: "▶ 통화목록" },
+      { text: "▶ 메세지" },
+      { text: "▶ 그만두고 성냥을 챙긴다.", goTo: "성냥을 챙긴다.", itemId: 17 }
+      ]
+  },
+    "갤러리": {
+    image: "/asset/img/office.png",
+    description: "갤러리에는 친구들과 찍은 사진들, 급식 사진, 하늘과 풍경 사진들이 잔뜩 남아있다.|휴대폰의 주인은 우리와 같은 동아리 학생이었는지, 몇몇 아는 얼굴들과 함께 폐가나 으스스한 사진들도 꽤나 있다.|최근으로 갈수록 그 양이 많아지고, 비가 내리는 어두운 산 속 사진들이 가득해진다. 이후… 아무것도 보이지 않는 새까만 사진이 몇십 장이나 더 이어지다 끝난다.|또 무엇을 볼까?",
+    choices: [
+      { text: "▶ 통화목록" },
+      { text: "▶ 메세지", itemId: 17 },
+      { text: "▶ 그만두고 성냥을 챙긴다.", goTo: "성냥을 챙긴다.", itemId: 17 }
+      ]
+  },
+    "통화목록": {
+    image: "/asset/img/office.png",
+    description: "가장 최근이 상단부터 표기되어있다.|[부재중 수신] 엄마(17)\n[부재중 수신] 아빠(13)\n[부재중 발신] 119(8)\n[부재중 수신] 회장(3)\n[부재중 수신] C양(2)\n[부재중 발신] 119(4)\n...|또 무엇을 볼까?",
+    choices: [
+      { text: "▶ 갤러리" },
+      { text: "▶ 메세지", itemId: 17 },
+      { text: "▶ 그만두고 성냥을 챙긴다.", goTo: "성냥을 챙긴다.", itemId: 17 }
+      ]
+  },
+    "메세지": {
+    image: "/asset/img/office.png",
+    description: "메세지 아이콘을 누르자, '핏-' 하는 소리와 함께 화면이 꺼져버렸다.|아무래도 방전된듯하다.\n충전 단자 부분이 마모되어있어 다시 충전시키기에도 어려워보인다.|당신은 핸드폰을 도로 사물함 안에 넣어두었다.",
+    choices: [
+      { text: "▶ 성냥을 챙긴다.", itemId: 17 }
       ]
   },
     "보건실": {
@@ -184,7 +280,7 @@ export const exploreLocations = {
   },
     "들춰본다. ": {
     image: "/asset/img/health_Room.png",
-    description: "당신은 세 번째 침대의 커튼을 들췄다.|….|아무도 없다.|베개 안 쪽에 구겨진 종이조각이 보인다.|[버려진 쪽지]를 얻었다.",
+    description: "당신은 세 번째 침대의 커튼을 들췄다.|….|아무도 없다.|베개 안 쪽에 구겨진 종이조각이 보인다.|[버려진 쪽지]를 획득했다.",
     choices: [
       { text: "▶ 돌아간다. ", goTo: "보건실" }
     ]
@@ -229,7 +325,7 @@ export const exploreLocations = {
     choices: [
       { text: "▶ 창문을 살펴본다."},
       { text: "▶ 화장실로 이동한다.  " },
-      // { text: "▶ (?)바닥을 살펴본다.", goTo: "바닥을 살펴본다", itemId: 98, oneTimeOnly: true },
+      { text: "▶ (?)바닥을 살펴본다.", goTo: "바닥을 살펴본다", itemId: 98, oneTimeOnly: true },
       { text: "▶ 돌아간다." }
       ]
   },
@@ -267,41 +363,41 @@ export const exploreLocations = {
     image: "/asset/img/restroom.png",
     description: "지저분한 거울에 당신의 모습이 비치고 있다.|수돗물을 틀어보았지만, 물은 나오지 않았다.",
     choices: [
-      { text: "▶ 돌아간다." },
-      { text: "　"}
+      { text: "▶ 조사한다.", triggersEvent: true},
+      { text: "▶ (?)가위바위보를 한다.", goTo: "가위바위보를 한다.", oneTimeOnly: true },
+      { text: "▶ 돌아간다. ", goTo:"화장실로 이동한다." }
     ]
   },
-  "　": {
-    image: "/asset/img/restroom.png",
-    description: "쪽지의 내용이 떠올라서였을까, 혹은 문득 그냥 그러고싶어서였을까.\n당신은 거울에 대고 가위바위보를 해보았다.",
-    choices: [
-      { text: "▶ 가위를 낸다"},
-      { text: "▶ 바위를 낸다"},
-      { text: "▶ 보를 낸다"},
-      { text: "▶ 돌아간다. ", goTo:"세면대를 살펴본다."}
-      ]
+  "가위바위보를 한다.": {
+      image: "/asset/img/restroom.png",
+      description: "당신은 거울에 대고 가위바위보를 해보았다.",
+      choices: [
+     { text: "▶ 가위를 낸다"},
+     { text: "▶ 바위를 낸다", itemId: 12},
+     { text: "▶ 보를 낸다", coinPenalty: 2 },
+       ]
   },
   "가위를 낸다": {
-    image: "/asset/img/restroom.png",
-    description: "가위를 냈다. 거울 속의 당신도 똑같이 가위를 냈다.|비겼다.",
-    choices: [
-      {text : "▶ 돌아간다."}
-    ],
-  },
-  "바위를 낸다": {
-    image: "/asset/img/restroom.png",
-    description: "바위를 냈다. 거울 속의 당신도 똑같이 바위를 냈다.|비겼다.",
-    choices: [
-      {text : "▶ 돌아간다."}
-    ],
-  },
-  "보를 낸다": {
-    image: "/asset/img/restroom.png",
-    description: "보를 냈다. 거울 속의 당신도 똑같이 보를 냈다.|비겼다.",
-    choices: [
-      {text : "▶ 돌아간다."}
-    ],
-  },
+      image: "/asset/img/restroom.png",
+      description: "가위를 냈다.|거울 속의 당신도 똑같이 가위를 냈다.\n…비겼다.|거울 속의 당신은, 당신을 빤히 바라보더니 평범한 모습으로 돌아가버렸다.|…다시 가위바위보를 해봐도 별다른 특이점은 더 이상 일어나지 않는 듯하다.",
+      choices: [
+     { text: "▶ 돌아간다. ", goTo:"화장실로 이동한다."}
+     ],
+   },
+   "바위를 낸다": {
+   image: "/asset/img/restroom.png",
+   description: "바위를 냈다.|거울 속의 당신은 가위를 냈다.\n…이겼다!|거울 속의 당신이 당신을 노려보더니, 팔을 뻗어왔다.|놀라 뒷걸음질치자, 딸그랑… 소리와 함께 세면대 아래로 무언가가 떨어졌다.|고개를 숙여 주워보니 그것은… '교무실'이라고 쓰여있는 자그마한 열쇠였다.|[열쇠]를 획득했다.",
+   choices: [
+     { text: "▶ 돌아간다. ", goTo:"화장실로 이동한다."}
+     ],
+   },
+   "보를 낸다": {
+      image: "/asset/img/restroom.png",
+     description: "보를 냈다.|거울 속의 당신은 가위를 냈다.\n…졌다.|바로 그 순간,\n거울 속의 당신이 웃으며 팔을 뻗었다.|놀라 뒷걸음질쳤지만… 옷자락을 붙잡히고 말았다.|……!|…!!\n………!!!|소동 끝에 뿌리치고 벗어날 수 있었다.|하지만 뿌리치는 과정에서 주머니가 찢어지고 만 듯하다.|[2코인]를 잃었다.",
+     choices: [
+     { text: "▶ 돌아간다. ", goTo:"화장실로 이동한다."}
+     ],
+   },
   "화장실 칸을 살펴본다.": {
     image: "/asset/img/restroom.png",
     description: "몇 번째 칸을 살펴볼까?",
@@ -412,7 +508,7 @@ export const exploreLocations = {
   },
     "두 번째 칸  ": {
     image: "/asset/img/restroom.png",
-    description: "깔끔하다. 그런데 휴지가 없다. 이런….",
+    description: "깔끔하다. 이런… 휴지가 없다.",
     choices: [
     { text: "▶ 조사한다.", triggersEvent: true},
     { text: "▶ 돌아간다." }
@@ -599,7 +695,7 @@ export const exploreLocations = {
     },
     "「퇴마부 제작법」": {
       image: "/asset/img/library.png",
-      description: "누군가가 직접 수필로 작성한 듯, 삐뚤빼뚤한 글씨로 적혀있다.|「 “퇴마부“를 만드는 방법. 」|「 노란색 한지에 피나 붉은색 잉크 등으로 ㅂ$#문&(흐려져있다)를 그려넣는다. 」|「 제령할 영혼의 이름을 삼창하며, 부적에 불을 붙여 태운다. 」|「 이 때, 모든 의식이 끝난 뒤 꼭 태운 재를 날려보낼 것. 」",
+      description: "누군가가 직접 수필로 작성한 듯, 삐뚤빼뚤한 글씨로 적혀있다.|「 “퇴마부“를 만드는 방법. 」|「 부적지에 피나 주사, 붉은색 잉크 등으로 ㅂ$#문&을 그려넣는다. 」|「 제령할 영혼의 이름을 삼창하며, 부적에 불을 붙여 태운다. 」|「 이 때, 모든 의식이 끝난 뒤 꼭 태운 재를 날려보낼 것. 」",
       choices: [
       { text: "▶ 돌아간다." }
       ],
@@ -651,13 +747,20 @@ export const exploreLocations = {
     description: "여기저기 긁히고 부서져 어딘가 섬뜩하게 느껴진다.",
     choices: [
       { text: "▶ 부숴본다.", coinPenalty: 1, goTo: "부숴본다." },
-      { text: "▶ 조사한다.", triggersEvent: true},
+      { text: "▶ 들어본다. ", goTo:"들어본다.", itemId: 16, oneTimeOnly: true },
       { text: "▶ 돌아간다." }
     ],
   },
   "부숴본다.": {
     image: "/asset/img/art_room.png",
     description: "당신은 석고 흉상을 들어 바닥에 내던졌다.|뿌드득, 하는 둔탁한 소리와 함께 얼굴이 산산조각 나며 하얀 석고 가루가 휘날린다.|…흉상 내부는 텅 비어있다.|………어라?|몸을 크게 움직여서인지, 주머니에서 코인이 떨어져나와 서랍장 아래로 굴러들어간 듯 하다.|[1코인]를 잃었다.",
+    choices: [
+      { text: "▶ 돌아간다. ", goTo: "미술실" }
+    ],
+  },
+  "들어본다.": {
+    image: "/asset/img/art_room.png",
+    description: "당신은 석고 흉상을 들어 자세히 살펴보았다.|…어라?|흉상을 들어올리자마자 아래에 깔려있던 무언가가 팔랑이며 떨어졌다.|반질거리는 노란색의… 한지다.|[노란색 한지]를 획득했다.",
     choices: [
       { text: "▶ 돌아간다. ", goTo: "미술실" }
     ],
@@ -729,7 +832,7 @@ export const exploreLocations = {
     image: "/asset/img/music_room.png",
     description: "녹이 슨 듯한 쇠 냄새를 풍기고 있다.\n…드문드문 보이는 악보는 음계를 알아보기 어려울 만큼 잉크가 뭉개져있다.",
     choices: [
-      { text: "▶ 악보를 읽어본다." },
+      { text: "▶ 악보를 읽어본다."},
       { text: "▶ 조사한다.", triggersEvent: true},
       { text: "▶ 돌아간다." }
     ],
@@ -737,6 +840,14 @@ export const exploreLocations = {
   "악보를 읽어본다.": {
     image: "/asset/img/music_room.png",
     description: "당신은 보표를 더듬어가며 희미하게 새겨진 음계를 읽어내본다.|(E) (D#) (E)… (D#)…… (E) (B) (D)…… (C)… (A)……\n이 다음은 흐려져 알아보기 힘들다.",
+    choices: [
+      { text: "▶ 계속 읽는다. ", goTo: "계속 읽는다.", itemId: 15, oneTimeOnly: true  },
+      { text: "▶ 돌아간다. ", goTo: "음악실" }
+    ],
+  },
+  "계속 읽는다.": {
+    image: "/asset/img/music_room.png",
+    description: "당신은 더듬더듬 흐려진 악보를 더 읽어보았다.|……어라?|음계 사이에 이질적인 무언가가 그려져있다.|한자 같기도, 그림 같기도 하다.|당신은 해당 부분만을 찢어 주머니에 넣었다.|[부문]을 획득했다.",
     choices: [
       { text: "▶ 돌아간다. ", goTo: "음악실" }
     ],

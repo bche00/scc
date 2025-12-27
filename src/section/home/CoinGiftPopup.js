@@ -175,10 +175,11 @@ const sendCoin = async () => {
 
             <div className={style.coinAmount}>
               <input
+                className="inputText"
                 type="text"
-                min={1}
+                min={0}
                 value={coinAmount}
-                onChange={(e) => setCoinAmount(parseInt(e.target.value) || 1)}
+                onChange={(e) => setCoinAmount(parseInt(e.target.value) || 0)}
               />
             </div>
 

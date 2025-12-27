@@ -120,6 +120,22 @@ const products = [
     used: "false",
   },
   {
+    id: 16,
+    image: "/asset/product/paper.png",
+    name: "*노란색 한지",
+    price: "-",
+    description: "반질거리는 노란색 한지다. 부적지로 사용할 수 있을 것 같다.",
+    used: "false",
+  },
+  {
+    id: 17,
+    image: "/asset/product/match.png",
+    name: "*성냥",
+    price: "-",
+    description: "몇 개 남아있지 않다. 무언가를 태울 수도, 잠깐 빛을 낼 수도, 추위를 달랠 수도 있을 것이다.",
+    used: "false",
+  },
+  {
     id: 98,
     image: "/asset/product/toupee.png",
     name: "교장선생님의 가발",

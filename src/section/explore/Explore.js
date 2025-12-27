@@ -74,7 +74,7 @@ export default function Explore({ location = "1층 계단" }) {
         const timer = setTimeout(() => {
           if (explorationResult) {
             if (explorationResult.type === "fail") {
-              setShowChoices(true);
+              setShowChoices(false);
               setExplorationCompleted(true);
             } else if (explorationResult.type === "success") {
               setExplorationCompleted(true);
@@ -93,6 +93,7 @@ export default function Explore({ location = "1층 계단" }) {
   const handleTextClick = () => {
     if (showTerminateModal || showPopup) return;
     const segment = activeTextSegments[textIndex] || "";
+
     if (charIndex < segment.length) {
       setDisplayText(segment);
       setCharIndex(segment.length);
@@ -109,6 +110,26 @@ export default function Explore({ location = "1층 계단" }) {
         !showPopup
       ) {
         setShowPopup(true);
+      } else if (
+        explorationResult &&
+        explorationResult.type === "fail" &&
+        explorationCompleted
+      ) {
+        // fail 메시지 다 출력된 후 자동으로 돌아가기
+        if (previousLocations.length > 0) {
+          const lastLocation = previousLocations[previousLocations.length - 1];
+          setPreviousLocations((prev) => prev.slice(0, -1));
+          setExplorationResult(null);
+          setEventType(null);
+          setExplorationCompleted(false);
+          setShowPopup(false);
+          setActiveTextSegments([]);
+          setTextIndex(0);
+          setCharIndex(0);
+          setDisplayText("");
+          setShowChoices(false);
+          setCurrentLocation(lastLocation);
+        }
       } else {
         setShowChoices(true);
       }
@@ -179,37 +200,41 @@ const handleChoiceClick = async (choice) => {
     }
   }
 
-  // 아이템 획득
-  if (actualChoice.itemId) {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (loggedInUser?.id) {
-      const choiceText = actualChoice.text?.trim();
+// 아이템 획득
+if (actualChoice.itemId || actualChoice.oneTimeOnly) {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (loggedInUser?.id) {
+    const choiceText = actualChoice.text?.trim();
 
-      const { data: userInfo, error } = await supabase
-        .from("users_info")
-        .select("explored_choices, bag_item")
-        .eq("user_id", loggedInUser.id)
-        .single();
+    const { data: userInfo, error } = await supabase
+      .from("users_info")
+      .select("explored_choices, bag_item")
+      .eq("user_id", loggedInUser.id)
+      .single();
 
-      if (error || !userInfo) {
-        console.error("유저 정보 불러오기 실패", error);
-        return;
-      }
+    if (error || !userInfo) {
+      console.error("유저 정보 불러오기 실패", error);
+      return;
+    }
 
-      // 이미 조사한 적 있는 선택지일 경우 조사 차단(유저단위)
-      if (userInfo.explored_choices?.[choiceText]) {
-        setExplorationResult({
-          type: "fail",
-          segments: ["이미 조사했었던 곳이다.\n또 살펴볼 필요는 없을 것 같다."],
-        });
-        setEventType("fail");
-        return; // 조사 및 아이템 지급 진행하지 않도록 return
-      }
+    // 🔹 oneTimeOnly일 경우에만 재조사 차단
+    if (actualChoice.oneTimeOnly && userInfo.explored_choices?.[choiceText]) {
+      setExplorationResult({
+        type: "fail",
+        segments: [
+          "특별한 점은 보이지 않는다.\n이전에 이미 조사를 마쳤으니 또 살펴볼 필요는 없을 것 같다.",
+        ],
+      });
+      setEventType("fail");
+      return; // 아이템 지급/조사 진행 X
+    }
 
-      // 아이템 지급 로직 시작
+    let updatedBag = [...(userInfo.bag_item || [])];
+
+    // 🔹 itemId가 있을 경우에만 아이템 지급
+    if (actualChoice.itemId) {
       const product = products.find((p) => p.id === actualChoice.itemId);
       if (product) {
-        const updatedBag = [...(userInfo.bag_item || [])];
         const existing = updatedBag.find(
           (item) => item.itemId === product.id && !item.used
         );
@@ -220,34 +245,40 @@ const handleChoiceClick = async (choice) => {
           updatedBag.push({ itemId: product.id, count: 1, used: false });
         }
 
-        const updatedExplored = {
-          ...(userInfo.explored_choices || {}),
-          [choiceText]: true,
-        };
-
         const koreaTime = new Date();
         koreaTime.setHours(koreaTime.getHours() + 9);
 
-        const { error: updateError } = await supabase
-          .from("users_info")
-          .update({
-            bag_item: updatedBag,
-            explored_choices: updatedExplored,
-          })
-          .eq("user_id", loggedInUser.id);
-
-        if (!updateError) {
-          await supabase.from("users_record").insert({
-            user_id: loggedInUser.id,
-            item_id: product.id,
-            item_name: product.name,
-            type: "obtained",
-            timestamp: koreaTime.toISOString(),
-          });
-        }
+        // 지급 기록
+        await supabase.from("users_record").insert({
+          user_id: loggedInUser.id,
+          item_id: product.id,
+          item_name: product.name,
+          type: "obtained",
+          timestamp: koreaTime.toISOString(),
+        });
       }
     }
+
+    // 🔹 oneTimeOnly라면 선택지를 탐색 완료 상태로 저장
+    const updatedExplored = {
+      ...(userInfo.explored_choices || {}),
+      ...(actualChoice.oneTimeOnly ? { [choiceText]: true } : {}),
+    };
+
+    const { error: updateError } = await supabase
+      .from("users_info")
+      .update({
+        bag_item: updatedBag,
+        explored_choices: updatedExplored,
+      })
+      .eq("user_id", loggedInUser.id);
+
+    if (updateError) {
+      console.error("업데이트 실패", updateError);
+    }
   }
+}
+
 
 
   // 조사 이벤트 처리
