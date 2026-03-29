@@ -72,7 +72,7 @@ export default function Record() {
                 {record.type === "used" ? "-사용" : 
                  record.type === "purchase" ? "+구매" : 
                  record.type === "obtained" ? "+획득" :
-                 record.type === "gift_sent" ? "선물함" :
+                 record.type === "gift_sent" ? "-선물함" :
                  record.type === "gift_received" ? "+받음" :
                  record.type === "penalty" ? "-잃음" :
                  "알 수 없음"}

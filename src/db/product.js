@@ -90,9 +90,9 @@ const products = [
   {
     id: 12,
     image: "/asset/product/room_key.png",
-    name: "*열쇠",
+    name: "*교무실 열쇠",
     price: "-",
-    description: "「교무실」이라고 쓰여있다.",
+    description: "「교무실」이라고 쓰여있다. 조금 녹슬어있다.",
     used: "false",
   },
   {
@@ -108,7 +108,7 @@ const products = [
     image: "/asset/product/attendance_register.png",
     name: "*출석부",
     price: "-",
-    description: "2학년 O반의 출석부다.",
+    description: "작년 2학년 4반의 출석부다. 처음 보는 이름이 딱 하나 적혀있다. [김다영]",
     used: "false",
   },
   {

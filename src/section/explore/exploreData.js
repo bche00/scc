@@ -20,13 +20,13 @@ export const exploreLocations = {
     image: "/asset/img/hallway.png",
     description: "잠겨있다.",
     choices: [
-      { text: "▶ [교무실 열쇠]를 사용한다.", goTo: "교무실" },
+      // { text: "▶ [교무실 열쇠]를 사용한다.", goTo: "교무실" },
       { text: "▶ 돌아간다. ", goTo: "1층" }
     ]
   },
   "교무실": {
     image: "/asset/img/teachers_room.png",
-    description: "잠겨있던 교무실에 들어왔다.|칸막이로 분리된 여러 책상들 위로 컴퓨터와 이런저런 서류, 학습지들이 널려있다.",
+    description: "잠겨있던 교무실에 들어왔다.\n칸막이로 분리된 여러 책상들 위로 컴퓨터와 이런저런 서류, 학습지들이 널려있다.",
     choices: [
       { text: "▶ 미니 냉장고를 열어본다." },
       { text: "▶ 책장을 살펴본다. ", goTo: "책장을 살펴본다.　" },
@@ -37,7 +37,7 @@ export const exploreLocations = {
     image: "/asset/img/teachers_room.png",
     description: "미니 냉장고를 열자, 예상했던 차가운 공기는 느껴지지 않고 묘한 악취가 진동한다.|안에는 비타600, 박키스 등 자양강장제와 간단한 간식류들이 몇 보인다.|…냄새와 상태를 보아하니 먹으면 안될 것 같다.",
     choices: [
-      { text: "▶ 조사한다." },
+      { text: "▶ 조사한다.", triggersEvent: true },
       { text: "▶ 돌아간다. ", goTo: "교무실"  }
     ]
   },
@@ -52,17 +52,16 @@ export const exploreLocations = {
   },
   "연간 졸업앨범을 펼쳐본다.": {
     image: "/asset/img/teachers_room.png",
-    description: "연간 졸업앨범을 한 권씩 펼쳐보았다.|…우리 학교를 거쳐간 많은 선배님들의 얼굴과 이름, 연도를 거듭할수록 빛바래지는 학교의 옛 모습이 담긴 사진들이 기록되어있다.|당연히도, 아는 얼굴은 없다.",
+    description: "연간 졸업앨범을 한 권씩 펼쳐보았다.|…우리 학교를 거쳐간 많은 선배님들의 얼굴과 이름, 연도를 거듭할수록 빛바래지는 학교의 옛 모습이 담긴 사진들이 기록되어있다.|이외엔 딱히 특별한 점은 없어보인다.",
     choices: [
-      { text: "▶ 출석부를 펼쳐본다." },
+      { text: "▶ 출석부를 펼쳐본다.",  itemId: 14, oneTimeOnly: true },
       { text: "▶ 돌아간다. ", goTo: "교무실"  }
     ]
   },
   "출석부를 펼쳐본다.": {
     image: "/asset/img/teachers_room.png",
-    description: "듀어어 어떻게 묘사하지",
+    description: "아는 이름들이 빼곡하다.|2학년 4반이라고 적혀있지만, 지금 3학년들의 이름들 뿐인것을 보니 작년 출석부인 듯하다.|...어라? 그 중 딱 한 사람, 처음 보는 이름이 있다.|[김다영]|이 사람이 우리를 학교에 가둔 원령의 정체일까?|[*출석부]를 획득했다.",
     choices: [
-      { text: "▶ 연간 졸업앨범을 펼쳐본다." },
       { text: "▶ 돌아간다. ", goTo: "교무실"  }
     ]
   },
@@ -184,7 +183,7 @@ export const exploreLocations = {
     description: "끔찍한 냄새가 나는 사물함을 열어보았다.|…끈덕진 것이 떨어져나가는 소리와 함께 힘겹게 열린 사물함 안에는…….|액정에 금이 간 구형 핸드폰과, 성냥 한 갑이 들어있다. 압수 물품을 보관해두는 사물함인듯 하다.",
     choices: [
       { text: "▶ 구형 핸드폰을 챙긴다." },
-      { text: "▶ 성냥을 챙긴다.", itemId: 17 }
+      { text: "▶ 성냥을 챙긴다.", itemId: 17, oneTimeOnly: true }
       ]
   },
     "성냥을 챙긴다.": {
@@ -386,7 +385,7 @@ export const exploreLocations = {
    },
    "바위를 낸다": {
    image: "/asset/img/restroom.png",
-   description: "바위를 냈다.|거울 속의 당신은 가위를 냈다.\n…이겼다!|거울 속의 당신이 당신을 노려보더니, 팔을 뻗어왔다.|놀라 뒷걸음질치자, 딸그랑… 소리와 함께 세면대 아래로 무언가가 떨어졌다.|고개를 숙여 주워보니 그것은… '교무실'이라고 쓰여있는 자그마한 열쇠였다.|[열쇠]를 획득했다.",
+   description: "바위를 냈다.|거울 속의 당신은 가위를 냈다.\n…이겼다!|거울 속의 당신이 당신을 노려보더니, 팔을 뻗어왔다.|놀라 뒷걸음질치자, 딸그랑… 소리와 함께 세면대 아래로 무언가가 떨어졌다.|고개를 숙여 주워보니 그것은… '교무실'이라고 쓰여있는 자그마한 열쇠였다.|[*교무실 열쇠]를 획득했다.",
    choices: [
      { text: "▶ 돌아간다. ", goTo:"화장실로 이동한다."}
      ],
@@ -760,7 +759,7 @@ export const exploreLocations = {
   },
   "들어본다.": {
     image: "/asset/img/art_room.png",
-    description: "당신은 석고 흉상을 들어 자세히 살펴보았다.|…어라?|흉상을 들어올리자마자 아래에 깔려있던 무언가가 팔랑이며 떨어졌다.|반질거리는 노란색의… 한지다.|[노란색 한지]를 획득했다.",
+    description: "당신은 석고 흉상을 들어 자세히 살펴보았다.|…어라?|흉상을 들어올리자마자 아래에 깔려있던 무언가가 팔랑이며 떨어졌다.|반질거리는 노란색의… 한지다.|[*노란색 한지]를 획득했다.",
     choices: [
       { text: "▶ 돌아간다. ", goTo: "미술실" }
     ],
@@ -841,13 +840,13 @@ export const exploreLocations = {
     image: "/asset/img/music_room.png",
     description: "당신은 보표를 더듬어가며 희미하게 새겨진 음계를 읽어내본다.|(E) (D#) (E)… (D#)…… (E) (B) (D)…… (C)… (A)……\n이 다음은 흐려져 알아보기 힘들다.",
     choices: [
-      { text: "▶ 계속 읽는다. ", goTo: "계속 읽는다.", itemId: 15, oneTimeOnly: true  },
+      { text: "▶ 계속 읽는다. ", goTo: "계속 읽는다.", itemId: 15, oneTimeOnly: true },
       { text: "▶ 돌아간다. ", goTo: "음악실" }
     ],
   },
   "계속 읽는다.": {
     image: "/asset/img/music_room.png",
-    description: "당신은 더듬더듬 흐려진 악보를 더 읽어보았다.|……어라?|음계 사이에 이질적인 무언가가 그려져있다.|한자 같기도, 그림 같기도 하다.|당신은 해당 부분만을 찢어 주머니에 넣었다.|[부문]을 획득했다.",
+    description: "당신은 더듬더듬 흐려진 악보를 더 읽어보았다.|……어라?|음계 사이에 이질적인 무언가가 그려져있다.|한자 같기도, 그림 같기도 하다.|당신은 해당 부분만을 찢어 주머니에 넣었다.|[*부문]을 획득했다.",
     choices: [
       { text: "▶ 돌아간다. ", goTo: "음악실" }
     ],
