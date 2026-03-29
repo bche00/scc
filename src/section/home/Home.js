@@ -47,6 +47,8 @@ export default function Home() {
           .select("coin")
           .eq("user_id", userId)
           .single();
+          setUserName(loggedInUser.name);
+          setCoin(userInfo.coin ?? 0);
 
         if (infoError) {
           console.error("유저 정보를 가져오는 중 오류:", infoError); 

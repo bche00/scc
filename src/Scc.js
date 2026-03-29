@@ -11,6 +11,7 @@ import Explore from './section/explore/Explore.js';
 import Shop from './section/shop/Shop.js';
 import Bag from './section/bag/Bag.js';
 import Record from './section/record/Record.js';
+import Game from './section/game/Game.js';
 import NotFound from './section/notFound.js';
 
 import PreventRefresh from './section/explore/PreventRefresh';
@@ -69,6 +70,7 @@ function App() {
             <Route path="/shop" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Shop /></ProtectedRoute>} />
             <Route path="/bag" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Bag /></ProtectedRoute>} />
             <Route path="/record" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Record /></ProtectedRoute>} />
+            <Route path="/game" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Game /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

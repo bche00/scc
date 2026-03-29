@@ -43,12 +43,11 @@ export default function Shop() {
     const fetchUserCoin = async () => {
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (!loggedInUser) return;
-
+      
       const { data, error } = await supabase
         .from("users_info")
         .select("coin, bag_item")
         .eq("user_id", loggedInUser.id)
-        .eq("status", "approved")
         .single();
 
       if (error) {
@@ -56,7 +55,7 @@ export default function Shop() {
         return;
       }
 
-      setUserCoin(data.coin);
+      setUserCoin(data.coin ?? 0);
     };
 
     fetchUserCoin();
@@ -159,21 +158,22 @@ export default function Shop() {
   };
 
   const handleOpenGiftPopup = async () => {
-    setGiftPopup({ visible: true, item: selectedProduct });
-    setSelectedUser(null);  // 추가: 팝업 열 때 이전 선택 초기화
-    setSearchTerm("");      // 추가: 검색어 초기화
+      setGiftPopup({ visible: true, item: selectedProduct });
+      setSelectedUser(null);  // 추가: 팝업 열 때 이전 선택 초기화
+      setSearchTerm("");      // 추가: 검색어 초기화
 
-    const { data, error } = await supabase
-      .from("users")
-      .select("id, name");
+      const { data, error } = await supabase
+        .from("users")
+        .select("id, name")
+        .eq("status", "approved");
 
-    if (error) {
-      console.error("유저 목록을 가져오는 중 오류 발생:", error);
-    } else {
-      const loggedInUserId = JSON.parse(localStorage.getItem("loggedInUser")).id;
-      setUsers(data.filter(user => user.id !== loggedInUserId));
-    }
-  };
+      if (error) {
+        console.error("유저 목록을 가져오는 중 오류 발생:", error);
+      } else {
+        const loggedInUserId = JSON.parse(localStorage.getItem("loggedInUser")).id;
+        setUsers(data.filter(user => user.id !== loggedInUserId));
+      }
+    };
 
   return (
     <div className={style.container}>

@@ -153,20 +153,18 @@ const filteredUsers = users.filter((user) =>
               {/* 버튼 */}
               <div className={style.btn}>
                 <button
-                  onClick={() =>
-                    handleGiftItem(
-                      giftPopup.item,
-                      selectedUser,
-                      bagItems,
-                      setBagItems,
-                      setGiftPopup,
-                      userCoin,
-                      setUserCoin
-                    )
-                  }
-                  disabled={!selectedUser}>
-                  보내기
-                </button>
+                    onClick={() =>
+                      handleGiftItem(
+                        giftPopup.item,
+                        selectedUser,
+                        bagItems,
+                        setBagItems,
+                        setGiftPopup
+                      )
+                    }
+                    disabled={!selectedUser}>
+                    보내기
+                  </button>
                 <button onClick={() => setGiftPopup({ visible: false, item: null })}>
                   취소
                 </button>

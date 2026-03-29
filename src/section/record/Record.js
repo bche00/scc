@@ -69,12 +69,12 @@ export default function Record() {
           {records.map((record) => (
             <li key={record.id} className={style.recordItem}>
               <strong>[ 
-                {record.type === "used" ? "사용" : 
-                 record.type === "purchase" ? "구매" : 
-                 record.type === "obtained" ? "획득" :
+                {record.type === "used" ? "-사용" : 
+                 record.type === "purchase" ? "+구매" : 
+                 record.type === "obtained" ? "+획득" :
                  record.type === "gift_sent" ? "선물함" :
-                 record.type === "gift_received" ? "받음" :
-                 record.type === "penalty" ? "잃음" :
+                 record.type === "gift_received" ? "+받음" :
+                 record.type === "penalty" ? "-잃음" :
                  "알 수 없음"}
               ]</strong>
               {record.item_name}  
